@@ -9,12 +9,15 @@ export type Round =
   | 'semifinals'
   | 'finals'
 
-export type HandleMatchRequest = {
+export type IncomingHandleMatchRequest = Match & {
   sport: Sport
   matchNumber: number
   round: Round
-  match: Match
   facilitatorEmail: string
+}
+
+export type ServerMatchRecord = IncomingHandleMatchRequest & {
+  timestamp: Date
 }
 
 export type Match = {
