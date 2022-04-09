@@ -103,17 +103,6 @@ export type SOARFilterProps = {
   medic: boolean
 }
 
-export type UseState<Type> = [Type, Dispatch<SetStateAction<Type>>]
-
-export type SOARContextProps = {
-  loadingState: UseState<boolean>
-  scanningState: UseState<boolean>
-  locationState: UseState<Array<SOARLocation>>
-  stationOrderState: UseState<StationOrderProps>
-  filteredState: UseState<SOARFilterProps>
-  QRState: UseState<QRCommandProps>
-}
-
 export type SOARTimestamp = {
   timestamp: number
   QR: QRCommandProps
