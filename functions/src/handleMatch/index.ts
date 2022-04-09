@@ -80,10 +80,13 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
     },
   }
 
-  docRef.update({
-    [data.round]: thisRoundData,
-    [nextRound]: nextRoundData,
-  })
+  docRef.set(
+    {
+      [data.round]: thisRoundData,
+      [nextRound]: nextRoundData,
+    },
+    { merge: true }
+  )
   return 'updated: non-finals'
 }
 
