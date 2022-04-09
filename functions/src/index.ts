@@ -2,8 +2,11 @@ import { logger, https } from 'firebase-functions'
 import { initializeApp } from 'firebase-admin/app'
 import { firestore } from 'firebase-admin'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
+import { handleMatch } from './handleMatch'
 
 initializeApp()
+
+export { handleMatch }
 
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')
