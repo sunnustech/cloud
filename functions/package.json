@@ -3,9 +3,10 @@
   "scripts": {
     "lint": "eslint --fix --ext .js,.ts .",
     "build": "tsc",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "serve:old": "yarn build && firebase emulators:start --only functions",
+    "serve": "tsc -w | firebase emulators:start --only functions",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
