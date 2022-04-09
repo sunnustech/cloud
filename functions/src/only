@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# deploys exactly one function
+# USAGE:
+# ./only [FUNCTION]
+
+[ -z $1 ] && echo "please provide one function to deploy" && exit 0
+
+yarn firebase deploy --only functions:$1
