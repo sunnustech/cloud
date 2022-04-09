@@ -15,9 +15,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.18.0",
     "firebase-tools": "^10.6.0"
