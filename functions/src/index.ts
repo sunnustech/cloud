@@ -3,38 +3,9 @@ import { initializeApp } from 'firebase-admin/app'
 import { firestore } from 'firebase-admin'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-
 initializeApp()
 
-export const helloWorld = https.onCall((req, res) => {
-  logger.info('request object')
-  logger.info(res.auth !== null)
-})
-
 export const authTest = https.onCall((data, context) => {
-  logger.info('authentication testing')
-  logger.info(data)
-  // logger.info(context.auth)
-  return {
-    originalData: data,
-    foo: context,
-    hello: 'world',
-  }
-})
-
-export const authTest2 = https.onCall((data, context) => {
-  logger.info('authentication testing 2')
-  logger.info(data)
-  logger.info(context)
-  return {
-    originalData: data,
-    hello: 'world',
-  }
-})
-
-export const authTest3 = https.onCall((data, context) => {
   logger.info('authentication testing 3')
 
   if (!context.auth) {
