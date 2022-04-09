@@ -9,7 +9,10 @@ export type Round =
   | 'semifinals'
   | 'finals'
 
+export type Series = 'TSS' | 'WSS'
+
 export type IncomingHandleMatchRequest = Match & {
+  series: Series
   sport: Sport
   matchNumber: number
   round: Round
