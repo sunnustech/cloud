@@ -5,6 +5,7 @@
     "build": "tsc",
     "serve:old": "yarn build && firebase emulators:start --only functions",
     "serve": "tsc -w | firebase emulators:start --only functions",
+    "serve:fresh": "rm -rf ./lib && tsc && tsc -w | firebase emulators:start --only functions",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
     "deploy": "firebase deploy --only functions",

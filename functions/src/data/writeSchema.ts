@@ -16,7 +16,7 @@ async function push({
   const docKeys = Object.keys(docs)
 
   const awaitStack = docKeys.map((docKey) => {
-    ;() => collectionRef.doc(docKey).update(docs[docKey])
+    collectionRef.doc(docKey).update(docs[docKey])
   })
 
   const results = await Promise.all(awaitStack)
