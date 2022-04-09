@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { logger, https } from 'firebase-functions'
 import { initializeApp } from 'firebase-admin/app'
 import { firestore } from 'firebase-admin'
 
@@ -7,12 +7,33 @@ import { firestore } from 'firebase-admin'
 
 initializeApp()
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info('Hello logs!', { structuredData: true })
-  response.send('Hello from Firebase!')
+export const helloWorld = https.onCall((req, res) => {
+  logger.info('request object')
+  logger.info(res.auth !== null)
 })
 
-export const addMessage = functions.https.onRequest(async (req, res) => {
+export const authTest = https.onCall((data, context) => {
+  logger.info('authentication testing')
+  logger.info(data)
+  // logger.info(context.auth)
+  return {
+    originalData: data,
+    foo: context,
+    hello: 'world',
+  }
+})
+
+export const authTest2 = https.onCall((data, context) => {
+  logger.info('authentication testing')
+  logger.info(data)
+  logger.info(context)
+  return {
+    originalData: data,
+    hello: 'world',
+  }
+})
+
+export const addMessage = https.onRequest(async (req, res) => {
   // Grab the text parameter.
   const original = req.query.text
   // Push the new message into Firestore using the Firebase Admin SDK.
@@ -22,4 +43,3 @@ export const addMessage = functions.https.onRequest(async (req, res) => {
   // Send back a message that we've successfully written the message
   res.json({ result: `Message with ID: ${writeResult.id} added.` })
 })
-
