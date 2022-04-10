@@ -1,4 +1,4 @@
-import { SOARLocation } from "../../../types/SOAR" 
+import { SOARLocation } from '../../../types/SOAR'
 
 const Slide: SOARLocation = {
   google_map_pin_url: 'https://goo.gl/maps/T1F9XPH1bCcAW1bJA',
@@ -129,7 +129,7 @@ const gameLocations: Array<SOARLocation> = [
   NerfBattle,
 ]
 
-const gameLocationObject: Record<string, any> = {
+const gameLocationObject: Record<string, SOARLocation> = {
   Slide,
   Relay2Maze,
   SotongHouze,

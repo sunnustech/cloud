@@ -1,4 +1,4 @@
-import { Sport, Round } from "../types/index"
+import { Sport, Round } from '../types/index'
 
 export const sportList: Array<Sport> = [
   'dodgeball',

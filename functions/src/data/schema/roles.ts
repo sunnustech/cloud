@@ -13,6 +13,12 @@ const facilitators: Array<string> = [
   'supreme@gmail.com',
 ]
 
+/**
+ * from an array generate an object whose keys are
+ * the elements of the array and values are all true
+ * @param {Array<string>} arr: the array
+ * @return {BooleanDict} the dictionary of trues
+ */
 function generateKeys(arr: Array<string>): BooleanDict {
   const result: BooleanDict = {}
   arr.forEach((email) => {

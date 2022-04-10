@@ -1,13 +1,13 @@
 import {
   EmailProps,
   LoginIdProps,
-  Member,
+  newTeamProps,
   ParticipantsDatabase,
-  RegisteredEvents,
   TeamProps,
+  TeamsDatabase,
 } from '../../types/participants'
 import { SOARTeamProps } from '../../types/SOAR'
-import { objFromArray } from '../../utils'
+import { makeTeams } from '../../utils'
 import { stationOrder } from './SOAR'
 
 const SOARInit: SOARTeamProps = {
@@ -21,12 +21,11 @@ const SOARInit: SOARTeamProps = {
   points: 0,
 }
 
-export function newSunNUSTeam(props: {
-  members: Array<Member>
-  registeredEvents: RegisteredEvents
-  direction: 'A' | 'B'
-  teamName: string
-}) {
+/**
+ * @param {newTeamProps} props: basic details of a fresh team
+ * @return {TeamProps} a team object with empty props
+ */
+export function newSunNUSTeam(props: newTeamProps): TeamProps {
   return {
     SOAR: SOARInit,
     SOARStart: 0,
@@ -34,6 +33,7 @@ export function newSunNUSTeam(props: {
     SOARPausedAt: 0,
     SOARStationsCompleted: [],
 
+    direction: props.direction,
     teamName: props.teamName,
     SOARStationsRemaining: stationOrder[props.direction],
     members: props.members,
@@ -41,7 +41,7 @@ export function newSunNUSTeam(props: {
   }
 }
 
-const testOne = {
+const testOne = newSunNUSTeam({
   teamName: 'Known_Painters',
   registeredEvents: {
     TSS: {
@@ -50,28 +50,32 @@ const testOne = {
     },
     SOAR: true,
   },
-  SOAR: SOARInit,
+  direction: 'A',
   members: [
     {
+      loginId: '',
       email: 'alice@gmail.com',
       phone: '77884793',
     },
     {
+      loginId: '',
       email: 'brandon@gmail.com',
       phone: '79412799',
     },
     {
+      loginId: '',
       email: 'carla@gmail.com',
       phone: '77008669',
     },
     {
+      loginId: '',
       email: 'dave@gmail.com',
       phone: '70620715',
     },
   ],
-}
+})
 
-const testTwo = {
+const testTwo = newSunNUSTeam({
   teamName: 'Modest_Liberators',
   registeredEvents: {
     TSS: {
@@ -80,28 +84,32 @@ const testTwo = {
     },
     SOAR: true,
   },
-  SOAR: SOARInit,
+  direction: 'A',
   members: [
     {
+      loginId: '',
       email: 'adam@gmail.com',
       phone: '73125593',
     },
     {
+      loginId: '',
       email: 'beverly@gmail.com',
       phone: '75687708',
     },
     {
+      loginId: '',
       email: 'cedric@gmail.com',
       phone: '75893845',
     },
     {
+      loginId: '',
       email: 'dana@gmail.com',
       phone: '78449264',
     },
   ],
-}
+})
 
-const testThree = {
+const testThree = newSunNUSTeam({
   teamName: 'HS123',
   registeredEvents: {
     TSS: {
@@ -111,33 +119,30 @@ const testThree = {
     },
     SOAR: false,
   },
-  SOAR: {
-    timerRunning: false,
-    started: false,
-    stopped: false,
-    startTime: {},
-    stopTime: {},
-    timerEvents: [],
-  },
+  direction: 'A',
   members: [
     {
+      loginId: '',
       email: 'hongsheng@gmail.com',
       phone: '11111111',
     },
     {
+      loginId: '',
       email: 'ryan@gmail.com',
       phone: '22222222',
     },
     {
+      loginId: '',
       email: 'khang@gmail.com',
       phone: '88888888',
     },
     {
+      loginId: '',
       email: 'junhong@gmail.com',
       phone: '99999999',
     },
   ],
-}
+})
 
 const Developer = newSunNUSTeam({
   teamName: 'Developer',
@@ -177,8 +182,8 @@ const generateRandomID = () => {
   return Math.random().toString(10).substring(2, 5)
 }
 
-const addLoginId = (obj: any): TeamProps => {
-  let teamName = trimTeamNameToLowercase(obj.teamName)
+const addLoginId = (obj: TeamProps): TeamProps => {
+  const teamName = trimTeamNameToLowercase(obj.teamName)
   obj.members.forEach((e: any) => {
     e['loginId'] = teamName + generateRandomID()
   })
@@ -210,9 +215,11 @@ allTeams.forEach((team) => {
   })
 })
 
-const participants: ParticipantsDatabase = objFromArray(allTeams, 'teamName')
-participants['allLoginIds'] = allLoginIds
-participants['allEmails'] = allEmails
+const teams: TeamsDatabase = makeTeams(allTeams)
+const participants: ParticipantsDatabase = Object.assign(teams, {
+  allLoginIds,
+  allEmails,
+})
 
 export default participants
 export { SOARInit }

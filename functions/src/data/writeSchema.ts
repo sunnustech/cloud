@@ -5,6 +5,10 @@ import typedSOAR from './schema/SOAR'
 import typedRoles from './schema/roles'
 import { https } from 'firebase-functions/v1'
 
+/**
+ * @param {string} collection: the target firebase collection
+ * @param {Record<string, Record<string, any>>} docs: the docs to write
+ */
 async function push({
   collection,
   docs,
@@ -19,8 +23,7 @@ async function push({
     collectionRef.doc(docKey).update(docs[docKey])
   })
 
-  const results = await Promise.all(awaitStack)
-  return results
+  await Promise.all(awaitStack)
 }
 
 export const writeSchema = https.onRequest(async (_, res) => {
@@ -33,5 +36,3 @@ export const writeSchema = https.onRequest(async (_, res) => {
 
   res.json({ result: `Probably worked: ${everything}` })
 })
-
-export default writeSchema

@@ -8,16 +8,17 @@ import {
 import { roundList } from '../data/constants'
 
 /**
- * Transitions teams to the next round. If team is in final, it has no more rounds and thus ends.
- * @param data.round Round that the team is currently in
- * @returns Next round that the team will be in
+ * Transitions teams to the next round. If team is in final, it has no more
+ * rounds and thus ends.
+ * @param {IncomingHandleMatchRequest} data: the entire match request
+ * @return {Round} Next round that the team will be in
  */
-const getNextRound = (data: IncomingHandleMatchRequest) => {
+const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
@@ -41,8 +42,8 @@ const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   const serverMatchRecord: ServerMatchRecord = { ...data, timestamp }
 
   const writeResult = await firestore()
-    .collection('match-records')
-    .add(serverMatchRecord)
+      .collection('match-records')
+      .add(serverMatchRecord)
   return writeResult
 }
 
@@ -81,16 +82,16 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
   }
 
   docRef.set(
-    {
-      [data.round]: thisRoundData,
-      [nextRound]: nextRoundData,
-    },
-    { merge: true }
+      {
+        [data.round]: thisRoundData,
+        [nextRound]: nextRoundData,
+      },
+      { merge: true }
   )
   return 'updated: non-finals'
 }
 
-export const handleMatch = https.onRequest(async (req, res) => {
+export const _handleMatch = https.onRequest(async (req, res) => {
   // sample match request
   const request: IncomingHandleMatchRequest = {
     series: 'TSS',
@@ -105,11 +106,24 @@ export const handleMatch = https.onRequest(async (req, res) => {
     facilitatorEmail: 'hongsheng@gmail.com',
   }
 
-  const [writeResult, _] = await Promise.all([
+  const [saveResult, writeResult] = await Promise.all([
     saveMatchRecordAsync(request),
     updateKnockoutTable(request),
   ])
 
   // Send back a message that we've successfully written the match
-  res.json({ result: `Match with ID: ${writeResult.id} written.` })
+  res.json({ result: `Match with ID: ${saveResult.id} written.` })
+  res.json({ result: `${writeResult} successfully` })
 })
+
+export const handleMatch = https.onCall(
+    async (req: IncomingHandleMatchRequest, context) => {
+      const [writeResult, _] = await Promise.all([
+        saveMatchRecordAsync(req),
+        updateKnockoutTable(req),
+      ])
+
+      // Send back a message that we've successfully written the match
+      return { result: `Match with ID: ${writeResult.id} written.` }
+    }
+)
