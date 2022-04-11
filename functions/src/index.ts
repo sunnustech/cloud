@@ -44,15 +44,15 @@ export const addUserToTeam = https.onRequest(async (req, res) => {
   }
 
   const writeResult = await docRef.set(
-      {
-        members: firestore.FieldValue.arrayUnion({
-          email: user.email,
-          loginId: 'something unique',
-          phoneNumber: user.phoneNumber,
-          uid: user.uid,
-        }),
-      },
-      { merge: true }
+    {
+      members: firestore.FieldValue.arrayUnion({
+        email: user.email,
+        loginId: 'something unique',
+        phoneNumber: user.phoneNumber,
+        uid: user.uid,
+      }),
+    },
+    { merge: true }
   )
   res.json({ message: writeResult })
 })
@@ -82,8 +82,16 @@ export const addMessage = https.onRequest(async (req, res) => {
   const original = req.query.text
   // Push the new message into Firestore using the Firebase Admin SDK.
   const writeResult = await firestore()
-      .collection('cloud-functions')
-      .add({ original: original })
+    .collection('cloud-functions')
+    .add({ original: original })
   // Send back a message that we've successfully written the message
   res.json({ result: `Message with ID: ${writeResult.id} added.` })
+})
+
+export const helloWorld = https.onRequest(async (req, res) => {
+  console.log('hello, server!')
+  res.json({
+    message: 'hello, requester!',
+    serverReceived: req.body,
+  })
 })
