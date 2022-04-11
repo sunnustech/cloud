@@ -10,6 +10,8 @@
   },
   "scripts": {
     "dev": "tsc && node .",
+    "dev:create-users": "tsc && node lib/createUsers",
+    "dev:cu": "tsc && node lib/createUsers",
     "build": "tsc"
   }
 }
