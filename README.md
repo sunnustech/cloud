@@ -5,7 +5,7 @@ node packages by running `yarn` in three directories:
 
 - `cloud/`
 - `cloud/functions`
-- `cloud/tests`
+- `cloud/functions/src/tests`
 
 Then make sure you're logged in:
 1. `cd cloud/functions`
@@ -16,7 +16,7 @@ Then make sure you're logged in:
 ## Using this
 
 `cloud/functions` contain deployed cloud functions.  
-`cloud/tests` container local debugging tests.
+`cloud/functions/src/tests` container local debugging tests.
 
 There are two important types of cloud functions:
 1. `onRequest`: this is open to public. All it takes to invoke such a function
@@ -66,7 +66,7 @@ cd cloud/functions && yarn serve
 To avoid needing to navigate to the link each time, you can use a simple
 node.js request sender.
 
-1. create a new `.ts` file in `cloud/tests/src` (reference `index.ts`)
+1. create a new `.ts` file in `cloud/functions/src/tests/src` (reference `index.ts`)
 2. create a script in `package.json` to build and run it.
 3. profit
 
