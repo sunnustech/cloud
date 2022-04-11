@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUsers = void 0;
 const axios_1 = __importDefault(require("axios"));
+const timestamp_1 = require("./timestamp");
 const base = 'http://localhost:5001/sunnus-22/us-central1';
 const fn = 'createUsers';
 function createUsers() {
+    (0, timestamp_1.timestamp)();
     console.log('function: createUsers');
     axios_1.default
         .post(`${base}/${fn}`, {
