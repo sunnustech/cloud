@@ -151,20 +151,27 @@ export const createUsers = https.onRequest(async (req, res) => {
   })
 
   /* execute all team initializations */
-  await Promise.allSettled(initializeQueue)
+  const initializeResult = await Promise.allSettled(initializeQueue)
+  console.log(initializeResult)
+
+  /* team names after initializing */
+  const postInitializationTeamNames: string[] = (
+    await firestore().collection('teams').listDocuments()
+  ).map((e) => e.id)
 
   const teamAssignmentQueue: Promise<AddUserRecord>[] = []
 
   successfulUserList.forEach((user) => {
-    teamAssignmentQueue.push(addUserToTeam(user, existingTeamNames))
+    teamAssignmentQueue.push(addUserToTeam(user, postInitializationTeamNames))
   })
 
   /* execute all user-to-team assignments */
-  await Promise.allSettled(teamAssignmentQueue)
+  const teamAssignmentResult = await Promise.allSettled(teamAssignmentQueue)
+  console.log(teamAssignmentResult)
 
   const teamsAfterWriting = await firestore().collection('teams').get()
 
-  const checkTeams: Record<string, Member[]> = {}
+  const editedTeams: Record<string, Member[]> = {}
   teamsAfterWriting.forEach((teamDoc) => {
     const data = teamDoc.data()
     const teamName = data.teamName
@@ -172,10 +179,10 @@ export const createUsers = https.onRequest(async (req, res) => {
       return
     }
     const members = data.members
-    checkTeams[teamName] = members
+    editedTeams[teamName] = members
   })
 
-  console.log(checkTeams)
+  console.log(editedTeams)
 
   /* send back the statuses */
   res.json({
@@ -183,6 +190,7 @@ export const createUsers = https.onRequest(async (req, res) => {
     rejected,
     successfulUserList,
     successfulUIDs,
+    editedTeams
   })
 })
 
