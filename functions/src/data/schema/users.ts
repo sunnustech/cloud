@@ -8,14 +8,14 @@ const userList: Member[] = [
     email: 'one@gmail.com',
     loginId: 'automagic123456',
     phoneNumber: '91239845',
-    uid: 'asdfghjklsemicolon',
+    uid: 'from_writeSchema___asdfghjklsemicolon',
   },
   {
     teamName: "auto_matic",
     email: 'two@gmail.com',
     loginId: 'automatic987654',
     phoneNumber: '90912365',
-    uid: 'qwertyyoueyeohp',
+    uid: 'from_writeSchema___qwertyyoueyeohp',
   },
 ]
 
