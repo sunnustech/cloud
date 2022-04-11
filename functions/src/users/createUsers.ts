@@ -10,15 +10,69 @@ type RequestUser = {
   phoneNumber: string
   teamName: string
 }
-type User = {
+type User = RequestUser & {
+  uid: string
+}
+type Member = {
   email: string
+  loginId: string
   phoneNumber: string
-  teamName: string
   uid: string
 }
 type AddUserRecord = {
   message: any
   status: 'fulfilled' | 'rejected'
+}
+
+/**
+ * @param {RequestUser[]} userList: the incoming request array of users
+ * @param {User[]} successList: the list that successfully created new
+ * users will be added to
+ * @returns {Promise<UserRecord>[]} a queue that can be executed to create
+ * the users requested
+ */
+const getUserCreationQueue = (
+  userList: RequestUser[],
+  successList: User[]
+): Promise<UserRecord>[] => {
+  const userCreationQueue: Promise<UserRecord>[] = []
+
+  /* add a user to the successfulUserList */
+  function appendSuccessfulAddition(user: RequestUser, rec: UserRecord) {
+    successList.push({
+      uid: rec.uid,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      teamName: user.teamName,
+    })
+    return rec
+  }
+
+  /* takes a RequestUser and adds basic information
+   * for firebase to be able to create a full user
+   */
+  function newUser(user: RequestUser) {
+    return {
+      email: user.email,
+      emailVerified: false,
+      password: 'sunnus',
+      disabled: false,
+    }
+  }
+
+  /* create a queue of user creation commands if that
+   * command succeeds in execution later, save that user
+   * into successfulUserList
+   */
+  userList.forEach((user) => {
+    userCreationQueue.push(
+      getAuth()
+        .createUser(newUser(user))
+        .then((rec) => appendSuccessfulAddition(user, rec))
+    )
+  })
+
+  return userCreationQueue
 }
 
 export const createUsers = https.onRequest(async (req, res) => {
@@ -35,35 +89,14 @@ export const createUsers = https.onRequest(async (req, res) => {
   }
 
   const userList: RequestUser[] = req.body.userList
-  const awaitStack: Promise<UserRecord>[] = []
-
   const successfulUserList: User[] = []
 
-  userList.forEach((user) => {
-    awaitStack.push(
-        getAuth()
-            .createUser({
-              email: user.email,
-              emailVerified: false,
-              password: 'sunnus',
-              disabled: false,
-            })
-            .then((userRecord) => {
-              successfulUserList.push({
-                uid: userRecord.uid,
-                phoneNumber: user.phoneNumber,
-                email: user.email,
-                teamName: user.teamName,
-              })
-              return userRecord
-            })
-    )
-  })
+  const userCreationQueue = getUserCreationQueue(userList, successfulUserList)
 
-  /* await all to settle, regardless of success or failture
+  /* await all to settle, regardless of success or failure
    * #leavenomanbehind
    */
-  const results = await Promise.allSettled(awaitStack)
+  const results = await Promise.allSettled(userCreationQueue)
 
   /* split the successes from the failures */
   const fulfilled = results.filter((result) => result.status === 'fulfilled')
@@ -72,46 +105,77 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
   // var addResults: Promise<PromiseSettledResult<AddUserRecord>[]> = 1
-  if (successfulUIDs.length > 0) {
-    /* append new UIDs to list of all automatically generated users
-     * (this allows them to be deleted easily by deleteAllUsers)
+
+  if (successfulUIDs.length === 0) {
+    /* no new users were created,
+     * so no need to handle team assignment
      */
-    const docRef = firestore().collection('users').doc('allIds')
-    docRef.set({
-      data: firestore.FieldValue.arrayUnion(...successfulUIDs),
+    res.json({
+      fulfilled,
+      rejected,
+      successfulUserList,
+      successfulUIDs,
     })
-
-    /* add successfully created users to their respective teams
-     * 1. get list of existing team names
-     *    - initialize if not exists
-     * 2. append user to member array in that team using array union
-     */
-
-    const existingTeamNames: string[] = (
-      await firestore().collection('teams').listDocuments()
-    ).map((e) => e.id)
-
-    const initializeStack: Promise<WriteResult>[] = []
-
-    successfulUserList.forEach((user) => {
-      if (!existingTeamNames.includes(user.teamName)) {
-        // initialize a new team based on the user's teamName
-        initializeStack.push(initializeTeam(user.teamName))
-      }
-    })
-
-    await Promise.allSettled(initializeStack)
-    const awaitStack: Promise<AddUserRecord>[] = []
-
-    successfulUserList.forEach((user) => {
-      awaitStack.push(addUserToTeam(user))
-    })
-
-    const asdf = await Promise.allSettled(awaitStack)
-    console.log(asdf)
-
-    // addResults = Promise.allSettled(awaitStack)
+    return
   }
+
+  /* append new UIDs to list of all automatically generated users
+   * (this allows them to be deleted easily by deleteAllUsers)
+   */
+  const allIdsDoc = firestore().collection('users').doc('allIds')
+  allIdsDoc.set({
+    data: firestore.FieldValue.arrayUnion(...successfulUIDs),
+  })
+
+  /* add successfully created users to their respective teams
+   * 1. get list of existing team names
+   *    - initialize if not exists
+   * 2. append user to member array in that team using array union
+   */
+
+  const existingTeamNames: string[] = (
+    await firestore().collection('teams').listDocuments()
+  ).map((e) => e.id)
+
+  const initializeQueue: Promise<WriteResult>[] = []
+
+  const allRequestedTeamNames: string[] = successfulUserList.map(
+    (user) => user.teamName
+  )
+  const uniqueRequestedTeamNames: string[] = [...new Set(allRequestedTeamNames)]
+
+  uniqueRequestedTeamNames.forEach((teamName) => {
+    if (!existingTeamNames.includes(teamName)) {
+      initializeQueue.push(initializeTeam(teamName))
+    }
+  })
+
+  /* execute all team initializations */
+  await Promise.allSettled(initializeQueue)
+
+  const teamAssignmentQueue: Promise<AddUserRecord>[] = []
+
+  successfulUserList.forEach((user) => {
+    teamAssignmentQueue.push(addUserToTeam(user, existingTeamNames))
+  })
+
+  /* execute all user-to-team assignments */
+  await Promise.allSettled(teamAssignmentQueue)
+
+  const teamsAfterWriting = await firestore().collection('teams').get()
+
+  const checkTeams: Record<string, Member[]> = {}
+  teamsAfterWriting.forEach((teamDoc) => {
+    const data = teamDoc.data()
+    const teamName = data.teamName
+    if (!allRequestedTeamNames.includes(teamName)) {
+      return
+    }
+    const members = data.members
+    checkTeams[teamName] = members
+  })
+
+  console.log(checkTeams)
 
   /* send back the statuses */
   res.json({
@@ -122,12 +186,10 @@ export const createUsers = https.onRequest(async (req, res) => {
   })
 })
 
-const addUserToTeam = async (user: User): Promise<AddUserRecord> => {
-  console.log('got here')
-  const existingTeamNames: string[] = (
-    await firestore().collection('teams').listDocuments()
-  ).map((e) => e.id)
-
+const addUserToTeam = async (
+  user: User,
+  existingTeamNames: string[]
+): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
     return {
       status: 'rejected',
@@ -135,17 +197,17 @@ const addUserToTeam = async (user: User): Promise<AddUserRecord> => {
     }
   }
 
-  const docRef = firestore().collection('teams').doc(user.teamName)
-  const data: User[] = (await docRef.get()).data()?.members
+  const teamDoc = firestore().collection('teams').doc(user.teamName)
+  const existingMembers: User[] = (await teamDoc.get()).data()?.members
 
-  if (!data) {
+  if (existingMembers === undefined) {
     return {
       status: 'rejected',
       message: `Internal server error: ${user.teamName} member array has an issue`,
     }
   }
 
-  const existingUIDs = data.map((e) => e.uid)
+  const existingUIDs = existingMembers.map((e) => e.uid)
 
   if (existingUIDs.includes(user.uid)) {
     return {
@@ -154,16 +216,17 @@ const addUserToTeam = async (user: User): Promise<AddUserRecord> => {
     }
   }
 
-  const writeResult = await docRef.set(
-      {
-        members: firestore.FieldValue.arrayUnion({
-          email: user.email,
-          loginId: 'something unique',
-          phoneNumber: user.phoneNumber,
-          uid: user.uid,
-        }),
-      },
-      { merge: true }
+  const writeResult = await teamDoc.set(
+    {
+      members: firestore.FieldValue.arrayUnion({
+        email: user.email,
+        loginId: 'something unique',
+        phoneNumber: user.phoneNumber,
+        uid: user.uid,
+      }),
+    },
+    { merge: true }
   )
+
   return { message: writeResult, status: 'fulfilled' }
 }
