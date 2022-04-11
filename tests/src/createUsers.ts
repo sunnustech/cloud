@@ -19,8 +19,8 @@ const createUser = (user: User): User => {
 }
 
 const csv: User[] = [
-  { email: '1@gmail.com', phoneNumber: '9832 6742', teamName: 'teamA' },
-  { email: '2@gmail.com', phoneNumber: '+65 91212368', teamName: 'teamB' },
+  { email: '1@gmail.com', phoneNumber: '9832 6742', teamName: 'auto_matic' },
+  { email: '2@gmail.com', phoneNumber: '+65 91212368', teamName: 'auto_magic' },
 ]
 
 const sanitizedUserList: User[] = csv.map((user) => createUser(user))
