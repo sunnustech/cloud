@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { User } from '../types/users'
+import { FirebaseUser } from '../types/users'
 // import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
 
@@ -16,20 +16,31 @@ export const createUsers = https.onRequest(async (req, res) => {
     return
   }
 
-  const userList: User[] = req.body.userList
+  const userList: FirebaseUser[] = req.body.userList
   const awaitStack: Promise<UserRecord>[] = []
 
   userList.forEach((user) => {
-    awaitStack.push(getAuth().createUser({
-      email: user.email,
-      emailVerified: false,
-      password: 'sunnus',
-      disabled: false,
-      phoneNumber: user.phoneNumber
-    }))
+    awaitStack.push(
+      getAuth().createUser({
+        email: user.email,
+        emailVerified: false,
+        password: 'sunnus',
+        disabled: false,
+      })
+    )
   })
-  // const collectionRef = firestore().collection('users')
-  // TODO: if user exists, send back in response and skip execution
-  console.log('request:', req.body)
-  res.json({ mirror: req.body })
+
+  /* await all to settle, regardless of success or failture
+   * #leavenomanbehind
+   */
+  const results = await Promise.allSettled(awaitStack)
+
+  /* split the successes from the failures */
+  const fulfilled = results.filter((result) => result.status === 'fulfilled')
+  const rejected = results.filter((result) => result.status === 'rejected')
+
+  /* add the successful ones to SunNUS user database */
+
+  /* send back the statuses */
+  res.json({ fulfilled, rejected })
 })
