@@ -1,10 +1,4 @@
-export type NewUser = {
+export type User = {
   email: string
-  phone: string
-}
-
-export type User = NewUser & {
-  emailVerified: false
-  password: 'sunnus'
-  disabled: false
+  phoneNumber: string
 }
