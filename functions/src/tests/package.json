@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "tsc && node .",
     "dev:create-users": "tsc && node lib/createUsers",
+    "dev:delete-all-users": "tsc && node lib/deleteAllUsers",
     "dev:cu": "tsc && node lib/createUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
     "dev:it": "tsc && node lib/initializeTeam",

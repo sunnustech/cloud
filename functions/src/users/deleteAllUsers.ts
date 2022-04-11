@@ -1,6 +1,7 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { getAuth } from 'firebase-admin/auth'
+import { WriteResult } from '@google-cloud/firestore'
 
 export const deleteAllUsers = https.onRequest(async (req, res) => {
   const requestKeys = Object.keys(req.body)
@@ -24,34 +25,43 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
     return
   }
 
-  const docRef = firestore().collection('users').doc('allIds')
-  await docRef.get().then((doc) => {
-    const data = doc.data()
-    const rmList = data?.data
-    if (!rmList || rmList.length === 0) {
+  const userCollection = firestore().collection('users')
+  const allIdsDoc = userCollection.doc('allIds')
+
+  const data = await allIdsDoc.get()
+  const rmList: string[] = data.data()?.data || []
+  if (!rmList || rmList.length === 0) {
+    res.json({
+      message:
+        'There are no automatically generated users in database to delete.',
+    })
+    return
+  }
+
+  const firebaseRemoveResult = await getAuth()
+    .deleteUsers(rmList)
+    .then((deleteUsersResult) => {
+      allIdsDoc.set({ data: [] })
+      return deleteUsersResult
+    })
+    .catch((error) => {
       res.json({
-        message:
-          'There are no automatically generated users in database to delete.',
+        message: 'Error deleting users:',
+        error,
       })
-      return
-    }
-    getAuth()
-        .deleteUsers(rmList)
-        .then((deleteUsersResult) => {
-          docRef.set({ data: [] })
-          res.json({
-            message: 'Processed request to delete all users',
-            success: deleteUsersResult.successCount,
-            failures: deleteUsersResult.failureCount,
-          })
-          return
-        })
-        .catch((error) => {
-          res.json({
-            message: 'Error deleting users:',
-            error,
-          })
-          return
-        })
+    })
+
+  const removeUserQueue: Promise<WriteResult>[] = []
+  rmList.forEach((uid) => {
+    const removeDoc = userCollection.doc(uid)
+    removeUserQueue.push(removeDoc.delete())
+  })
+
+  const SunNUSRemoveResult = await Promise.allSettled(removeUserQueue)
+
+  res.json({
+    message: 'Processed request to delete all users',
+    firebaseRemoveResult,
+    SunNUSRemoveResult,
   })
 })
