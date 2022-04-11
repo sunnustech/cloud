@@ -1,8 +1,7 @@
-import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import { getAuth, UserRecord } from 'firebase-admin/auth'
+import { WriteResult } from '@google-cloud/firestore'
 
-const SOARInit: SOARTeamProps = {
+const SOARInit = {
   timerRunning: false,
   started: false,
   stopped: false,
@@ -13,8 +12,7 @@ const SOARInit: SOARTeamProps = {
   points: 0,
 }
 
-export const initializeSunNUSTeam = https.onRequest(async (req, res) => {
-  const teamName = 'basic test'
+export const initializeTeam = async (teamName: string): Promise<WriteResult> => {
   const teamData = {
     SOAR: SOARInit,
     SOARStart: 0,
@@ -26,4 +24,10 @@ export const initializeSunNUSTeam = https.onRequest(async (req, res) => {
     members: [],
     registeredEvents: {},
   }
-})
+  const result = await firestore()
+  .collection('teams')
+  .doc(teamName)
+  .set(teamData)
+
+  return result
+}

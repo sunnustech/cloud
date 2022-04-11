@@ -13,6 +13,8 @@
     "dev:create-users": "tsc && node lib/createUsers",
     "dev:cu": "tsc && node lib/createUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
+    "dev:it": "tsc && node lib/initializeTeam",
+    "dev:au": "tsc && node lib/addUserToTeam",
     "build": "tsc"
   }
 }
