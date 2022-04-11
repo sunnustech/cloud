@@ -1,16 +1,14 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "prettier --write ./src/**/*.ts && eslint --fix --ext .js,.ts .",
     "build": "tsc",
-    "serve:old": "yarn build && firebase emulators:start --only functions",
-    "serve": "tsc -w | firebase emulators:start --only functions",
-    "serve:fresh": "rm -rf ./lib && tsc && tsc -w | firebase emulators:start --only functions",
-    "shell": "yarn build && firebase functions:shell",
+    "lint": "prettier --write ./src/**/*.ts && eslint --fix --ext .js,.ts .",
+    "prettier": "prettier --write ./src/**/*.ts",
+    "serve": "rm -rf ./lib && tsc && tsc -w | firebase emulators:start --only functions",
+    "shell": "tsc && firebase functions:shell",
     "start": "yarn shell",
-    "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "prettier": "prettier --write ./src/**/*.ts"
+    "deploy": "firebase deploy --only functions"
   },
   "engines": {
     "node": "16"
