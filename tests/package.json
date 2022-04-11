@@ -1,0 +1,14 @@
+{
+  "name": "sunnus-console",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^17.0.23",
+    "axios": "^0.26.1",
+    "typescript": "^4.6.3"
+  },
+  "scripts": {
+    "dev": "tsc && node ."
+  }
+}
