@@ -4,10 +4,11 @@ import { firestore } from 'firebase-admin'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
 import { handleMatch } from './handleMatch'
 import { writeSchema } from './data/writeSchema'
+import { createUsers } from './users'
 
 initializeApp()
 
-export { handleMatch, writeSchema }
+export { handleMatch, writeSchema, createUsers }
 
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')

@@ -3,7 +3,7 @@ import typedParticipants from './schema/participants'
 import typedTSS from './schema/TSS'
 import typedSOAR from './schema/SOAR'
 import typedRoles from './schema/roles'
-import { https } from 'firebase-functions/v1'
+import { https } from 'firebase-functions'
 import { WriteResult } from '@google-cloud/firestore'
 
 /**
