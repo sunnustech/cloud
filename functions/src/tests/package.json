@@ -1,5 +1,5 @@
 {
-  "name": "sunnus-console",
+  "name": "sunnus-tests",
   "version": "1.0.0",
   "main": "lib/index.js",
   "license": "MIT",
@@ -18,3 +18,4 @@
     "build": "tsc"
   }
 }
+

@@ -66,4 +66,4 @@ node_modules/
 .env
 
 # test build files
-tests/lib/
+functions/src/tests/lib
