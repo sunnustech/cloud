@@ -19,9 +19,7 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
  * @param {Array<T>} arr: the array of team props
  * @return {Record<string, T>} the final object
  */
-export function makeTeams(
-    arr: Array<TeamProps>,
-): Record<string, TeamProps> {
+export function makeTeams(arr: Array<TeamProps>): Record<string, TeamProps> {
   const obj: Record<string, TeamProps> = {}
   arr.forEach((e: TeamProps) => {
     obj[e.teamName] = e

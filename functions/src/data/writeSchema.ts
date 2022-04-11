@@ -42,10 +42,26 @@ async function push({
 
 export const writeSchema = https.onRequest(async (_, res) => {
   const everything = await Promise.all([
-    push({ force: true, collection: 'participants', docs: typedParticipants }),
-    push({ force: true, collection: 'SOAR', docs: typedSOAR }),
-    push({ force: true, collection: 'TSS', docs: typedTSS }),
-    push({ force: true, collection: 'roles', docs: typedRoles }),
+    push({
+      force: true,
+      collection: 'participants',
+      docs: typedParticipants,
+    }),
+    push({
+      force: true,
+      collection: 'SOAR',
+      docs: typedSOAR,
+    }),
+    push({
+      force: true,
+      collection: 'TSS',
+      docs: typedTSS,
+    }),
+    push({
+      force: true,
+      collection: 'roles',
+      docs: typedRoles,
+    }),
   ])
 
   res.json({ result: `Probably worked: ${everything}` })

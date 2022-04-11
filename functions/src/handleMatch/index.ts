@@ -16,9 +16,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
@@ -39,11 +39,14 @@ const getNextSlot = (data: IncomingHandleMatchRequest) => {
 const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   // get timestamp from server
   const timestamp: Date = firestore.Timestamp.now().toDate()
-  const serverMatchRecord: ServerMatchRecord = { ...data, timestamp }
+  const serverMatchRecord: ServerMatchRecord = {
+    ...data,
+    timestamp,
+  }
 
   const writeResult = await firestore()
-    .collection('match-records')
-    .add(serverMatchRecord)
+      .collection('match-records')
+      .add(serverMatchRecord)
   return writeResult
 }
 
@@ -66,11 +69,11 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
   // If the round is finals, we only need to update this round
   if (data.round === 'finals') {
     docRef.set(
-      {
-        [data.round]: thisRoundData,
-        champions: winnerTeamName,
-      },
-      { merge: true }
+        {
+          [data.round]: thisRoundData,
+          champions: winnerTeamName,
+        },
+        { merge: true }
     )
     return 'updated: finals'
   }
@@ -85,11 +88,11 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
   }
 
   docRef.set(
-    {
-      [data.round]: thisRoundData,
-      [nextRound]: nextRoundData,
-    },
-    { merge: true }
+      {
+        [data.round]: thisRoundData,
+        [nextRound]: nextRoundData,
+      },
+      { merge: true }
   )
   return 'updated: non-finals'
 }
@@ -115,18 +118,23 @@ export const _handleMatch = https.onRequest(async (req, res) => {
   ])
 
   // Send back a message that we've successfully written the match
-  res.json({ result: `Match with ID: ${saveResult.id} written.` })
+  res.json({
+    result: `Match with ID: ${saveResult.id} written.`,
+  })
   res.json({ result: `${writeResult} successfully` })
 })
 
 export const handleMatch = https.onCall(
-  async (req: IncomingHandleMatchRequest, context) => {
-    const [writeResult, _] = await Promise.all([
-      saveMatchRecordAsync(req),
-      updateKnockoutTable(req),
-    ])
+    async (req: IncomingHandleMatchRequest, context) => {
+    // TODO: use context to only allow uids that are inside of facils/admins
+      const results = await Promise.all([
+        saveMatchRecordAsync(req),
+        updateKnockoutTable(req),
+      ])
 
-    // Send back a message that we've successfully written the match
-    return { result: `Match with ID: ${writeResult.id} written.` }
-  }
+      // Send back a message that we've successfully written the match
+      return {
+        result: `Match with ID: ${results[0].id} written.`,
+      }
+    }
 )

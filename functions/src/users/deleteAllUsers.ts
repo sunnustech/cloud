@@ -36,19 +36,22 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
       return
     }
     getAuth()
-      .deleteUsers(rmList)
-      .then((deleteUsersResult) => {
-        docRef.set({ data: [] })
-        res.json({
-          message: 'Processed request to delete all users',
-          success: deleteUsersResult.successCount,
-          failures: deleteUsersResult.failureCount,
+        .deleteUsers(rmList)
+        .then((deleteUsersResult) => {
+          docRef.set({ data: [] })
+          res.json({
+            message: 'Processed request to delete all users',
+            success: deleteUsersResult.successCount,
+            failures: deleteUsersResult.failureCount,
+          })
+          return
         })
-        return
-      })
-      .catch((error) => {
-        res.json({ message: 'Error deleting users:', error })
-        return
-      })
+        .catch((error) => {
+          res.json({
+            message: 'Error deleting users:',
+            error,
+          })
+          return
+        })
   })
 })

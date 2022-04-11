@@ -41,22 +41,22 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   userList.forEach((user) => {
     awaitStack.push(
-      getAuth()
-        .createUser({
-          email: user.email,
-          emailVerified: false,
-          password: 'sunnus',
-          disabled: false,
-        })
-        .then((userRecord) => {
-          successfulUserList.push({
-            uid: userRecord.uid,
-            phoneNumber: user.phoneNumber,
-            email: user.email,
-            teamName: user.teamName,
-          })
-          return userRecord
-        })
+        getAuth()
+            .createUser({
+              email: user.email,
+              emailVerified: false,
+              password: 'sunnus',
+              disabled: false,
+            })
+            .then((userRecord) => {
+              successfulUserList.push({
+                uid: userRecord.uid,
+                phoneNumber: user.phoneNumber,
+                email: user.email,
+                teamName: user.teamName,
+              })
+              return userRecord
+            })
     )
   })
 
@@ -77,7 +77,9 @@ export const createUsers = https.onRequest(async (req, res) => {
      * (this allows them to be deleted easily by deleteAllUsers)
      */
     const docRef = firestore().collection('users').doc('allIds')
-    docRef.set({ data: firestore.FieldValue.arrayUnion(...successfulUIDs) })
+    docRef.set({
+      data: firestore.FieldValue.arrayUnion(...successfulUIDs),
+    })
 
     /* add successfully created users to their respective teams
      * 1. get list of existing team names
@@ -112,7 +114,12 @@ export const createUsers = https.onRequest(async (req, res) => {
   }
 
   /* send back the statuses */
-  res.json({ fulfilled, rejected, successfulUserList, successfulUIDs })
+  res.json({
+    fulfilled,
+    rejected,
+    successfulUserList,
+    successfulUIDs,
+  })
 })
 
 const addUserToTeam = async (user: User): Promise<AddUserRecord> => {
@@ -148,15 +155,15 @@ const addUserToTeam = async (user: User): Promise<AddUserRecord> => {
   }
 
   const writeResult = await docRef.set(
-    {
-      members: firestore.FieldValue.arrayUnion({
-        email: user.email,
-        loginId: 'something unique',
-        phoneNumber: user.phoneNumber,
-        uid: user.uid,
-      }),
-    },
-    { merge: true }
+      {
+        members: firestore.FieldValue.arrayUnion({
+          email: user.email,
+          loginId: 'something unique',
+          phoneNumber: user.phoneNumber,
+          uid: user.uid,
+        }),
+      },
+      { merge: true }
   )
   return { message: writeResult, status: 'fulfilled' }
 }

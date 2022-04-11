@@ -12,7 +12,9 @@ const SOARInit = {
   points: 0,
 }
 
-export const initializeTeam = async (teamName: string): Promise<WriteResult> => {
+export const initializeTeam = async (
+    teamName: string
+): Promise<WriteResult> => {
   const teamData = {
     SOAR: SOARInit,
     SOARStart: 0,
@@ -25,9 +27,9 @@ export const initializeTeam = async (teamName: string): Promise<WriteResult> => 
     registeredEvents: {},
   }
   const result = await firestore()
-  .collection('teams')
-  .doc(teamName)
-  .set(teamData)
+      .collection('teams')
+      .doc(teamName)
+      .set(teamData)
 
   return result
 }
