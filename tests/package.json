@@ -1,0 +1,20 @@
+{
+  "name": "sunnus-console",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^17.0.23",
+    "axios": "^0.26.1",
+    "typescript": "^4.6.3"
+  },
+  "scripts": {
+    "dev": "tsc && node .",
+    "dev:create-users": "tsc && node lib/createUsers",
+    "dev:cu": "tsc && node lib/createUsers",
+    "dev:dau": "tsc && node lib/deleteAllUsers",
+    "dev:it": "tsc && node lib/initializeTeam",
+    "dev:au": "tsc && node lib/addUserToTeam",
+    "build": "tsc"
+  }
+}
