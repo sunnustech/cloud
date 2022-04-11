@@ -1,16 +1,16 @@
 import { TypedRoles, BooleanDict } from '../../types/roles'
 
 const admins: Array<string> = [
-  'calista@gmail.com',
-  'something@gmail.com',
-  'is@gmail.com',
-  'up@gmail.com',
+  'hgOiKxBqMPgop95eESIZnADpwyK2', // brew4k@gmail.com
+  'TJFUjBCGF8XSziA6QCbBL0pZNx33', // hongsheng@gmail.com
+  '8uRI4WLMTZX7RlU8YuFDlH7mgL12', // calista@gmail.com
 ]
 
 const facilitators: Array<string> = [
-  'hongsheng@gmail.com',
-  'daddy@gmail.com',
-  'supreme@gmail.com',
+  'hgOiKxBqMPgop95eESIZnADpwyK2', // brew4k@gmail.com
+  'TJFUjBCGF8XSziA6QCbBL0pZNx33', // hongsheng@gmail.com
+  '8uRI4WLMTZX7RlU8YuFDlH7mgL12', // calista@gmail.com
+  '3uorVJy2cvRDLE4xJgh4t5dOL4k1', // sunnus@gmail.com
 ]
 
 /**
