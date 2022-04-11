@@ -66,8 +66,23 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
   if (successfulUIDs.length > 0) {
+    /* append new UIDs to list of all automatically generated users
+     * (this allows them to be deleted easily by deleteAllUsers)
+     */
     const docRef = firestore().collection('users').doc('allIds')
     docRef.set({ data: firestore.FieldValue.arrayUnion(...successfulUIDs) })
+
+    /* add successfully created users to their respective teams
+     * 1. get list of existing team names
+     *    - initialize if not exists
+     * 2. append user to member array in that team using array union
+     */
+
+    const existingTeamNames: string[] = (
+      await firestore().collection('teams').listDocuments()
+    ).map((e) => e.id)
+    res.json({ existingTeamNames: existingTeamNames })
+    return
   }
 
   /* send back the statuses */
