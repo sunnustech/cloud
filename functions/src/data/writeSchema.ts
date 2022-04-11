@@ -5,6 +5,7 @@ import typedSOAR from './schema/SOAR'
 import typedRoles from './schema/roles'
 import { https } from 'firebase-functions'
 import { WriteResult } from '@google-cloud/firestore'
+import writeUserList from './schema/users'
 
 /**
  * @param {Object} props: the input
@@ -62,6 +63,7 @@ export const writeSchema = https.onRequest(async (_, res) => {
       collection: 'roles',
       docs: typedRoles,
     }),
+    writeUserList()
   ])
 
   res.json({ result: `Probably worked: ${everything}` })

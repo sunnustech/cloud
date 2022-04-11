@@ -15,6 +15,7 @@
     "dev:dau": "tsc && node lib/deleteAllUsers",
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:au": "tsc && node lib/addUserToTeam",
+    "dev:ws": "tsc && node lib/writeSchema",
     "build": "tsc"
   }
 }
