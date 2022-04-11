@@ -12,6 +12,7 @@
     "dev": "tsc && node .",
     "dev:create-users": "tsc && node lib/createUsers",
     "dev:cu": "tsc && node lib/createUsers",
+    "dev:dau": "tsc && node lib/deleteAllUsers",
     "build": "tsc"
   }
 }
