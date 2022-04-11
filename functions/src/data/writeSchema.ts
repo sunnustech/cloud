@@ -6,8 +6,9 @@ import typedRoles from './schema/roles'
 import { https } from 'firebase-functions/v1'
 
 /**
- * @param {string} collection: the target firebase collection
- * @param {Record<string, Record<string, any>>} docs: the docs to write
+ * @param {Object} props: the input
+ * @param {string} props.collection: the target firebase collection
+ * @param {Record<string, Record<string, any>>} props.docs: the docs to write
  */
 async function push({
   collection,

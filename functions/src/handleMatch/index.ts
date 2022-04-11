@@ -96,8 +96,8 @@ export const _handleMatch = https.onRequest(async (req, res) => {
   const request: IncomingHandleMatchRequest = {
     series: 'TSS',
     sport: 'volleyball',
-    matchNumber: 0,
     round: 'round_of_32',
+    matchNumber: 0,
     A: 'A-team',
     B: 'B-team',
     winner: 'A',
