@@ -1,4 +1,5 @@
 import { deleteAllUsers } from './deleteAllUsers'
-import { createUsers } from './createUsers'
+import { createUsersAndAddToTeams } from './createUsersAndAddToTeams'
+import { createUsers} from './createUsers'
 
-export { deleteAllUsers, createUsers }
+export { deleteAllUsers, createUsersAndAddToTeams, createUsers }

@@ -4,11 +4,17 @@ import { firestore } from 'firebase-admin'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
 import { handleMatch } from './handleMatch'
 import { writeSchema } from './data/writeSchema'
-import { createUsers, deleteAllUsers } from './users'
+import { createUsersAndAddToTeams, deleteAllUsers, createUsers } from './users'
 
 initializeApp()
 
-export { handleMatch, writeSchema, createUsers, deleteAllUsers }
+export {
+  handleMatch,
+  writeSchema,
+  createUsersAndAddToTeams,
+  deleteAllUsers,
+  createUsers,
+}
 
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')
@@ -35,8 +41,8 @@ export const addMessage = https.onRequest(async (req, res) => {
   const original = req.query.text
   // Push the new message into Firestore using the Firebase Admin SDK.
   const writeResult = await firestore()
-      .collection('cloud-functions')
-      .add({ original: original })
+    .collection('cloud-functions')
+    .add({ original: original })
   // Send back a message that we've successfully written the message
   res.json({ result: `Message with ID: ${writeResult.id} added.` })
 })
