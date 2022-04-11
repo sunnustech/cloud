@@ -1,20 +1,29 @@
 import axios from 'axios'
 import { timestamp } from './timestamp'
 import { cloud } from './firebase'
-import { SunNUSUser, FirebaseUser } from './types/users'
+import { sanitizePhoneNumber } from './utils'
 
-const createUser = (user: SunNUSUser): FirebaseUser => {
+// import { User } from './types/users'
+type User = {
+  email: string
+  phoneNumber: string
+  teamName: string
+}
+
+const createUser = (user: User): User => {
   return {
     email: user.email,
+    teamName: user.teamName,
+    phoneNumber: sanitizePhoneNumber('65', user.phoneNumber),
   }
 }
 
-const csv: SunNUSUser[] = [
-  { email: '1@gmail.com', phoneNumber: '9832 6742' },
-  { email: '2@gmail.com', phoneNumber: '+65 91212368' },
+const csv: User[] = [
+  { email: '1@gmail.com', phoneNumber: '9832 6742', teamName: 'teamA' },
+  { email: '2@gmail.com', phoneNumber: '+65 91212368', teamName: 'teamB' },
 ]
 
-const sanitizedUserList: FirebaseUser[] = csv.map((user) => createUser(user))
+const sanitizedUserList: User[] = csv.map((user) => createUser(user))
 
 const fn = 'createUsers'
 timestamp(fn)

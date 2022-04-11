@@ -1,9 +1,8 @@
-export type SunNUSUser = {
+// server side types
+
+export type User = {
   email: string
   phoneNumber: string
   teamName: string
-}
-
-export type FirebaseUser = {
-  email: string
+  uid: string
 }

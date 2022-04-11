@@ -1,8 +1,7 @@
-export type SunNUSUser = {
+// test-client side types
+
+export type User = {
   email: string
   phoneNumber: string
-}
-
-export type FirebaseUser = {
-  email: string
+  teamName: string
 }
