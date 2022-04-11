@@ -28,17 +28,25 @@ type AddUserRecord = {
  * @param {RequestUser[]} userList: the incoming request array of users
  * @param {User[]} successList: the list that successfully created new
  * users will be added to
- * @returns {Promise<UserRecord>[]} a queue that can be executed to create
+ * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
-  userList: RequestUser[],
-  successList: User[]
+    userList: RequestUser[],
+    successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
-  /* add a user to the successfulUserList */
-  function appendSuccessfulAddition(user: RequestUser, rec: UserRecord) {
+  /**
+   * add a user to the successfulUserList
+   * @param {RequestUser} user: requested props
+   * @param {UserRecord} rec: the assgined props after user creation
+   * @return {UserRecord} bypass the callback
+   */
+  function appendSuccessfulAddition(
+      user: RequestUser,
+      rec: UserRecord
+  ): UserRecord {
     successList.push({
       uid: rec.uid,
       phoneNumber: user.phoneNumber,
@@ -48,8 +56,11 @@ const getUserCreationQueue = (
     return rec
   }
 
-  /* takes a RequestUser and adds basic information
+  /**
+   * takes a RequestUser and adds basic information
    * for firebase to be able to create a full user
+   * @param {RequestUser} user: requested props
+   * @return {void}
    */
   function newUser(user: RequestUser) {
     return {
@@ -66,9 +77,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-      getAuth()
-        .createUser(newUser(user))
-        .then((rec) => appendSuccessfulAddition(user, rec))
+        getAuth()
+            .createUser(newUser(user))
+            .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -140,7 +151,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   const initializeQueue: Promise<WriteResult>[] = []
 
   const allRequestedTeamNames: string[] = successfulUserList.map(
-    (user) => user.teamName
+      (user) => user.teamName
   )
   const uniqueRequestedTeamNames: string[] = [...new Set(allRequestedTeamNames)]
 
@@ -190,13 +201,13 @@ export const createUsers = https.onRequest(async (req, res) => {
     rejected,
     successfulUserList,
     successfulUIDs,
-    editedTeams
+    editedTeams,
   })
 })
 
 const addUserToTeam = async (
-  user: User,
-  existingTeamNames: string[]
+    user: User,
+    existingTeamNames: string[]
 ): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
     return {
@@ -225,15 +236,15 @@ const addUserToTeam = async (
   }
 
   const writeResult = await teamDoc.set(
-    {
-      members: firestore.FieldValue.arrayUnion({
-        email: user.email,
-        loginId: 'something unique',
-        phoneNumber: user.phoneNumber,
-        uid: user.uid,
-      }),
-    },
-    { merge: true }
+      {
+        members: firestore.FieldValue.arrayUnion({
+          email: user.email,
+          loginId: 'something unique',
+          phoneNumber: user.phoneNumber,
+          uid: user.uid,
+        }),
+      },
+      { merge: true }
   )
 
   return { message: writeResult, status: 'fulfilled' }
