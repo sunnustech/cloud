@@ -19,6 +19,7 @@ module.exports = {
   },
   ignorePatterns: [
     '/lib/**/*', // Ignore built files.
+    '/src/tests/**/*', // Ignore test files.
   ],
   plugins: ['@typescript-eslint', 'import'],
   rules: {

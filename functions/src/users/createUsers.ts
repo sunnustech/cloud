@@ -12,8 +12,8 @@ import { WriteResult } from '@google-cloud/firestore'
  * the users requested
  */
 const getUserCreationQueue = (
-  userList: RequestUser[],
-  successList: Member[]
+    userList: RequestUser[],
+    successList: Member[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -24,8 +24,8 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-    user: RequestUser,
-    rec: UserRecord
+      user: RequestUser,
+      rec: UserRecord
   ): UserRecord {
     successList.push({
       uid: rec.uid,
@@ -58,9 +58,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-      getAuth()
-        .createUser(newUser(user))
-        .then((rec) => appendSuccessfulAddition(user, rec))
+        getAuth()
+            .createUser(newUser(user))
+            .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -137,6 +137,6 @@ export const createUsers = https.onRequest(async (req, res) => {
     rejected,
     successfulUserList,
     successfulUIDs,
-    userWriteResult
+    userWriteResult,
   })
 })

@@ -4,14 +4,14 @@ import { WriteResult } from '@google-cloud/firestore'
 
 const userList: Member[] = [
   {
-    teamName: "auto_magic",
+    teamName: 'auto_magic',
     email: 'one@gmail.com',
     loginId: 'automagic123456',
     phoneNumber: '91239845',
     uid: 'from_writeSchema___asdfghjklsemicolon',
   },
   {
-    teamName: "auto_matic",
+    teamName: 'auto_matic',
     email: 'two@gmail.com',
     loginId: 'automatic987654',
     phoneNumber: '90912365',

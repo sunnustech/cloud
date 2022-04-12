@@ -3,7 +3,13 @@ import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { WriteResult } from '@google-cloud/firestore'
 import { initializeTeam } from './initializeTeam'
-import { RequestUser, User, Member, AddUserRecord, FirebaseUserInit } from '../types/users'
+import {
+  RequestUser,
+  User,
+  Member,
+  AddUserRecord,
+  FirebaseUserInit,
+} from '../types/users'
 
 /**
  * @param {RequestUser[]} userList: the incoming request array of users
@@ -13,8 +19,8 @@ import { RequestUser, User, Member, AddUserRecord, FirebaseUserInit } from '../t
  * the users requested
  */
 const getUserCreationQueue = (
-  userList: RequestUser[],
-  successList: User[]
+    userList: RequestUser[],
+    successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -25,8 +31,8 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-    user: RequestUser,
-    rec: UserRecord
+      user: RequestUser,
+      rec: UserRecord
   ): UserRecord {
     successList.push({
       uid: rec.uid,
@@ -58,9 +64,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-      getAuth()
-        .createUser(newUser(user))
-        .then((rec) => appendSuccessfulAddition(user, rec))
+        getAuth()
+            .createUser(newUser(user))
+            .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -132,7 +138,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
   const initializeQueue: Promise<WriteResult>[] = []
 
   const allRequestedTeamNames: string[] = successfulUserList.map(
-    (user) => user.teamName
+      (user) => user.teamName
   )
   const uniqueRequestedTeamNames: string[] = [...new Set(allRequestedTeamNames)]
 
@@ -187,8 +193,8 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
 })
 
 const addUserToTeam = async (
-  user: User,
-  existingTeamNames: string[]
+    user: User,
+    existingTeamNames: string[]
 ): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
     return {
@@ -217,15 +223,15 @@ const addUserToTeam = async (
   }
 
   const writeResult = await teamDoc.set(
-    {
-      members: firestore.FieldValue.arrayUnion({
-        email: user.email,
-        loginId: 'something unique',
-        phoneNumber: user.phoneNumber,
-        uid: user.uid,
-      }),
-    },
-    { merge: true }
+      {
+        members: firestore.FieldValue.arrayUnion({
+          email: user.email,
+          loginId: 'something unique',
+          phoneNumber: user.phoneNumber,
+          uid: user.uid,
+        }),
+      },
+      { merge: true }
   )
 
   return { message: writeResult, status: 'fulfilled' }

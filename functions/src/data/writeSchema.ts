@@ -63,7 +63,7 @@ export const writeSchema = https.onRequest(async (_, res) => {
       collection: 'roles',
       docs: typedRoles,
     }),
-    writeUserList()
+    writeUserList(),
   ])
 
   res.json({ result: `Probably worked: ${everything}` })
