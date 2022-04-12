@@ -1,7 +1,7 @@
 import {
   EmailProps,
   LoginIdProps,
-  newTeamProps,
+  NewTeamProps,
   ParticipantsDatabase,
   TeamProps,
   TeamsDatabase,
@@ -22,10 +22,10 @@ const SOARInit: SOARTeamProps = {
 }
 
 /**
- * @param {newTeamProps} props: basic details of a fresh team
+ * @param {NewTeamProps} props: basic details of a fresh team
  * @return {TeamProps} a team object with empty props
  */
-export function newSunNUSTeam(props: newTeamProps): TeamProps {
+export function newSunNUSTeam(props: NewTeamProps): TeamProps {
   return {
     SOAR: SOARInit,
     SOARStart: 0,

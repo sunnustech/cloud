@@ -16,14 +16,14 @@ export type RegisteredEvents = {
   SOAR?: boolean
 }
 
-export type newTeamProps = {
+export type NewTeamProps = {
   teamName: string
-  members: Array<Member>
   registeredEvents: RegisteredEvents
   direction: 'A' | 'B'
 }
 
-export type TeamProps = newTeamProps & {
+export type TeamProps = NewTeamProps & {
+  members: Array<Member>
   SOAR: SOARTeamProps
   SOARTimerEvents: Array<number>
   SOARStart: number
