@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/node": "^17.0.23",
     "axios": "^0.26.1",
+    "csv-parse": "^5.0.4",
     "typescript": "^4.6.3"
   },
   "scripts": {
@@ -27,4 +28,3 @@
     "dev:dd": "tsc && node lib/deleteDocs"
   }
 }
-
