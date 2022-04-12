@@ -13,6 +13,12 @@ const docList = [
   'auto_four',
   'auto_five',
   'auto_six',
+  'auto_seven',
+  'auto_eight',
+  'auto_nine',
+  'auto_ten',
+  'auto_eleven',
+  'auto_twelve',
 ]
 
 axios

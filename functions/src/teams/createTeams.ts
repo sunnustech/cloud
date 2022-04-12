@@ -21,7 +21,7 @@ function makeTeam(props: NewTeamProps): TeamProps {
       startTime: 0,
       stopTime: 0,
       allEvents: [],
-      direction: 'A',
+      direction: props.direction,
       points: 0,
     },
   }

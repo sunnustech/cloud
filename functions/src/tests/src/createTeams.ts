@@ -2,86 +2,45 @@ import axios from 'axios'
 import { timestamp } from './timestamp'
 import { cloud } from './firebase'
 import { NewTeamProps } from '../../types/participants'
+import { parse } from 'csv-parse/sync'
+import fs from 'fs'
+
+type CsvTeamProps = {
+  teamName: string
+  volleyball: string
+  dodgeball: string
+  frisbee: string
+  tchoukball: string
+  SOAR: string
+  direction: 'A' | 'B'
+}
 
 const fn = 'createTeams'
 timestamp(fn)
 
 const request = { message: 'requester to server, over!' }
 
-const teamList: NewTeamProps[] = [
-  {
-    teamName: 'auto_one',
-    direction: 'A',
-    registeredEvents: {
-      TSS: {
-        volleyball: true,
-      },
-      SOAR: false,
+/* read from the csv file */
+const fileData = fs.readFileSync('src/csv/createTeams.csv')
+const csv: CsvTeamProps[] = parse(fileData, {
+  delimiter: ',',
+  trim: true,
+  columns: true,
+})
+
+const teamList: NewTeamProps[] = csv.map((csvTeam) => ({
+  teamName: csvTeam.teamName,
+  direction: csvTeam.direction,
+  registeredEvents: {
+    TSS: {
+      volleyball: csvTeam.volleyball !== '',
+      tchoukball: csvTeam.tchoukball !== '',
+      frisbee: csvTeam.frisbee !== '',
+      dodgeball: csvTeam.dodgeball !== '',
     },
+    SOAR: csvTeam.SOAR !== '',
   },
-  {
-    teamName: 'auto_two',
-    direction: 'A',
-    registeredEvents: {
-      SOAR: true,
-    },
-  },
-  {
-    teamName: 'auto_three',
-    direction: 'B',
-    registeredEvents: {
-      SOAR: true,
-    },
-  },
-  {
-    teamName: 'auto_four',
-    direction: 'B',
-    registeredEvents: {
-      TSS: {
-        volleyball: true,
-      },
-    },
-  },
-  {
-    teamName: 'auto_five',
-    direction: 'B',
-    registeredEvents: {
-      TSS: {
-        dodgeball: true,
-      },
-    },
-  },
-  {
-    teamName: 'auto_six',
-    direction: 'B',
-    registeredEvents: {
-      TSS: {
-        tchoukball: true,
-        frisbee: true,
-      },
-    },
-  },
-  {
-    teamName: 'existing_1',
-    direction: 'B',
-    registeredEvents: {
-      TSS: {
-        tchoukball: true,
-        frisbee: true,
-      },
-    },
-  },
-  {
-    teamName: 'existing_2',
-    direction: 'B',
-    registeredEvents: {
-      TSS: {
-        tchoukball: true,
-        frisbee: true,
-      },
-    },
-  },
-]
+}))
 
 axios.post(cloud(fn), { teamList }).then((res) => {
   const data = res.data
