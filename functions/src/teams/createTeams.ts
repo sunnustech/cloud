@@ -1,5 +1,6 @@
 import { https } from 'firebase-functions'
 import { NewTeamProps, TeamProps } from '../types/participants'
+import { listDocIdsAsync, partition } from '../utils'
 
 function makeTeam(props: NewTeamProps): TeamProps {
   return {
@@ -39,9 +40,17 @@ export const createTeams = https.onRequest(async (req, res) => {
   }
 
   const teamList: NewTeamProps[] = req.body.teamList
+  const existingTeamNames: string[] = await listDocIdsAsync('teams')
+  const [alreadyExisting, tobeFulfilled] = partition(teamList, (team) =>
+    existingTeamNames.includes(team.teamName)
+  )
+
+  // const madeTeamList: TeamProps[] = teamList.map((team) => makeTeam(team))
 
   res.json({
     result: `Round robin handler at your service!`,
-    teamList: teamList
+    teamList,
+    alreadyExisting,
+    tobeFulfilled,
   })
 })

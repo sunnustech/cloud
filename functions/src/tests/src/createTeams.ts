@@ -16,40 +16,40 @@ const teamList: NewTeamProps[] = [
       TSS: {
         volleyball: true,
       },
-      SOAR: false
-    }
+      SOAR: false,
+    },
   },
   {
     teamName: 'auto_two',
     direction: 'A',
     registeredEvents: {
-      SOAR: true
-    }
+      SOAR: true,
+    },
   },
   {
     teamName: 'auto_three',
     direction: 'B',
     registeredEvents: {
-      SOAR: true
-    }
+      SOAR: true,
+    },
   },
   {
     teamName: 'auto_four',
     direction: 'B',
     registeredEvents: {
       TSS: {
-        volleyball: true
-      }
-    }
+        volleyball: true,
+      },
+    },
   },
   {
     teamName: 'auto_five',
     direction: 'B',
     registeredEvents: {
       TSS: {
-        dodgeball: true
-      }
-    }
+        dodgeball: true,
+      },
+    },
   },
   {
     teamName: 'auto_six',
@@ -57,10 +57,30 @@ const teamList: NewTeamProps[] = [
     registeredEvents: {
       TSS: {
         tchoukball: true,
-        frisbee: true
-      }
-    }
-  }
+        frisbee: true,
+      },
+    },
+  },
+  {
+    teamName: 'existing_1',
+    direction: 'B',
+    registeredEvents: {
+      TSS: {
+        tchoukball: true,
+        frisbee: true,
+      },
+    },
+  },
+  {
+    teamName: 'existing_2',
+    direction: 'B',
+    registeredEvents: {
+      TSS: {
+        tchoukball: true,
+        frisbee: true,
+      },
+    },
+  },
 ]
 
 axios.post(cloud(fn), { teamList }).then((res) => {

@@ -1,4 +1,5 @@
 import { TeamProps } from '../types/participants'
+import { firestore } from 'firebase-admin'
 
 /**
  * @param {string} string: the string you want to process
@@ -25,4 +26,31 @@ export function makeTeams(arr: Array<TeamProps>): Record<string, TeamProps> {
     obj[e.teamName] = e
   })
   return obj
+}
+
+/**
+ * retrives a list of document ids of a collection
+ * @param {string} collection: the name of the collection to read
+ * @return {Promise<string[]>} the list
+ */
+export async function listDocIdsAsync(collection: string): Promise<string[]> {
+  const list: string[] = (
+    await firestore().collection(collection).listDocuments()
+  ).map((e) => e.id)
+  return list
+}
+
+/**
+ * filter, but two ways
+ * @param {T[]} array: the array to split in two
+ * @return {[T[], T[]]} the pass-fail array
+ */
+export function partition<T>(array: T[], check: (elem: T) => boolean): [T[], T[]] {
+  return array.reduce(
+    (result: [pass: T[], fail: T[]], element) => {
+      result[check(element) ? 0 : 1].push(element)
+      return result
+    },
+    [[], []]
+  )
 }

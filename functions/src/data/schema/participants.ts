@@ -36,7 +36,7 @@ export function newSunNUSTeam(props: NewTeamProps): TeamProps {
     direction: props.direction,
     teamName: props.teamName,
     SOARStationsRemaining: stationOrder[props.direction],
-    members: props.members,
+    members: [],
     registeredEvents: props.registeredEvents,
   }
 }
@@ -51,28 +51,6 @@ const testOne = newSunNUSTeam({
     SOAR: true,
   },
   direction: 'A',
-  members: [
-    {
-      loginId: '',
-      email: 'alice@gmail.com',
-      phone: '77884793',
-    },
-    {
-      loginId: '',
-      email: 'brandon@gmail.com',
-      phone: '79412799',
-    },
-    {
-      loginId: '',
-      email: 'carla@gmail.com',
-      phone: '77008669',
-    },
-    {
-      loginId: '',
-      email: 'dave@gmail.com',
-      phone: '70620715',
-    },
-  ],
 })
 
 const testTwo = newSunNUSTeam({
@@ -85,28 +63,6 @@ const testTwo = newSunNUSTeam({
     SOAR: true,
   },
   direction: 'A',
-  members: [
-    {
-      loginId: '',
-      email: 'adam@gmail.com',
-      phone: '73125593',
-    },
-    {
-      loginId: '',
-      email: 'beverly@gmail.com',
-      phone: '75687708',
-    },
-    {
-      loginId: '',
-      email: 'cedric@gmail.com',
-      phone: '75893845',
-    },
-    {
-      loginId: '',
-      email: 'dana@gmail.com',
-      phone: '78449264',
-    },
-  ],
 })
 
 const testThree = newSunNUSTeam({
@@ -120,28 +76,6 @@ const testThree = newSunNUSTeam({
     SOAR: false,
   },
   direction: 'A',
-  members: [
-    {
-      loginId: '',
-      email: 'hongsheng@gmail.com',
-      phone: '11111111',
-    },
-    {
-      loginId: '',
-      email: 'ryan@gmail.com',
-      phone: '22222222',
-    },
-    {
-      loginId: '',
-      email: 'khang@gmail.com',
-      phone: '88888888',
-    },
-    {
-      loginId: '',
-      email: 'junhong@gmail.com',
-      phone: '99999999',
-    },
-  ],
 })
 
 const Developer = newSunNUSTeam({
@@ -150,28 +84,6 @@ const Developer = newSunNUSTeam({
   registeredEvents: {
     SOAR: true,
   },
-  members: [
-    {
-      email: 'adam@gmail.com',
-      phone: '73125593',
-      loginId: 'dev_loper120389',
-    },
-    {
-      email: 'beverly@gmail.com',
-      phone: '75687708',
-      loginId: 'dev_loper120388',
-    },
-    {
-      email: 'calista@gmail.com',
-      phone: '75893845',
-      loginId: 'k',
-    },
-    {
-      email: 'dana@gmail.com',
-      phone: '78449264',
-      loginId: 'dev_loper120386',
-    },
-  ],
 })
 
 const trimTeamNameToLowercase = (teamName: string) => {
