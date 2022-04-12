@@ -1,6 +1,8 @@
 import { https } from 'firebase-functions'
 import { NewTeamProps, TeamProps } from '../types/participants'
 import { listDocIdsAsync, partition } from '../utils'
+import { firestore } from 'firebase-admin'
+import { WriteResult } from '@google-cloud/firestore'
 
 function makeTeam(props: NewTeamProps): TeamProps {
   return {
@@ -41,16 +43,30 @@ export const createTeams = https.onRequest(async (req, res) => {
 
   const teamList: NewTeamProps[] = req.body.teamList
   const existingTeamNames: string[] = await listDocIdsAsync('teams')
-  const [alreadyExisting, tobeFulfilled] = partition(teamList, (team) =>
-    existingTeamNames.includes(team.teamName)
+
+  const [tobeFulfilled, alreadyExisting] = partition(teamList, (team) =>
+    !existingTeamNames.includes(team.teamName)
   )
 
-  // const madeTeamList: TeamProps[] = teamList.map((team) => makeTeam(team))
+  const madeTeamList: TeamProps[] = tobeFulfilled.map((team) => makeTeam(team))
+
+  const teamsCollection = firestore().collection('teams')
+  const createTeamsQueue: Promise<WriteResult>[] = []
+
+  madeTeamList.forEach(team => {
+    createTeamsQueue.push(teamsCollection.doc(team.teamName).create(team))
+  })
+
+  const writeResult = await Promise.allSettled(createTeamsQueue)
+
+  console.log(alreadyExisting)
 
   res.json({
     result: `Round robin handler at your service!`,
-    teamList,
-    alreadyExisting,
-    tobeFulfilled,
+    // teamList,
+    // alreadyExisting,
+    // tobeFulfilled,
+    madeTeamList,
+    writeResult
   })
 })
