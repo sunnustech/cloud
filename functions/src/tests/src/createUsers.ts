@@ -15,7 +15,7 @@ const createUser = (user: RequestUser): RequestUser => {
 }
 
 /* read from the csv file */
-const fileData = fs.readFileSync('src/csv/users.csv')
+const fileData = fs.readFileSync('src/csv/createUsers.csv')
 const csv: RequestUser[] = parse(fileData, {
   delimiter: ',',
   trim: true,
