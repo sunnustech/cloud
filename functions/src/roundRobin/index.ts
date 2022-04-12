@@ -1,7 +1,7 @@
 import { https } from 'firebase-functions'
 
-export const handleMatch = https.onCall(async (req, context) => {
-  return {
+export const handleMatch = https.onRequest(async (req, res) => {
+  res.json({
     result: `Round robin handler at your service!`,
-  }
+  })
 })
