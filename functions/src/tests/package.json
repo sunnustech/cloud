@@ -10,15 +10,19 @@
   },
   "scripts": {
     "dev": "tsc && node .",
+    "build": "tsc",
     "dev:create-users": "tsc && node lib/createUsers",
     "dev:delete-all-users": "tsc && node lib/deleteAllUsers",
+    "dev:handle-match": "tsc && node lib/handleMatch",
+    "dev:initialize-team": "tsc && node lib/initializeTeam",
+    "dev:create-teams": "tsc && node lib/createTeams",
+    "dev:write-schema": "tsc && node lib/createTeams",
     "dev:cu": "tsc && node lib/createUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
-    "dev:au": "tsc && node lib/addUserToTeam",
-    "dev:ws": "tsc && node lib/writeSchema",
-    "build": "tsc"
+    "dev:ct": "tsc && node lib/createTeams",
+    "dev:ws": "tsc && node lib/writeSchema"
   }
 }
 
