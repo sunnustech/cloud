@@ -1,5 +1,8 @@
 import { TeamProps } from '../types/participants'
 import { firestore } from 'firebase-admin'
+import { deleteDocs } from './deleteDocs'
+
+export { deleteDocs }
 
 /**
  * @param {string} string: the string you want to process

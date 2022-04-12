@@ -1,6 +1,5 @@
 import { https } from 'firebase-functions'
 import { NewTeamProps, TeamProps } from '../types/participants'
-import { listDocIdsAsync, partition } from '../utils'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 

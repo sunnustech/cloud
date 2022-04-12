@@ -17,12 +17,14 @@
     "dev:initialize-team": "tsc && node lib/initializeTeam",
     "dev:create-teams": "tsc && node lib/createTeams",
     "dev:write-schema": "tsc && node lib/createTeams",
+    "dev:delete-docs": "tsc && node lib/deleteDocs",
     "dev:cu": "tsc && node lib/createUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
-    "dev:ws": "tsc && node lib/writeSchema"
+    "dev:ws": "tsc && node lib/writeSchema",
+    "dev:dd": "tsc && node lib/deleteDocs"
   }
 }
 

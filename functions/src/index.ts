@@ -7,10 +7,12 @@ import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createUsersAndAddToTeams, deleteAllUsers, createUsers } from './users'
 import { createTeams } from './teams'
+import { deleteDocs } from './utils'
 
 initializeApp()
 
 export {
+  deleteDocs,
   createTeams,
   handleMatch,
   writeSchema,
