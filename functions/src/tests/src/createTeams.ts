@@ -84,5 +84,6 @@ const teamList: NewTeamProps[] = [
 ]
 
 axios.post(cloud(fn), { teamList }).then((res) => {
-  console.log(res.data)
+  const data = res.data
+  console.log(data)
 })

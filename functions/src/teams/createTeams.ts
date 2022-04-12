@@ -42,31 +42,20 @@ export const createTeams = https.onRequest(async (req, res) => {
   }
 
   const teamList: NewTeamProps[] = req.body.teamList
-  const existingTeamNames: string[] = await listDocIdsAsync('teams')
-
-  const [tobeFulfilled, alreadyExisting] = partition(teamList, (team) =>
-    !existingTeamNames.includes(team.teamName)
-  )
-
-  const madeTeamList: TeamProps[] = tobeFulfilled.map((team) => makeTeam(team))
 
   const teamsCollection = firestore().collection('teams')
   const createTeamsQueue: Promise<WriteResult>[] = []
 
-  madeTeamList.forEach(team => {
-    createTeamsQueue.push(teamsCollection.doc(team.teamName).create(team))
+  teamList.forEach((team) => {
+    createTeamsQueue.push(
+      teamsCollection.doc(team.teamName).create(makeTeam(team))
+    )
   })
 
   const writeResult = await Promise.allSettled(createTeamsQueue)
 
-  console.log(alreadyExisting)
-
   res.json({
     result: `Round robin handler at your service!`,
-    // teamList,
-    // alreadyExisting,
-    // tobeFulfilled,
-    madeTeamList,
-    writeResult
+    writeResult,
   })
 })
