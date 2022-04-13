@@ -1,3 +1,5 @@
+/* some shared types for easier future changes */
+
 export type RegisteredEvents = {
   TSS?: {
     volleyball?: boolean
@@ -10,28 +12,9 @@ export type RegisteredEvents = {
 
 /* InitializeXYZ will contain the minimum
  * props required to initialize XYZ.
- *
  */
 
-export type InitializeTeam = {
-  teamName: string
-  registeredEvents: {
-    TSS?: {
-      volleyball?: boolean
-      dodgeball?: boolean
-      tchoukball?: boolean
-      frisbee?: boolean
-    }
-    SOAR?: boolean
-  }
-  direction: 'A' | 'B'
-}
-
-export type InitializeUser = {
-  email: string
-  phoneNumber: string
-  teamName: string
-}
+/* some intermediate types that are only used in helper functions */
 
 export type InitializeFirebaseUser = {
   email: string
@@ -40,3 +23,16 @@ export type InitializeFirebaseUser = {
   disabled: false
 }
 
+/* the core types that will be extended in sunnus-firestore */
+
+export type InitializeTeam = {
+  teamName: string
+  registeredEvents: RegisteredEvents
+  direction: 'A' | 'B'
+}
+
+export type InitializeUser = {
+  email: string
+  phoneNumber: string
+  teamName: string
+}

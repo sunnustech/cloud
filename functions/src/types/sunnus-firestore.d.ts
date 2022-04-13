@@ -1,27 +1,14 @@
 import { SOARTeamProps } from './SOAR'
+import { InitializeTeam, InitializeUser } from './sunnus-init'
 
 /* a fully-fledged SunNUS team Member */
-export type User = {
-  email: string
-  loginId: string
-  phoneNumber: string
-  teamName: string
-  uid: string
+export type User = InitializeUser & {
+  loginId: string // TODO: figure out how to assign four unique loginIds
+  uid: string // automatically assigned by firebase upon account creation
 }
 
 /* a SunNUS team */
-export type Team = {
-  teamName: string
-  registeredEvents: {
-    TSS?: {
-      volleyball?: boolean
-      dodgeball?: boolean
-      tchoukball?: boolean
-      frisbee?: boolean
-    }
-    SOAR?: boolean
-  }
-  direction: 'A' | 'B'
+export type Team = InitializeTeam & {
   members: string[] // array of members' uids
   SOAR: SOARTeamProps
   SOARTimerEvents: number[]
