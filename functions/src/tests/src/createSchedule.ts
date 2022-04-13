@@ -124,11 +124,6 @@ const sport: Sport = 'touchRugby'
 
 console.log(sport)
 
-// first pair of start and end
-const s = new Date(0, 0, 0, 9)
-const e = new Date(s)
-e.setMinutes(s.getMinutes() + matchLength[sport])
-
 const matches: number[][] = roundRobinFixtures[sportDensity[sport]]
 
 // handle lunch break
@@ -137,28 +132,42 @@ const matches: number[][] = roundRobinFixtures[sportDensity[sport]]
 function duringLunch(t: Date): boolean {
   const h = t.getHours()
   // naive check suffices and is actually less buggy
-  return (h === 12)
+  return h === 12
 }
 
-// courts.forEach
-matches.forEach((match) => {
-  // timeskip through lunch break
-  while (duringLunch(s) || duringLunch(e)) {
-    s.setTime((new Date(0,0,0,13)).getTime())
-    e.setTime((new Date(s)).getTime())
-    e.setMinutes(s.getMinutes() + matchLength[sport])
-  }
-  schedule.push({
-    start: time(s),
-    end: time(e),
-    venue: venues[sport],
-    court: 'Court 1',
-    round: 'round_robin',
-    sport,
-  })
+function startEndInit(first: Date, matchLength: number) {
+  const s = new Date(first)
+  const e = new Date(first)
+  e.setMinutes(s.getMinutes() + matchLength)
+  return [s, e]
+}
 
-  s.setMinutes(s.getMinutes() + matchInterval[sport])
-  e.setMinutes(e.getMinutes() + matchInterval[sport])
+courts[sport].forEach((court, index) => {
+  // first pair of start and end
+  const first = new Date(0, 0, 0, 9)
+  const [s, e] = startEndInit(first, matchLength[sport])
+
+  matches.forEach((match) => {
+    // timeskip through lunch break
+    while (duringLunch(s) || duringLunch(e)) {
+      s.setTime(new Date(0, 0, 0, 13).getTime())
+      e.setTime(new Date(s).getTime())
+      e.setMinutes(s.getMinutes() + matchLength[sport])
+    }
+    schedule.push({
+      start: time(s),
+      end: time(e),
+      venue: venues[sport],
+      round: 'round_robin',
+      court,
+      sport,
+    })
+
+    s.setMinutes(s.getMinutes() + matchInterval[sport])
+    e.setMinutes(e.getMinutes() + matchInterval[sport])
+  })
 })
 
-console.log(schedule.map((e) => e.start))
+const _court = schedule.filter((e) => e.court === 'Court 4')
+const starts = _court.map((e) => e.start)
+console.log(schedule)
