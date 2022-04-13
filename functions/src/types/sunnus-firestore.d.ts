@@ -31,11 +31,15 @@ export type Team = {
   SOARStationsRemaining: string[]
 }
 
+export namespace SunnusFirestore {
+  type teams = Record<string, Team>
+}
+
 /* unused in actual code,
  * this serves as a visual map of what firestore looks like.
  * keys are collection names.
  */
-export type Firebase = {
+export type Firestore = {
   teams: Record<string, Team>
   users: Record<string, User>
 }

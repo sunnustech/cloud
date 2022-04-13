@@ -1,9 +1,4 @@
-import {
-  EmailProps,
-  LoginIdProps,
-  ParticipantsDatabase,
-  TeamsDatabase,
-} from '../../types/participants'
+import { SunnusFirestore } from '../../types/sunnus-firestore'
 import { SOARTeamProps } from '../../types/SOAR'
 import { Team } from '../../types/sunnus-firestore'
 import { NewTeamProps } from '../../types/sunnus-init'
@@ -109,14 +104,7 @@ const allTeams: Array<Team> = [
   Developer,
 ]
 
-const allLoginIds: Record<string, LoginIdProps> = {}
-const allEmails: Record<string, EmailProps> = {}
+const teams: SunnusFirestore.teams = makeTeams(allTeams)
 
-const teams: TeamsDatabase = makeTeams(allTeams)
-const participants: ParticipantsDatabase = Object.assign(teams, {
-  allLoginIds,
-  allEmails,
-})
-
-export default participants
+export default teams
 export { SOARInit }
