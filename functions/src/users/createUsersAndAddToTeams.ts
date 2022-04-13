@@ -5,7 +5,6 @@ import { WriteResult } from '@google-cloud/firestore'
 import { initializeTeam } from './initializeTeam'
 import {
   RequestUser,
-  User,
   Member,
   AddUserRecord,
   FirebaseUserInit,
@@ -13,14 +12,14 @@ import {
 
 /**
  * @param {RequestUser[]} userList: the incoming request array of users
- * @param {User[]} successList: the list that successfully created new
+ * @param {Member[]} successList: the list that successfully created new
  * users will be added to
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
     userList: RequestUser[],
-    successList: User[]
+    successList: Member[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -35,6 +34,7 @@ const getUserCreationQueue = (
       rec: UserRecord
   ): UserRecord {
     successList.push({
+      loginId: 'TODO',
       uid: rec.uid,
       phoneNumber: user.phoneNumber,
       email: user.email,
@@ -87,7 +87,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
   }
 
   const userList: RequestUser[] = req.body.userList
-  const successfulUserList: User[] = []
+  const successfulUserList: Member[] = []
 
   const userCreationQueue = getUserCreationQueue(userList, successfulUserList)
 
@@ -193,7 +193,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
 })
 
 const addUserToTeam = async (
-    user: User,
+    user: Member,
     existingTeamNames: string[]
 ): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
@@ -204,7 +204,7 @@ const addUserToTeam = async (
   }
 
   const teamDoc = firestore().collection('teams').doc(user.teamName)
-  const existingMembers: User[] = (await teamDoc.get()).data()?.members
+  const existingMembers: Member[] = (await teamDoc.get()).data()?.members
 
   if (existingMembers === undefined) {
     return {

@@ -1,15 +1,13 @@
 // server side types
 
+/* the data packet of a user when receiving a request to create users */
 export type RequestUser = {
   email: string
   phoneNumber: string
   teamName: string
 }
 
-export type User = RequestUser & {
-  uid: string
-}
-
+/* minimum data required to initialize a firebase user */
 export type FirebaseUserInit = {
   email: string
   emailVerified: false
@@ -17,6 +15,7 @@ export type FirebaseUserInit = {
   disabled: false
 }
 
+/* a fully-fledged SunNUS team Member */
 export type Member = {
   teamName: string
   email: string
