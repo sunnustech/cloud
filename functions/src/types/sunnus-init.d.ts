@@ -1,4 +1,12 @@
-import { RegisteredEvents } from "./teams"
+export type RegisteredEvents = {
+  TSS?: {
+    volleyball?: boolean
+    dodgeball?: boolean
+    tchoukball?: boolean
+    frisbee?: boolean
+  }
+  SOAR?: boolean
+}
 
 /* InitializeXYZ will contain the minimum
  * props required to initialize XYZ.
@@ -7,7 +15,15 @@ import { RegisteredEvents } from "./teams"
 
 export type InitializeTeam = {
   teamName: string
-  registeredEvents: RegisteredEvents
+  registeredEvents: {
+    TSS?: {
+      volleyball?: boolean
+      dodgeball?: boolean
+      tchoukball?: boolean
+      frisbee?: boolean
+    }
+    SOAR?: boolean
+  }
   direction: 'A' | 'B'
 }
 
