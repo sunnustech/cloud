@@ -21,6 +21,7 @@
     "dev:handle-match": "tsc && node lib/handleMatch",
     "dev:initialize-team": "tsc && node lib/initializeTeam",
     "dev:create-teams": "tsc && node lib/createTeams",
+    "dev:create-schedule": "tsc && node lib/createSchedule",
     "dev:write-schema": "tsc && node lib/createTeams",
     "dev:delete-docs": "tsc && node lib/deleteDocs",
 
@@ -32,6 +33,7 @@
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
+    "dev:cs": "tsc && node lib/createSchedule",
     "dev:ws": "tsc && node lib/writeSchema",
     "dev:dd": "tsc && node lib/deleteDocs"
   }
