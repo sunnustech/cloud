@@ -1,30 +1,35 @@
 import { https } from 'firebase-functions'
-import { NewTeamProps } from '../types/sunnus-init'
+import { InitializeTeam } from '../types/sunnus-init'
 import { Team } from '../types/sunnus-firestore'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 
-function makeTeam(props: NewTeamProps): Team {
+/**
+ * creates a firestore-ready team from request data
+ * @param {InitializeTeam} props: the request data
+ * @return {Team} a firestore-ready team object
+ */
+function makeTeam(props: InitializeTeam): Team {
   return {
     teamName: props.teamName,
-    members: [],
     registeredEvents: props.registeredEvents,
-    SOARStart: 0,
-    SOARTimerEvents: [0],
-    SOARPausedAt: 0,
-    SOARStationsCompleted: [],
-    SOARStationsRemaining: [],
     direction: props.direction,
     SOAR: {
-      timerRunning: false,
-      started: false,
-      stopped: false,
-      startTime: 0,
-      stopTime: 0,
-      allEvents: [],
       direction: props.direction,
+      allEvents: [],
       points: 0,
+      startTime: 0,
+      started: false,
+      stopTime: 0,
+      stopped: false,
+      timerRunning: false,
     },
+    SOARPausedAt: 0,
+    SOARStart: 0,
+    SOARStationsCompleted: [],
+    SOARStationsRemaining: [],
+    SOARTimerEvents: [0],
+    members: [],
   }
 }
 
@@ -41,21 +46,21 @@ export const createTeams = https.onRequest(async (req, res) => {
     return
   }
 
-  const teamList: NewTeamProps[] = req.body.teamList
+  const teamList: InitializeTeam[] = req.body.teamList
 
   const teamsCollection = firestore().collection('teams')
   const createTeamsQueue: Promise<WriteResult>[] = []
 
   teamList.forEach((team) => {
     createTeamsQueue.push(
-      teamsCollection.doc(team.teamName).create(makeTeam(team))
+        teamsCollection.doc(team.teamName).create(makeTeam(team))
     )
   })
 
   const writeResult = await Promise.allSettled(createTeamsQueue)
 
   res.json({
-    result: `Round robin handler at your service!`,
+    result: 'Round robin handler at your service!',
     writeResult,
   })
 })

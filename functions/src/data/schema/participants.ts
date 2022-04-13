@@ -1,6 +1,5 @@
-import { Firestore } from '../../types/sunnus-firestore'
+import { Firestore, Team } from '../../types/sunnus-firestore'
 import { SOARTeamProps } from '../../types/SOAR'
-import { Team } from '../../types/sunnus-firestore'
 import { NewTeamProps } from '../../types/sunnus-init'
 import { makeTeams } from '../../utils'
 import { stationOrder } from './SOAR'
