@@ -36,6 +36,7 @@ export const assignUsers = https.onRequest(async (req, res) => {
     const d = doc.data()
     const user: User = {
       email: d.email,
+      realEmail: d.realEmail,
       loginId: d.loginId,
       phoneNumber: d.phoneNumber,
       teamName: d.teamName,

@@ -15,9 +15,9 @@ import { getLoginIdList } from '../utils'
  * the users requested
  */
 const getUserCreationQueue = (
-    userList: InitializeUser[],
-    successList: User[],
-    freshLoginIds: string[]
+  userList: InitializeUser[],
+  successList: User[],
+  freshLoginIds: string[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -29,18 +29,20 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-      user: InitializeUser,
-      index: number,
-      rec: UserRecord
+    user: InitializeUser,
+    index: number,
+    rec: UserRecord
   ): UserRecord {
     const loginIdNumber = freshLoginIds[index]
+    const loginId = `${user.teamName}${loginIdNumber}`
+    const email = `${loginId}@sunnus.com`
     successList.push({
       uid: rec.uid,
       phoneNumber: user.phoneNumber,
-      email: user.email,
+      realEmail: user.email,
       teamName: user.teamName,
-      // TODO: figure out how to assign four unique loginIds
-      loginId: `${user.teamName}${loginIdNumber}`,
+      email,
+      loginId,
       loginIdNumber,
     })
     return rec
@@ -50,11 +52,15 @@ const getUserCreationQueue = (
    * takes a InitializeUser and adds basic information
    * for firebase to be able to create a full user
    * @param {InitializeUser} user: requested props
+   * @param {number} index
    * @return {InitializeFirebaseUser}
    */
-  function newUser(user: InitializeUser): InitializeFirebaseUser {
+  function newUser(user: InitializeUser, index: number): InitializeFirebaseUser {
+    const loginIdNumber = freshLoginIds[index]
+    const loginId = `${user.teamName}${loginIdNumber}`
+    const email = `${loginId}@sunnus.com`
     return {
-      email: user.email,
+      email,
       emailVerified: false,
       password: 'sunnus',
       disabled: false,
@@ -67,9 +73,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user, index) => {
     userCreationQueue.push(
-        getAuth()
-            .createUser(newUser(user))
-            .then((rec) => appendSuccessfulAddition(user, index, rec))
+      getAuth()
+        .createUser(newUser(user, index))
+        .then((rec) => appendSuccessfulAddition(user, index, rec))
     )
   })
 
@@ -104,15 +110,16 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   /* this queue creates Firebase email-password users */
   const userCreationQueue = getUserCreationQueue(
-      userList,
-      successfulUserList,
-      freshLoginIds
+    userList,
+    successfulUserList,
+    freshLoginIds
   )
 
   /* await all to settle, regardless of success or failure
    * #leavenomanbehind
    */
   const results = await Promise.allSettled(userCreationQueue)
+  console.log(results)
 
   /* split the successes from the failures */
   const fulfilled = results.filter((result) => result.status === 'fulfilled')
@@ -121,7 +128,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
   const successfulLoginIds = successfulUserList.map(
-      (user) => user.loginIdNumber
+    (user) => user.loginIdNumber
   )
 
   if (successfulUIDs.length === 0) {

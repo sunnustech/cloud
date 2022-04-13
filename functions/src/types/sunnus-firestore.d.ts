@@ -3,6 +3,7 @@ import { InitializeTeam, InitializeUser } from './sunnus-init'
 
 /* a fully-fledged SunNUS team Member */
 export type User = InitializeUser & {
+  realEmail: string
   loginId: string
   loginIdNumber: string
   uid: string // automatically assigned by firebase upon account creation

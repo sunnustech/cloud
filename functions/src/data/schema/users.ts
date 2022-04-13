@@ -5,7 +5,8 @@ import { User } from '../../types/sunnus-firestore'
 const userList: User[] = [
   {
     teamName: 'auto_magic',
-    email: 'one@gmail.com',
+    email: 'automagic123456@sunnus',
+    realEmail: 'one@gmail.com',
     loginId: 'automagic123456',
     phoneNumber: '91239845',
     uid: 'from_writeSchema___asdfghjklsemicolon',
@@ -13,7 +14,8 @@ const userList: User[] = [
   },
   {
     teamName: 'auto_matic',
-    email: 'two@gmail.com',
+    email: 'automatic987654@sunnus',
+    realEmail: 'two@gmail.com',
     loginId: 'automatic987654',
     phoneNumber: '90912365',
     uid: 'from_writeSchema___qwertyyoueyeohp',
