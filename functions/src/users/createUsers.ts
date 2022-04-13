@@ -98,7 +98,6 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
-  // var addResults: Promise<PromiseSettledResult<AddUserRecord>[]> = 1
 
   if (successfulUIDs.length === 0) {
     /* no new users were created,

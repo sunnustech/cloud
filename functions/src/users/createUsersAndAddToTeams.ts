@@ -4,8 +4,12 @@ import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { WriteResult } from '@google-cloud/firestore'
 import { initializeTeam } from './initializeTeam'
 import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
-import { AddUserRecord } from '../types/users'
 import { User } from '../types/sunnus-firestore'
+
+type AddUserRecord = {
+  message: any
+  status: 'fulfilled' | 'rejected'
+}
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
