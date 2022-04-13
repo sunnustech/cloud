@@ -1,8 +1,8 @@
 import { firestore } from 'firebase-admin'
-import { Member } from '../../types/users'
 import { WriteResult } from '@google-cloud/firestore'
+import { User } from '../../types/sunnus-firestore'
 
-const userList: Member[] = [
+const userList: User[] = [
   {
     teamName: 'auto_magic',
     email: 'one@gmail.com',

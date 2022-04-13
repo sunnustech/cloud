@@ -1,7 +1,8 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
-import { RequestUser, FirebaseUserInit, Member } from '../types/users'
+import { RequestUser, FirebaseUserInit } from '../types/users'
+import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
 
 /**
@@ -13,7 +14,7 @@ import { WriteResult } from '@google-cloud/firestore'
  */
 const getUserCreationQueue = (
     userList: RequestUser[],
-    successList: Member[]
+    successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -81,7 +82,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   }
 
   const userList: RequestUser[] = req.body.userList
-  const successfulUserList: Member[] = []
+  const successfulUserList: User[] = []
 
   /* this queue creates Firebase email-password users */
   const userCreationQueue = getUserCreationQueue(userList, successfulUserList)

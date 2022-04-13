@@ -5,7 +5,6 @@ import { WriteResult } from '@google-cloud/firestore'
 import { initializeTeam } from './initializeTeam'
 import {
   RequestUser,
-  Member,
   AddUserRecord,
   FirebaseUserInit,
 } from '../types/users'
