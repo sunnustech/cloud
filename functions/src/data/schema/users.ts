@@ -9,6 +9,7 @@ const userList: User[] = [
     loginId: 'automagic123456',
     phoneNumber: '91239845',
     uid: 'from_writeSchema___asdfghjklsemicolon',
+    loginIdNumber: '123456',
   },
   {
     teamName: 'auto_matic',
@@ -16,6 +17,7 @@ const userList: User[] = [
     loginId: 'automatic987654',
     phoneNumber: '90912365',
     uid: 'from_writeSchema___qwertyyoueyeohp',
+    loginIdNumber: '987654',
   },
 ]
 

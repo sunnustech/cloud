@@ -40,6 +40,7 @@ export const assignUsers = https.onRequest(async (req, res) => {
       phoneNumber: d.phoneNumber,
       teamName: d.teamName,
       uid: d.uid,
+      loginIdNumber: d.loginIdNumber,
     }
     // skip if no teamName
     if (!user.teamName) {

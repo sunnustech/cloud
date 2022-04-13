@@ -4,19 +4,20 @@ import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
+import { getLoginIdList } from '../utils'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
  * @param {User[]} successList: the list that successfully created new
  * users will be added to
- * @param {string[]} existingLoginIds: a list of existing login ids
+ * @param {string[]} freshLoginIds: a list of existing login ids
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
   userList: InitializeUser[],
   successList: User[],
-  existingLoginIds: string[]
+  freshLoginIds: string[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -28,15 +29,18 @@ const getUserCreationQueue = (
    */
   function appendSuccessfulAddition(
     user: InitializeUser,
+    index: number,
     rec: UserRecord
   ): UserRecord {
+    const loginIdNumber = freshLoginIds[index]
     successList.push({
       uid: rec.uid,
       phoneNumber: user.phoneNumber,
       email: user.email,
       teamName: user.teamName,
       // TODO: figure out how to assign four unique loginIds
-      loginId: `${user.teamName}123456`,
+      loginId: `${user.teamName}${loginIdNumber}`,
+      loginIdNumber,
     })
     return rec
   }
@@ -60,11 +64,11 @@ const getUserCreationQueue = (
    * command succeeds in execution later, save that user
    * into successfulUserList
    */
-  userList.forEach((user) => {
+  userList.forEach((user, index) => {
     userCreationQueue.push(
       getAuth()
         .createUser(newUser(user))
-        .then((rec) => appendSuccessfulAddition(user, rec))
+        .then((rec) => appendSuccessfulAddition(user, index, rec))
     )
   })
 
@@ -89,13 +93,19 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   // const sharedCollection = firestore().collection('shared')
   // const loginIdsDoc = sharedCollection.doc('loginIds')
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
 
   /* get list of all existing loginIds */
-  // const existingLoginIds: string[] =
-  //   (await loginIdsDoc.get()).data()?.data || []
+  const existingLoginIds: string[] = (await allUsersData.get()).data()?.loginIdList || []
+  const freshLoginIds = getLoginIdList(userList.length, existingLoginIds)
 
   /* this queue creates Firebase email-password users */
-  const userCreationQueue = getUserCreationQueue(userList, successfulUserList, [])
+  const userCreationQueue = getUserCreationQueue(
+    userList,
+    successfulUserList,
+    freshLoginIds
+  )
 
   /* await all to settle, regardless of success or failure
    * #leavenomanbehind
@@ -108,6 +118,7 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
+  const successfulLoginIds = successfulUserList.map((user) => user.loginIdNumber)
 
   if (successfulUIDs.length === 0) {
     /* no new users were created,
@@ -129,10 +140,12 @@ export const createUsers = https.onRequest(async (req, res) => {
    * append new login ids
    * (this allows unique ids to be ensured)
    */
-  const usersCollection = firestore().collection('users')
-  const allUsersData = usersCollection.doc('allUsersData')
-  allUsersData.set({
+  allUsersData.update({
     uidList: firestore.FieldValue.arrayUnion(...successfulUIDs),
+    loginIdList: firestore.FieldValue.arrayUnion(...successfulLoginIds),
+  })
+  allUsersData.update({
+    uidList: firestore.FieldValue.arrayRemove('')
   })
 
   const setUserQueue: Promise<WriteResult>[] = []
