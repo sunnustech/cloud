@@ -1,4 +1,5 @@
 import { SOARTeamProps } from './SOAR'
+import { Team } from './sunnus-firestore'
 
 export type Member = {
   email: string
@@ -44,7 +45,7 @@ type EmailProps = {
   index: number
 }
 
-type TeamsDatabase = Record<string, TeamProps>
+type TeamsDatabase = Record<string, Team>
 
 /*
  * To be Firestore-friendly, the final form has to be an object,

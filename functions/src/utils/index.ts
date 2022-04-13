@@ -1,6 +1,7 @@
 import { TeamProps } from '../types/participants'
 import { firestore } from 'firebase-admin'
 import { deleteDocs } from './deleteDocs'
+import { Team } from '../types/sunnus-firestore'
 
 export { deleteDocs }
 
@@ -23,9 +24,9 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
  * @param {Array<T>} arr: the array of team props
  * @return {Record<string, T>} the final object
  */
-export function makeTeams(arr: Array<TeamProps>): Record<string, TeamProps> {
-  const obj: Record<string, TeamProps> = {}
-  arr.forEach((e: TeamProps) => {
+export function makeTeams(arr: Array<Team>): Record<string, Team> {
+  const obj: Record<string, Team> = {}
+  arr.forEach((e: Team) => {
     obj[e.teamName] = e
   })
   return obj

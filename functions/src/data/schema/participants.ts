@@ -3,10 +3,10 @@ import {
   LoginIdProps,
   NewTeamProps,
   ParticipantsDatabase,
-  TeamProps,
   TeamsDatabase,
 } from '../../types/participants'
 import { SOARTeamProps } from '../../types/SOAR'
+import { Team } from '../../types/sunnus-firestore'
 import { makeTeams } from '../../utils'
 import { stationOrder } from './SOAR'
 
@@ -23,9 +23,9 @@ const SOARInit: SOARTeamProps = {
 
 /**
  * @param {NewTeamProps} props: basic details of a fresh team
- * @return {TeamProps} a team object with empty props
+ * @return {Team} a firestore-ready team object with empty props
  */
-export function newSunNUSTeam(props: NewTeamProps): TeamProps {
+export function newSunNUSTeam(props: NewTeamProps): Team {
   return {
     SOAR: SOARInit,
     SOARStart: 0,
@@ -94,7 +94,7 @@ const generateRandomID = () => {
   return Math.random().toString(10).substring(2, 5)
 }
 
-const addLoginId = (obj: TeamProps): TeamProps => {
+const addLoginId = (obj: Team): Team => {
   const teamName = trimTeamNameToLowercase(obj.teamName)
   obj.members.forEach((e: any) => {
     e['loginId'] = teamName + generateRandomID()
@@ -102,7 +102,7 @@ const addLoginId = (obj: TeamProps): TeamProps => {
   return obj
 }
 
-const allTeams: Array<TeamProps> = [
+const allTeams: Array<Team> = [
   addLoginId(testOne),
   addLoginId(testTwo),
   addLoginId(testThree),
@@ -111,21 +111,6 @@ const allTeams: Array<TeamProps> = [
 
 const allLoginIds: Record<string, LoginIdProps> = {}
 const allEmails: Record<string, EmailProps> = {}
-
-allTeams.forEach((team) => {
-  team.members.forEach((member, index) => {
-    allLoginIds[member.loginId] = {
-      teamName: team.teamName,
-      index,
-      email: member.email,
-    }
-    allEmails[member.email] = {
-      teamName: team.teamName,
-      index,
-      loginId: member.loginId,
-    }
-  })
-})
 
 const teams: TeamsDatabase = makeTeams(allTeams)
 const participants: ParticipantsDatabase = Object.assign(teams, {

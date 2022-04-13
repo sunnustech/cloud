@@ -1,9 +1,10 @@
 import { https } from 'firebase-functions'
-import { NewTeamProps, TeamProps } from '../types/participants'
+import { NewTeamProps } from '../types/participants'
+import { Team } from '../types/sunnus-firestore'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 
-function makeTeam(props: NewTeamProps): TeamProps {
+function makeTeam(props: NewTeamProps): Team {
   return {
     teamName: props.teamName,
     members: [],
