@@ -133,8 +133,21 @@ const matches: number[][] = roundRobinFixtures[sportDensity[sport]]
 
 // handle lunch break
 
+// lunch break is 1200 - 1300
+function duringLunch(t: Date): boolean {
+  const h = t.getHours()
+  // naive check suffices and is actually less buggy
+  return (h === 12)
+}
+
 // courts.forEach
 matches.forEach((match) => {
+  // timeskip through lunch break
+  while (duringLunch(s) || duringLunch(e)) {
+    s.setTime((new Date(0,0,0,13)).getTime())
+    e.setTime((new Date(s)).getTime())
+    e.setMinutes(s.getMinutes() + matchLength[sport])
+  }
   schedule.push({
     start: time(s),
     end: time(e),
@@ -146,7 +159,6 @@ matches.forEach((match) => {
 
   s.setMinutes(s.getMinutes() + matchInterval[sport])
   e.setMinutes(e.getMinutes() + matchInterval[sport])
-  console.log(time(s), time(e))
 })
 
 console.log(schedule.map((e) => e.start))
