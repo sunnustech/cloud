@@ -9,12 +9,14 @@ import { WriteResult } from '@google-cloud/firestore'
  * @param {InitializeUser[]} userList: the incoming request array of users
  * @param {User[]} successList: the list that successfully created new
  * users will be added to
+ * @param {string[]} existingLoginIds: a list of existing login ids
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
-    userList: InitializeUser[],
-    successList: User[]
+  userList: InitializeUser[],
+  successList: User[],
+  existingLoginIds: string[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -25,8 +27,8 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-      user: InitializeUser,
-      rec: UserRecord
+    user: InitializeUser,
+    rec: UserRecord
   ): UserRecord {
     successList.push({
       uid: rec.uid,
@@ -60,9 +62,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-        getAuth()
-            .createUser(newUser(user))
-            .then((rec) => appendSuccessfulAddition(user, rec))
+      getAuth()
+        .createUser(newUser(user))
+        .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -85,8 +87,15 @@ export const createUsers = https.onRequest(async (req, res) => {
   const userList: InitializeUser[] = req.body.userList
   const successfulUserList: User[] = []
 
+  // const sharedCollection = firestore().collection('shared')
+  // const loginIdsDoc = sharedCollection.doc('loginIds')
+
+  /* get list of all existing loginIds */
+  // const existingLoginIds: string[] =
+  //   (await loginIdsDoc.get()).data()?.data || []
+
   /* this queue creates Firebase email-password users */
-  const userCreationQueue = getUserCreationQueue(userList, successfulUserList)
+  const userCreationQueue = getUserCreationQueue(userList, successfulUserList, [])
 
   /* await all to settle, regardless of success or failure
    * #leavenomanbehind

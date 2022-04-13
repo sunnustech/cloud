@@ -24,7 +24,7 @@ const csv: InitializeUser[] = parse(fileData, {
 
 const sanitizedUserList: InitializeUser[] = csv.map((user) => createUser(user))
 
-const fn = 'createUsers'
+const fn = 'development-createUsers'
 timestamp(fn)
 
 axios.post(cloud(fn), { userList: sanitizedUserList }).then((res) => {

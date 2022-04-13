@@ -2,7 +2,7 @@ import axios from 'axios'
 import { timestamp } from './timestamp'
 import { cloud } from './firebase'
 
-const fn = 'helloWorld'
+const fn = 'development-helloWorld'
 timestamp(fn)
 
 const request = { message: 'requester to server, over!' }

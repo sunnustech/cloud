@@ -2,7 +2,7 @@ import axios from 'axios'
 import { timestamp } from './timestamp'
 import { cloud } from './firebase'
 
-const fn = 'addUserToTeam'
+const fn = 'development-addUserToTeam'
 timestamp(fn)
 const request = {
   user: {

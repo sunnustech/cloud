@@ -2,7 +2,7 @@ import axios from 'axios'
 import { timestamp } from './timestamp'
 import { cloud } from './firebase'
 
-const fn = 'writeSchema'
+const fn = 'development-writeSchema'
 timestamp(fn)
 
 const request = { message: 'reset, thanks' }

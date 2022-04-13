@@ -15,6 +15,7 @@
     "dev:create-users": "tsc && node lib/createUsers",
     "dev:assign-users": "tsc && node lib/assignUsers",
     "dev:delete-all-users": "tsc && node lib/deleteAllUsers",
+    "dev:delete-all-teams": "tsc && node lib/deleteAllTeams",
 
     "dev:handle-match": "tsc && node lib/handleMatch",
     "dev:initialize-team": "tsc && node lib/initializeTeam",
@@ -25,6 +26,7 @@
     "dev:cu": "tsc && node lib/createUsers",
     "dev:au": "tsc && node lib/assignUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
+    "dev:dat": "tsc && node lib/deleteAllTeams",
 
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
