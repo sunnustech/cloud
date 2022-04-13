@@ -16,6 +16,7 @@ export type Team = InitializeTeam & {
   SOARPausedAt: number
   SOARStationsCompleted: string[]
   SOARStationsRemaining: string[]
+  // schedule: string[] // list of schedule ids
 }
 
 /* this serves as a visual map of what firestore looks like.
