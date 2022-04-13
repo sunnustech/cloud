@@ -125,17 +125,17 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* append new UIDs to list of all automatically generated users
    * (this allows them to be deleted easily by deleteAllUsers)
    */
-  const userCollection = firestore().collection('users')
-  const allIdsDoc = userCollection.doc('allIds')
-  allIdsDoc.set({
-    data: firestore.FieldValue.arrayUnion(...successfulUIDs),
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
+  allUsersData.set({
+    uidList: firestore.FieldValue.arrayUnion(...successfulUIDs),
   })
 
   const setUserQueue: Promise<WriteResult>[] = []
 
   successfulUserList.forEach((user) => {
     const uid = user.uid
-    const userDocument = userCollection.doc(uid)
+    const userDocument = usersCollection.doc(uid)
     setUserQueue.push(userDocument.set(user))
   })
 

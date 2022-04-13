@@ -25,13 +25,12 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
     return
   }
 
-  const userCollection = firestore().collection('users')
-  const allIdsDoc = userCollection.doc('allIds')
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
+  const uidsToRemove: string[] = (await allUsersData.get()).data()?.uidList || []
 
   /* get list of all uids */
-  const data = await allIdsDoc.get()
-  const rmList: string[] = data.data()?.data || []
-  if (!rmList || rmList.length === 0) {
+  if (!uidsToRemove || uidsToRemove.length === 0) {
     res.json({
       message:
         'There are no automatically generated users in database to delete.',
@@ -40,16 +39,16 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
   }
 
   const firebaseRemoveResult = await getAuth()
-      .deleteUsers(rmList)
+      .deleteUsers(uidsToRemove)
       .then((deleteUsersResult) => {
       // only reset allIdsDoc if successful
-        allIdsDoc.set({ data: [] })
+        allUsersData.set({ uidList: [] })
         return deleteUsersResult
       })
 
   const removeUserQueue: Promise<WriteResult>[] = []
-  rmList.forEach((uid) => {
-    const removeDoc = userCollection.doc(uid)
+  uidsToRemove.forEach((uid) => {
+    const removeDoc = usersCollection.doc(uid)
     removeUserQueue.push(removeDoc.delete())
   })
 
