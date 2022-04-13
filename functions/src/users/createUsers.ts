@@ -1,32 +1,32 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
-import { RequestUser, FirebaseUserInit } from '../types/users'
+import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
 
 /**
- * @param {RequestUser[]} userList: the incoming request array of users
+ * @param {InitializeUser[]} userList: the incoming request array of users
  * @param {User[]} successList: the list that successfully created new
  * users will be added to
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
-    userList: RequestUser[],
-    successList: User[]
+  userList: InitializeUser[],
+  successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
   /**
    * add a user to the successfulUserList
-   * @param {RequestUser} user: requested props
+   * @param {InitializeUser} user: requested props
    * @param {UserRecord} rec: the assgined props after user creation
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-      user: RequestUser,
-      rec: UserRecord
+    user: InitializeUser,
+    rec: UserRecord
   ): UserRecord {
     successList.push({
       uid: rec.uid,
@@ -39,12 +39,12 @@ const getUserCreationQueue = (
   }
 
   /**
-   * takes a RequestUser and adds basic information
+   * takes a InitializeUser and adds basic information
    * for firebase to be able to create a full user
-   * @param {RequestUser} user: requested props
-   * @return {FirebaseUserInit}
+   * @param {InitializeUser} user: requested props
+   * @return {InitializeFirebaseUser}
    */
-  function newUser(user: RequestUser): FirebaseUserInit {
+  function newUser(user: InitializeUser): InitializeFirebaseUser {
     return {
       email: user.email,
       emailVerified: false,
@@ -59,9 +59,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-        getAuth()
-            .createUser(newUser(user))
-            .then((rec) => appendSuccessfulAddition(user, rec))
+      getAuth()
+        .createUser(newUser(user))
+        .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -81,7 +81,7 @@ export const createUsers = https.onRequest(async (req, res) => {
     return
   }
 
-  const userList: RequestUser[] = req.body.userList
+  const userList: InitializeUser[] = req.body.userList
   const successfulUserList: User[] = []
 
   /* this queue creates Firebase email-password users */

@@ -3,35 +3,32 @@ import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { WriteResult } from '@google-cloud/firestore'
 import { initializeTeam } from './initializeTeam'
-import {
-  RequestUser,
-  AddUserRecord,
-  FirebaseUserInit,
-} from '../types/users'
+import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
+import { AddUserRecord } from '../types/users'
 import { User } from '../types/sunnus-firestore'
 
 /**
- * @param {RequestUser[]} userList: the incoming request array of users
+ * @param {InitializeUser[]} userList: the incoming request array of users
  * @param {User[]} successList: the list that successfully created new
  * users will be added to
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
-    userList: RequestUser[],
-    successList: User[]
+  userList: InitializeUser[],
+  successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
   /**
    * add a user to the successfulUserList
-   * @param {RequestUser} user: requested props
+   * @param {InitializeUser} user: requested props
    * @param {UserRecord} rec: the assgined props after user creation
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-      user: RequestUser,
-      rec: UserRecord
+    user: InitializeUser,
+    rec: UserRecord
   ): UserRecord {
     successList.push({
       loginId: 'TODO',
@@ -44,12 +41,12 @@ const getUserCreationQueue = (
   }
 
   /**
-   * takes a RequestUser and adds basic information
+   * takes a InitializeUser and adds basic information
    * for firebase to be able to create a full user
-   * @param {RequestUser} user: requested props
-   * @return {FirebaseUserInit}
+   * @param {InitializeUser} user: requested props
+   * @return {InitializeFirebaseUser}
    */
-  function newUser(user: RequestUser): FirebaseUserInit {
+  function newUser(user: InitializeUser): InitializeFirebaseUser {
     return {
       email: user.email,
       emailVerified: false,
@@ -64,9 +61,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user) => {
     userCreationQueue.push(
-        getAuth()
-            .createUser(newUser(user))
-            .then((rec) => appendSuccessfulAddition(user, rec))
+      getAuth()
+        .createUser(newUser(user))
+        .then((rec) => appendSuccessfulAddition(user, rec))
     )
   })
 
@@ -86,7 +83,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
     return
   }
 
-  const userList: RequestUser[] = req.body.userList
+  const userList: InitializeUser[] = req.body.userList
   const successfulUserList: User[] = []
 
   const userCreationQueue = getUserCreationQueue(userList, successfulUserList)
@@ -138,7 +135,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
   const initializeQueue: Promise<WriteResult>[] = []
 
   const allRequestedTeamNames: string[] = successfulUserList.map(
-      (user) => user.teamName
+    (user) => user.teamName
   )
   const uniqueRequestedTeamNames: string[] = [...new Set(allRequestedTeamNames)]
 
@@ -193,8 +190,8 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
 })
 
 const addUserToTeam = async (
-    user: User,
-    existingTeamNames: string[]
+  user: User,
+  existingTeamNames: string[]
 ): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
     return {
@@ -223,15 +220,15 @@ const addUserToTeam = async (
   }
 
   const writeResult = await teamDoc.set(
-      {
-        members: firestore.FieldValue.arrayUnion({
-          email: user.email,
-          loginId: 'something unique',
-          phoneNumber: user.phoneNumber,
-          uid: user.uid,
-        }),
-      },
-      { merge: true }
+    {
+      members: firestore.FieldValue.arrayUnion({
+        email: user.email,
+        loginId: 'something unique',
+        phoneNumber: user.phoneNumber,
+        uid: user.uid,
+      }),
+    },
+    { merge: true }
   )
 
   return { message: writeResult, status: 'fulfilled' }
