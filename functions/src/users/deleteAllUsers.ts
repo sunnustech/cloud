@@ -32,11 +32,10 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
 
   const loginIdsToRemove: string[] = []
   const usersDataDoc = await usersCollection.get()
-  usersDataDoc.forEach(doc => {
+  usersDataDoc.forEach((doc) => {
     const d = doc.data()
     const n = d.loginIdNumber
-    if (typeof n === 'string' && n !== '')
-    loginIdsToRemove.push(n)
+    if (typeof n === 'string' && n !== '') loginIdsToRemove.push(n)
   })
 
   /* get list of all uids */
@@ -49,15 +48,15 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
   }
 
   const firebaseRemoveResult = await getAuth()
-    .deleteUsers(uidsToRemove)
-    .then((deleteUsersResult) => {
+      .deleteUsers(uidsToRemove)
+      .then((deleteUsersResult) => {
       // only reset allIdsDoc if successful
-      allUsersData.update({
-        uidList: firestore.FieldValue.arrayRemove(...uidsToRemove),
-        loginIdList: firestore.FieldValue.arrayRemove(...loginIdsToRemove),
+        allUsersData.update({
+          uidList: firestore.FieldValue.arrayRemove(...uidsToRemove),
+          loginIdList: firestore.FieldValue.arrayRemove(...loginIdsToRemove),
+        })
+        return deleteUsersResult
       })
-      return deleteUsersResult
-    })
 
   const removeUserQueue: Promise<WriteResult>[] = []
   uidsToRemove.forEach((uid) => {

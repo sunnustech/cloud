@@ -67,7 +67,7 @@ export function partition<T>(
 
 /**
  * tries for a random login id (6-digit numeric string)
- * @returns {string} the login id
+ * @return {string} the login id
  */
 function getLoginId(): string {
   const [min, max] = [0, 1000000]
@@ -84,7 +84,7 @@ function getLoginId(): string {
  */
 export function getLoginIdList(n: number, existingIds: string[]): string[] {
   const existingIdDict: Record<string, boolean> = {}
-  existingIds.forEach(id => {
+  existingIds.forEach((id) => {
     existingIdDict[id] = true
   })
   const fresh: string[] = []
@@ -100,4 +100,3 @@ export function getLoginIdList(n: number, existingIds: string[]): string[] {
   }
   return fresh
 }
-
