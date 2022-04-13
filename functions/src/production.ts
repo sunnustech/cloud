@@ -1,5 +1,8 @@
 import { logger, https } from 'firebase-functions'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
+import { handleMatch } from './knockout'
+
+export { handleMatch }
 
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')

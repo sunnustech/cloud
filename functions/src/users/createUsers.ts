@@ -15,9 +15,9 @@ import { getLoginIdList } from '../utils'
  * the users requested
  */
 const getUserCreationQueue = (
-  userList: InitializeUser[],
-  successList: User[],
-  freshLoginIds: string[]
+    userList: InitializeUser[],
+    successList: User[],
+    freshLoginIds: string[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -29,9 +29,9 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-    user: InitializeUser,
-    index: number,
-    rec: UserRecord
+      user: InitializeUser,
+      index: number,
+      rec: UserRecord
   ): UserRecord {
     const loginIdNumber = freshLoginIds[index]
     const loginId = `${user.teamName}${loginIdNumber}`
@@ -55,7 +55,10 @@ const getUserCreationQueue = (
    * @param {number} index
    * @return {InitializeFirebaseUser}
    */
-  function newUser(user: InitializeUser, index: number): InitializeFirebaseUser {
+  function newUser(
+      user: InitializeUser,
+      index: number
+  ): InitializeFirebaseUser {
     const loginIdNumber = freshLoginIds[index]
     const loginId = `${user.teamName}${loginIdNumber}`
     const email = `${loginId}@sunnus.com`
@@ -73,9 +76,9 @@ const getUserCreationQueue = (
    */
   userList.forEach((user, index) => {
     userCreationQueue.push(
-      getAuth()
-        .createUser(newUser(user, index))
-        .then((rec) => appendSuccessfulAddition(user, index, rec))
+        getAuth()
+            .createUser(newUser(user, index))
+            .then((rec) => appendSuccessfulAddition(user, index, rec))
     )
   })
 
@@ -110,9 +113,9 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   /* this queue creates Firebase email-password users */
   const userCreationQueue = getUserCreationQueue(
-    userList,
-    successfulUserList,
-    freshLoginIds
+      userList,
+      successfulUserList,
+      freshLoginIds
   )
 
   /* await all to settle, regardless of success or failure
@@ -128,7 +131,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
   const successfulLoginIds = successfulUserList.map(
-    (user) => user.loginIdNumber
+      (user) => user.loginIdNumber
   )
 
   if (successfulUIDs.length === 0) {
