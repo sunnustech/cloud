@@ -1,6 +1,6 @@
 import { Firestore, Team } from '../../types/sunnus-firestore'
 import { SOARTeamProps } from '../../types/SOAR'
-import { NewTeamProps } from '../../types/sunnus-init'
+import { InitializeTeam } from '../../types/sunnus-init'
 import { makeTeams } from '../../utils'
 import { stationOrder } from './SOAR'
 
@@ -16,10 +16,10 @@ const SOARInit: SOARTeamProps = {
 }
 
 /**
- * @param {NewTeamProps} props: basic details of a fresh team
+ * @param {InitializeTeam} props: basic details of a fresh team
  * @return {Team} a firestore-ready team object with empty props
  */
-export function newSunNUSTeam(props: NewTeamProps): Team {
+export function newSunNUSTeam(props: InitializeTeam): Team {
   return {
     SOAR: SOARInit,
     SOARStart: 0,
