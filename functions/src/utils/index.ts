@@ -39,10 +39,10 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
  * @param {Collection} collection: the collection reference
  * @return {Promise<string[]>} the list
  */
-export async function listDocIdsAsync(collection: Collection): Promise<string[]> {
-  const list: string[] = (
-    await collection.listDocuments()
-  ).map((e) => e.id)
+export async function listDocIdsAsync(
+    collection: Collection
+): Promise<string[]> {
+  const list: string[] = (await collection.listDocuments()).map((e) => e.id)
   return list
 }
 

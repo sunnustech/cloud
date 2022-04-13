@@ -40,12 +40,12 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
   }
 
   const firebaseRemoveResult = await getAuth()
-    .deleteUsers(rmList)
-    .then((deleteUsersResult) => {
+      .deleteUsers(rmList)
+      .then((deleteUsersResult) => {
       // only reset allIdsDoc if successful
-      allIdsDoc.set({ data: [] })
-      return deleteUsersResult
-    })
+        allIdsDoc.set({ data: [] })
+        return deleteUsersResult
+      })
 
   const removeUserQueue: Promise<WriteResult>[] = []
   rmList.forEach((uid) => {
