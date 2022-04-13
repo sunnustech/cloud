@@ -5,8 +5,9 @@ import { AuthData } from 'firebase-functions/lib/common/providers/https'
 // import { handleMatch } from './knockout'
 import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
-import { createUsersAndAddToTeams, deleteAllUsers, createUsers } from './users'
-import { createTeams } from './teams'
+import { createTeams } from './teams/createTeams'
+import { createUsers } from './users/createUsers'
+import { deleteAllUsers } from './users/deleteAllUsers'
 import { deleteDocs } from './utils'
 
 initializeApp()
@@ -16,7 +17,6 @@ export {
   createTeams,
   handleMatch,
   writeSchema,
-  createUsersAndAddToTeams,
   deleteAllUsers,
   createUsers,
 }

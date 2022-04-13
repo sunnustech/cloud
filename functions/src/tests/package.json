@@ -13,14 +13,19 @@
     "dev": "tsc && node .",
     "build": "tsc",
     "dev:create-users": "tsc && node lib/createUsers",
+    "dev:assign-users": "tsc && node lib/assignUsers",
     "dev:delete-all-users": "tsc && node lib/deleteAllUsers",
+
     "dev:handle-match": "tsc && node lib/handleMatch",
     "dev:initialize-team": "tsc && node lib/initializeTeam",
     "dev:create-teams": "tsc && node lib/createTeams",
     "dev:write-schema": "tsc && node lib/createTeams",
     "dev:delete-docs": "tsc && node lib/deleteDocs",
+
     "dev:cu": "tsc && node lib/createUsers",
+    "dev:au": "tsc && node lib/assignUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
+
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
