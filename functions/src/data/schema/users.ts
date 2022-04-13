@@ -4,22 +4,22 @@ import { User } from '../../types/sunnus-firestore'
 
 const userList: User[] = [
   {
-    teamName: 'auto_magic',
-    email: 'automagic123456@sunnus',
-    realEmail: 'one@gmail.com',
-    loginId: 'automagic123456',
+    teamName: 'developer_team',
+    email: 'k@sunnus.com',
+    realEmail: 'actual-khang@gmail.com',
+    loginId: 'supposed to be long',
     phoneNumber: '91239845',
-    uid: 'from_writeSchema___asdfghjklsemicolon',
-    loginIdNumber: '123456',
+    uid: 'VMXuhnIg2jcKGGt9y6D1GDV9gBR2', // this is legit
+    loginIdNumber: 'supposed to be a number',
   },
   {
-    teamName: 'auto_matic',
-    email: 'automatic987654@sunnus',
-    realEmail: 'two@gmail.com',
-    loginId: 'automatic987654',
+    teamName: 'developer_team',
+    email: 'r@sunnus.com',
+    realEmail: 'actual-ryan@gmail.com',
+    loginId: 'supposed to be long',
     phoneNumber: '90912365',
-    uid: 'from_writeSchema___qwertyyoueyeohp',
-    loginIdNumber: '987654',
+    uid: 'xo05ywdQhsSLYvXe0CIozFXYnB32', // this is legit
+    loginIdNumber: 'supposed to be a number',
   },
 ]
 
