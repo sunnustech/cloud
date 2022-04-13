@@ -124,6 +124,10 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   /* append new UIDs to list of all automatically generated users
    * (this allows them to be deleted easily by deleteAllUsers)
+   *
+   * TODO
+   * append new login ids
+   * (this allows unique ids to be ensured)
    */
   const usersCollection = firestore().collection('users')
   const allUsersData = usersCollection.doc('allUsersData')
