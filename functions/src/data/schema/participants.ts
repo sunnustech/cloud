@@ -1,4 +1,4 @@
-import { SunnusFirestore } from '../../types/sunnus-firestore'
+import { Firestore } from '../../types/sunnus-firestore'
 import { SOARTeamProps } from '../../types/SOAR'
 import { Team } from '../../types/sunnus-firestore'
 import { NewTeamProps } from '../../types/sunnus-init'
@@ -104,7 +104,7 @@ const allTeams: Array<Team> = [
   Developer,
 ]
 
-const teams: SunnusFirestore.teams = makeTeams(allTeams)
+const teams: Firestore['teams'] = makeTeams(allTeams)
 
 export default teams
 export { SOARInit }
