@@ -8,17 +8,18 @@ import {
   AddUserRecord,
   FirebaseUserInit,
 } from '../types/users'
+import { User } from '../types/sunnus-firestore'
 
 /**
  * @param {RequestUser[]} userList: the incoming request array of users
- * @param {Member[]} successList: the list that successfully created new
+ * @param {User[]} successList: the list that successfully created new
  * users will be added to
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
     userList: RequestUser[],
-    successList: Member[]
+    successList: User[]
 ): Promise<UserRecord>[] => {
   const userCreationQueue: Promise<UserRecord>[] = []
 
@@ -86,7 +87,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
   }
 
   const userList: RequestUser[] = req.body.userList
-  const successfulUserList: Member[] = []
+  const successfulUserList: User[] = []
 
   const userCreationQueue = getUserCreationQueue(userList, successfulUserList)
 
@@ -168,7 +169,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
 
   const teamsAfterWriting = await firestore().collection('teams').get()
 
-  const editedTeams: Record<string, Member[]> = {}
+  const editedTeams: Record<string, User[]> = {}
   teamsAfterWriting.forEach((teamDoc) => {
     const data = teamDoc.data()
     const teamName = data.teamName
@@ -192,7 +193,7 @@ export const createUsersAndAddToTeams = https.onRequest(async (req, res) => {
 })
 
 const addUserToTeam = async (
-    user: Member,
+    user: User,
     existingTeamNames: string[]
 ): Promise<AddUserRecord> => {
   if (!existingTeamNames.includes(user.teamName)) {
@@ -203,7 +204,7 @@ const addUserToTeam = async (
   }
 
   const teamDoc = firestore().collection('teams').doc(user.teamName)
-  const existingMembers: Member[] = (await teamDoc.get()).data()?.members
+  const existingMembers: User[] = (await teamDoc.get()).data()?.members
 
   if (existingMembers === undefined) {
     return {

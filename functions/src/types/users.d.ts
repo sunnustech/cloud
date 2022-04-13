@@ -15,15 +15,6 @@ export type FirebaseUserInit = {
   disabled: false
 }
 
-/* a fully-fledged SunNUS team Member */
-export type Member = {
-  teamName: string
-  email: string
-  loginId: string
-  phoneNumber: string
-  uid: string
-}
-
 export type AddUserRecord = {
   message: any
   status: 'fulfilled' | 'rejected'
