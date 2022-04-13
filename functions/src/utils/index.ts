@@ -1,8 +1,11 @@
-import { firestore } from 'firebase-admin'
+// import { firestore } from 'firebase-admin'
 import { deleteDocs } from './deleteDocs'
 import { Team } from '../types/sunnus-firestore'
+import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 
 export { deleteDocs }
+
+type Collection = CollectionReference<DocumentData>
 
 /**
  * @param {string} string: the string you want to process
@@ -33,12 +36,12 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
 
 /**
  * retrives a list of document ids of a collection
- * @param {string} collection: the name of the collection to read
+ * @param {Collection} collection: the collection reference
  * @return {Promise<string[]>} the list
  */
-export async function listDocIdsAsync(collection: string): Promise<string[]> {
+export async function listDocIdsAsync(collection: Collection): Promise<string[]> {
   const list: string[] = (
-    await firestore().collection(collection).listDocuments()
+    await collection.listDocuments()
   ).map((e) => e.id)
   return list
 }
