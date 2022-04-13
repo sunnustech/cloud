@@ -33,11 +33,9 @@ export type Team = {
 
 /* unused in actual code,
  * this serves as a visual map of what firestore looks like.
- * keys are collection names
- * values are the list of documents
- * generics of the values are the content of each document
+ * keys are collection names.
  */
 export type Firebase = {
-  teams: Team[]
-  users: User[]
+  teams: Record<string, Team>
+  users: Record<string, User>
 }

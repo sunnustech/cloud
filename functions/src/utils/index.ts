@@ -1,4 +1,3 @@
-import { TeamProps } from '../types/participants'
 import { firestore } from 'firebase-admin'
 import { deleteDocs } from './deleteDocs'
 import { Team } from '../types/sunnus-firestore'

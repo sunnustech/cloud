@@ -1,12 +1,12 @@
 import {
   EmailProps,
   LoginIdProps,
-  NewTeamProps,
   ParticipantsDatabase,
   TeamsDatabase,
 } from '../../types/participants'
 import { SOARTeamProps } from '../../types/SOAR'
 import { Team } from '../../types/sunnus-firestore'
+import { NewTeamProps } from '../../types/sunnus-init'
 import { makeTeams } from '../../utils'
 import { stationOrder } from './SOAR'
 

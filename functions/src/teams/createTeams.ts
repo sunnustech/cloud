@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { NewTeamProps } from '../types/participants'
+import { NewTeamProps } from '../types/sunnus-init'
 import { Team } from '../types/sunnus-firestore'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
