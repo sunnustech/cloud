@@ -61,6 +61,15 @@ const roundRobinFixtures: Record<number, number[][]> = {
 
 // const preEliminationFixtures
 
+const sports: Sport[] = [
+  'touchRugby',
+  'dodgeball',
+  'frisbee',
+  'tchoukball',
+  'volleyball',
+  'captainsBall',
+]
+
 const matchLength: Record<Sport, number> = {
   touchRugby: 20,
   dodgeball: 15,
@@ -74,23 +83,22 @@ const getLunchEnd = (sport: Sport): Date => {
   return dateify(lunchBreaks[sport][1])
 }
 
-function dateify (HHMM: string): Date{
-  const [h, m] = HHMM.split(':').map(e => parseInt(e))
+function dateify(HHMM: string): Date {
+  const [h, m] = HHMM.split(':').map((e) => parseInt(e))
   return new Date(0, 0, 0, h, m)
 }
 
 // lunch break is 1200 - 1300
 function duringLunch(date: Date, sport: Sport): boolean {
-  const [start, end] = lunchBreaks[sport].map(e => dateify(e))
+  const [start, end] = lunchBreaks[sport].map((e) => dateify(e))
   const s = start.getTime()
   const e = end.getTime()
   const t = date.getTime()
   const b = t >= s && t < e
   console.log(time(start), time(date), time(end), b)
   // naive check suffices and is actually less buggy
-  return (t >= s && t < e)
+  return t >= s && t < e
 }
-
 
 const matchInterval: Record<Sport, number> = {
   touchRugby: 25,
@@ -160,10 +168,7 @@ const lunchBreaks: Record<Sport, string[]> = {
   captainsBall: ['13:00', '14:00'],
 }
 
-const sport: Sport = 'captainsBall'
-const schedule: Event[] = []
-const density = sportDensity[sport]
-const matches: number[][] = roundRobinFixtures[density]
+// const sport: Sport = 'captainsBall'
 
 const startTimes: Record<Sport, string> = {
   touchRugby: '9:00',
@@ -188,46 +193,52 @@ function incrementTime(s: Date, e: Date, interval: number): void {
   e.setMinutes(e.getMinutes() + interval)
 }
 
-courts[sport].forEach((court, groupIndex) => {
-  // first pair of start and end
-  const first = dateify(startTimes[sport])
-  const [s, e] = startEndInit(first, matchLength[sport])
+const schedule: Event[] = []
 
-  matches.forEach((match) => {
-    // timeskip through lunch break
-    const pastLunch = () => {
-      if (duringLunch(s, sport) || duringLunch(e, sport)) {
-        const lunchEnd = getLunchEnd(sport)
-        s.setTime(new Date(lunchEnd).getTime())
-        e.setTime(new Date(s).getTime())
-        e.setMinutes(s.getMinutes() + matchLength[sport])
+sports.forEach((sport) => {
+  const density = sportDensity[sport]
+  const matches: number[][] = roundRobinFixtures[density]
+  courts[sport].forEach((court, groupIndex) => {
+    // first pair of start and end
+    const first = dateify(startTimes[sport])
+    const [s, e] = startEndInit(first, matchLength[sport])
+
+    matches.forEach((match) => {
+      // timeskip through lunch break
+      const pastLunch = () => {
+        if (duringLunch(s, sport) || duringLunch(e, sport)) {
+          const lunchEnd = getLunchEnd(sport)
+          s.setTime(new Date(lunchEnd).getTime())
+          e.setTime(new Date(s).getTime())
+          e.setMinutes(s.getMinutes() + matchLength[sport])
+        }
       }
-    }
-    const inc = () => incrementTime(s, e, matchInterval[sport])
-    const add = (inc: number) =>
-      schedule.push({
-        start: time(s),
-        end: time(e),
-        venue: venues[sport],
-        round: 'round_robin',
-        court,
-        sport,
-        A: `${letter(inc)}${match[0]}`,
-        B: `${letter(inc)}${match[1]}`,
-        winner: 'U',
-      })
-    if (alternatingMatches[sport]) {
-      pastLunch()
-      add(2 * groupIndex)
-      inc()
-      pastLunch()
-      add(2 * groupIndex + 1)
-      inc()
-    } else {
-      pastLunch()
-      add(groupIndex)
-      inc()
-    }
+      const inc = () => incrementTime(s, e, matchInterval[sport])
+      const add = (inc: number) =>
+        schedule.push({
+          start: time(s),
+          end: time(e),
+          venue: venues[sport],
+          round: 'round_robin',
+          court,
+          sport,
+          A: `${letter(inc)}${match[0]}`,
+          B: `${letter(inc)}${match[1]}`,
+          winner: 'U',
+        })
+      if (alternatingMatches[sport]) {
+        pastLunch()
+        add(2 * groupIndex)
+        inc()
+        pastLunch()
+        add(2 * groupIndex + 1)
+        inc()
+      } else {
+        pastLunch()
+        add(groupIndex)
+        inc()
+      }
+    })
   })
 })
 
