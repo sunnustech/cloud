@@ -1,4 +1,5 @@
 import { parse } from 'csv-parse/sync'
+import { ScheduleConfig } from '../../types/delete-me-after-done-with-schedule-thanks'
 
 const True: Record<string, boolean> = {
   yes: true,
@@ -10,28 +11,6 @@ const False: Record<string, boolean> = {
   false: true,
 }
 
-type Sport =
-  | 'touchRugby'
-  | 'dodgeball'
-  | 'frisbee'
-  | 'tchoukball'
-  | 'volleyball'
-  | 'captainsBall'
-
-type SportConfig = {
-  sport: Sport
-  matchLength: number
-  matchInterval: number
-  venue: string
-  court: string[]
-  startTime: string
-  lunchStart: string
-  lunchEnd: string
-  alternating: boolean
-}
-
-type ScheduleConfig = Record<Sport, SportConfig>
-
 export const readScheduleConfig = (fileData: Buffer): ScheduleConfig =>
   parse(fileData, {
     delimiter: ',',
@@ -42,6 +21,7 @@ export const readScheduleConfig = (fileData: Buffer): ScheduleConfig =>
       'sport',
       'matchLength',
       'matchBreak',
+      'density',
       'venue',
       'courts',
       'courts',

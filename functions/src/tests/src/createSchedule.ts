@@ -11,7 +11,11 @@
 
 import { stringify } from 'csv-stringify'
 import fs from 'fs'
-import { Sport, Event, ScheduleConfig } from '../../types/delete-me-after-done-with-schedule-thanks'
+import {
+  Sport,
+  Event,
+  ScheduleConfig,
+} from '../../types/delete-me-after-done-with-schedule-thanks'
 import { readScheduleConfig } from './createScheduleFromCsv'
 
 /* we only support less than these number of matches. */
@@ -78,67 +82,16 @@ const sports: Sport[] = [
   'captainsBall',
 ]
 
-const matchLength: Record<Sport, number> = {
-  touchRugby: 20,
-  dodgeball: 15,
-  frisbee: 15,
-  tchoukball: 15,
-  volleyball: 20,
-  captainsBall: 15,
-}
-
-const getLunchEnd = (sport: Sport): Date => {
-  return dateify(lunchBreaks[sport][1])
-}
-
 function dateify(HHMM: string): Date {
   const [h, m] = HHMM.split(':').map((e) => parseInt(e))
   return new Date(0, 0, 0, h, m)
 }
 
 // lunch break is 1200 - 1300
-function duringLunch(date: Date, sport: Sport): boolean {
-  const [start, end] = lunchBreaks[sport].map((e) => dateify(e))
-  const s = start.getTime()
-  const e = end.getTime()
+function duringLunch(date: Date, start: string, end: string): boolean {
+  const [s, e] = [start, end].map((e) => dateify(e).getTime())
   const t = date.getTime()
   return t >= s && t < e
-}
-
-const matchInterval: Record<Sport, number> = {
-  touchRugby: 25,
-  dodgeball: 20,
-  frisbee: 20,
-  tchoukball: 20,
-  volleyball: 20,
-  captainsBall: 20,
-}
-
-const courts: Record<Sport, string[]> = {
-  touchRugby: ['Court 1', 'Court 2', 'Court 3', 'Court 4'],
-  dodgeball: ['Court 1', 'Court 3'],
-  frisbee: ['Field A', 'Field B', 'Field C', 'Field D'],
-  tchoukball: ['Court 1', 'Court 2'],
-  volleyball: ['Court 1', 'Court 2'],
-  captainsBall: ['Court 1', 'Court 2'],
-}
-
-const sportDensity: Record<Sport, number> = {
-  touchRugby: 5,
-  dodgeball: 4,
-  frisbee: 6,
-  tchoukball: 4,
-  volleyball: 4,
-  captainsBall: 5,
-}
-
-const venues: Record<Sport, string> = {
-  touchRugby: 'Football Field',
-  dodgeball: 'SRC Multi-Purpose Courts',
-  frisbee: 'Science Fields',
-  tchoukball: 'SRC Handball Courts',
-  volleyball: 'SRC Volleyball Courts',
-  captainsBall: 'SRC Basketball Courts',
 }
 
 function letter(n: number): string {
@@ -163,35 +116,7 @@ function startEndInit(first: Date, matchLength: number) {
   return [s, e]
 }
 
-// variable initializations
-const lunchBreaks: Record<Sport, string[]> = {
-  touchRugby: ['12:00', '13:00'],
-  dodgeball: ['12:00', '13:00'],
-  frisbee: ['12:00', '13:00'],
-  tchoukball: ['13:00', '14:00'],
-  volleyball: ['13:00', '14:00'],
-  captainsBall: ['13:00', '14:00'],
-}
-
 // const sport: Sport = 'captainsBall'
-
-const startTimes: Record<Sport, string> = {
-  touchRugby: '9:00',
-  dodgeball: '9:00',
-  frisbee: '9:00',
-  tchoukball: '9:00',
-  volleyball: '8:40',
-  captainsBall: '9:00',
-}
-
-const alternatingMatches: Record<Sport, boolean> = {
-  touchRugby: false,
-  dodgeball: true,
-  frisbee: false,
-  tchoukball: true,
-  volleyball: true,
-  captainsBall: true,
-}
 
 function incrementTime(s: Date, e: Date, interval: number): void {
   s.setMinutes(s.getMinutes() + interval)
@@ -201,32 +126,36 @@ function incrementTime(s: Date, e: Date, interval: number): void {
 const schedule: Event[] = []
 
 const scheduleConfigCsv = fs.readFileSync('src/csv/scheduleConfig.csv')
-const config: ScheduleConfig = readScheduleConfig(scheduleConfigCsv)
+const overallConfig: ScheduleConfig = readScheduleConfig(scheduleConfigCsv)
 
 sports.forEach((sport) => {
-  const density = sportDensity[sport]
+  const config = overallConfig[sport]
+  const density = config.density
   const matches: number[][] = roundRobinFixtures[density]
-  courts[sport].forEach((court, groupIndex) => {
+  const courts = config.courts
+  courts.forEach((court, groupIndex) => {
     // first pair of start and end
-    const first = dateify(startTimes[sport])
-    const [s, e] = startEndInit(first, matchLength[sport])
+    const first = dateify(config.startTime)
+    const [s, e] = startEndInit(first, config.matchLength)
 
     matches.forEach((match) => {
       // timeskip through lunch break
       const pastLunch = () => {
-        if (duringLunch(s, sport) || duringLunch(e, sport)) {
-          const lunchEnd = getLunchEnd(sport)
+        const lunch = (t: Date) =>
+          duringLunch(t, config.lunchStart, config.lunchEnd)
+        if (lunch(s) || lunch(e)) {
+          const lunchEnd = dateify(config.lunchEnd)
           s.setTime(new Date(lunchEnd).getTime())
           e.setTime(new Date(s).getTime())
-          e.setMinutes(s.getMinutes() + matchLength[sport])
+          e.setMinutes(s.getMinutes() + config.matchLength)
         }
       }
-      const inc = () => incrementTime(s, e, matchInterval[sport])
+      const inc = () => incrementTime(s, e, config.matchInterval)
       const add = (inc: number) =>
         schedule.push({
           start: time(s),
           end: time(e),
-          venue: venues[sport],
+          venue: config.venue,
           round: 'round_robin',
           court,
           sport,
@@ -234,7 +163,7 @@ sports.forEach((sport) => {
           B: `${letter(inc)}${match[1]}`,
           winner: 'U',
         })
-      if (alternatingMatches[sport]) {
+      if (config.alternating) {
         pastLunch()
         add(2 * groupIndex)
         inc()
@@ -272,3 +201,5 @@ stringify(
     logger.write(records)
   }
 )
+
+console.log(schedule.length)

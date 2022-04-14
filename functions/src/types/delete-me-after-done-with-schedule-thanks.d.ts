@@ -25,11 +25,12 @@ type SportConfig = {
   matchLength: number
   matchInterval: number
   venue: string
-  court: string[]
+  courts: string[]
   startTime: string
   lunchStart: string
   lunchEnd: string
   alternating: boolean
+  density: number
 }
 
 export type ScheduleConfig = Record<Sport, SportConfig>

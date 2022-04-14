@@ -1,7 +1,7 @@
-sport,match length (minutes),break in-between (minutes),Main Venue,Venue 1,Venue 2,Venue 3,Venue 4,First Match,Lunch Start,Lunch End,Alternating
-touchRugby,20,5,Football Field,Court 1,Court 2,Court 3,Court 4,9:00,12:00,13:00,no
-dodgeball,15,5,SRC Multi-Purpose Courts,Court 1,Court 3,,,9:00,12:00,13:00,yes
-frisbee,15,5,Science Fields,Field A,Field B,Field C,Field D,9:00,12:00,13:00,no
-tchoukball,15,5,SRC Handball Courts,Court 1,Court 2,,,9:00,13:00,14:00,yes
-volleyball,20,0,SRC Volleyball Courts,Court 1,Court 2,,,8:40,13:00,14:00,yes
-captainsBall,15,5,SRC Basketball Courts,Court 1,Court 2,,,9:00,13:00,14:00,yes
+sport,match length (minutes),break in-between (minutes),Round Robin Size,Main Venue,Venue 1,Venue 2,Venue 3,Venue 4,First Match,Lunch Start,Lunch End,Alternating
+touchRugby,20,5,5,Football Field,Court 1,Court 2,Court 3,Court 4,9:00,12:00,13:00,no
+dodgeball,15,5,4,SRC Multi-Purpose Courts,Court 1,Court 3,,,9:00,12:00,13:00,yes
+frisbee,15,5,6,Science Fields,Field A,Field B,Field C,Field D,9:00,12:00,13:00,no
+tchoukball,15,5,4,SRC Handball Courts,Court 1,Court 2,,,9:00,13:00,14:00,yes
+volleyball,20,0,4,SRC Volleyball Courts,Court 1,Court 2,,,8:40,13:00,14:00,yes
+captainsBall,15,5,5,SRC Basketball Courts,Court 1,Court 2,,,9:00,13:00,14:00,yes
