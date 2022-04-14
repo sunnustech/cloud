@@ -9,6 +9,8 @@
  * TODO: handle all number of groups from 9 to 24 inclusive
  */
 
+import fs from 'fs'
+
 type Sport =
   | 'touchRugby'
   | 'dodgeball'
@@ -26,6 +28,7 @@ type Event = {
   venue: string
   court: string
   round: Round
+  teams: string[]
 }
 
 /* we only support less than these number of matches. */
@@ -94,11 +97,11 @@ const courts: Record<Sport, string[]> = {
 
 const venues: Record<Sport, string> = {
   touchRugby: 'Football Field',
-  dodgeball: 'Multi-Purpose Courts',
+  dodgeball: 'SRC Multi-Purpose Courts',
   frisbee: 'Science Fields',
-  tchoukball: 'Tennis Courts',
-  volleyball: 'Volleyball Courts',
-  captainsBall: 'Basketball Courts',
+  tchoukball: 'SRC Handball Courts',
+  volleyball: 'SRC Volleyball Courts',
+  captainsBall: 'SRC Basketball Courts',
 }
 
 function letter(n: number): string {
@@ -161,6 +164,7 @@ courts[sport].forEach((court, index) => {
       round: 'round_robin',
       court,
       sport,
+      teams: match.map(e => e.toString())
     })
 
     s.setMinutes(s.getMinutes() + matchInterval[sport])
@@ -168,6 +172,18 @@ courts[sport].forEach((court, index) => {
   })
 })
 
+const _courts: string[] = []
+const _logger: string[][] = []
+const field: keyof Event = 'start'
+
+schedule.forEach(e => {
+  if (!_courts.includes(e[field])) {
+    _logger.push([e[field], JSON.stringify(e.teams)])
+    _courts.push(e[field])
+  }
+})
+
 const _court = schedule.filter((e) => e.court === 'Court 4')
 const starts = _court.map((e) => e.start)
-console.log(schedule)
+
+console.log(_logger)
