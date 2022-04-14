@@ -33,7 +33,7 @@
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
     "dev:cs": "tsc && node lib/createSchedule",
-    "dev:csfc": "tsc && node lib/createScheduleFromCsv",
+    "dev:rr": "tsc && node lib/parsers/roundRobinConfig",
     "dev:ws": "tsc && node lib/writeSchema",
     "dev:dd": "tsc && node lib/deleteDocs"
   }

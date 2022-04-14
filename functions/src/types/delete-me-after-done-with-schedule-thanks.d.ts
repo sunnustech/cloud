@@ -34,3 +34,4 @@ type SportConfig = {
 }
 
 export type ScheduleConfig = Record<Sport, SportConfig>
+export type RoundRobinConfig = Record<number, number[][]>
