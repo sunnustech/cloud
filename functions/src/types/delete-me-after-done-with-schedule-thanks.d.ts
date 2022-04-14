@@ -19,3 +19,17 @@ export type Event = {
   B: string
   winner: 'A' | 'B' | 'U'
 }
+
+type SportConfig = {
+  sport: Sport
+  matchLength: number
+  matchInterval: number
+  venue: string
+  court: string[]
+  startTime: string
+  lunchStart: string
+  lunchEnd: string
+  alternating: boolean
+}
+
+export type ScheduleConfig = Record<Sport, SportConfig>

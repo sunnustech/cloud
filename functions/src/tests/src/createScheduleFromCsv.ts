@@ -70,6 +70,9 @@ export const readScheduleConfig = (fileData: Buffer): ScheduleConfig =>
       return value
     },
     onRecord: (rec) => {
+      if (rec[0] === 'sport') {
+        return
+      }
       const config = rec[1]
       config.matchInterval = config.matchLength + config.matchBreak
       // handle empty courts

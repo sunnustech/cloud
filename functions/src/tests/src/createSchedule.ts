@@ -11,7 +11,8 @@
 
 import { stringify } from 'csv-stringify'
 import fs from 'fs'
-import { Sport, Event } from '../../types/delete-me-after-done-with-schedule-thanks'
+import { Sport, Event, ScheduleConfig } from '../../types/delete-me-after-done-with-schedule-thanks'
+import { readScheduleConfig } from './createScheduleFromCsv'
 
 /* we only support less than these number of matches. */
 // const maxCapacity: Record<Sport, number> = {
@@ -199,6 +200,9 @@ function incrementTime(s: Date, e: Date, interval: number): void {
 
 const schedule: Event[] = []
 
+const scheduleConfigCsv = fs.readFileSync('src/csv/scheduleConfig.csv')
+const config: ScheduleConfig = readScheduleConfig(scheduleConfigCsv)
+
 sports.forEach((sport) => {
   const density = sportDensity[sport]
   const matches: number[][] = roundRobinFixtures[density]
@@ -255,9 +259,9 @@ schedule.forEach((e) => {
   }
 })
 
-console.log(_courts)
-fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
+// console.log(_courts)
 
+fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
 const logger = fs.createWriteStream('schedule.csv')
 stringify(
   schedule,
