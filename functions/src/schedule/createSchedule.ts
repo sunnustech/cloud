@@ -1,32 +1,43 @@
 import { https } from 'firebase-functions'
+import { Sport } from '../types/schedule'
+import { hasMissingKeys } from '../utils'
 // import { firestore } from 'firebase-admin'
 // import { getAuth, UserRecord } from 'firebase-admin/auth'
 // import { WriteResult } from '@google-cloud/firestore'
 
+const sports: Sport[] = [
+  'touchRugby',
+  'dodgeball',
+  'frisbee',
+  'tchoukball',
+  'volleyball',
+  'captainsBall',
+]
+
+console.log(sports)
+
+const keyCheck = [
+  [
+    'scheduleConfig',
+    'please supply a schedule config in the property "scheduleConfig"',
+  ],
+  [
+    'roundRobinConfig',
+    'please supply a round robin config in the property "roundRobinConfig"',
+  ],
+]
+
 export const createSchedule = https.onRequest(async (req, res) => {
-  const requestKeys = Object.keys(req.body)
-
-  /* check to see if userList is a property of the request body */
-  if (!requestKeys.includes('scheduleConfig')) {
-    res.json({
-      keys: requestKeys,
-      message: 'please supply a schedule config in the property "scheduleConfig"',
-      data: req.body,
-    })
+  const [err, status] = hasMissingKeys(keyCheck, req)
+  if (status === 'missing') {
+    res.json({ message: err })
     return
   }
 
-  if (!requestKeys.includes('roundRobinConfig')) {
-    res.json({
-      keys: requestKeys,
-      message: 'please supply a round robin config in the property "roundRobinConfig"',
-      data: req.body,
-    })
-    return
-  }
+  console.log('not supposed to be here')
 
   /* send back the statuses */
   res.json({
-    message: 'yeet'
+    message: 'yeet',
   })
 })

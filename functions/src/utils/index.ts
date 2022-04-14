@@ -1,9 +1,7 @@
 // import { firestore } from 'firebase-admin'
-import { deleteDocs } from './deleteDocs'
 import { Team } from '../types/sunnus-firestore'
 import { CollectionReference, DocumentData } from '@google-cloud/firestore'
-
-export { deleteDocs }
+import { Request } from 'firebase-functions'
 
 type Collection = CollectionReference<DocumentData>
 
@@ -40,7 +38,7 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
  * @return {Promise<string[]>} the list
  */
 export async function listDocIdsAsync(
-    collection: Collection
+  collection: Collection
 ): Promise<string[]> {
   const list: string[] = (await collection.listDocuments()).map((e) => e.id)
   return list
@@ -53,15 +51,15 @@ export async function listDocIdsAsync(
  * @return {[T[], T[]]} the pass-fail array
  */
 export function partition<T>(
-    array: T[],
-    check: (elem: T) => boolean
+  array: T[],
+  check: (elem: T) => boolean
 ): [T[], T[]] {
   return array.reduce(
-      (result: [pass: T[], fail: T[]], element) => {
-        result[check(element) ? 0 : 1].push(element)
-        return result
-      },
-      [[], []]
+    (result: [pass: T[], fail: T[]], element) => {
+      result[check(element) ? 0 : 1].push(element)
+      return result
+    },
+    [[], []]
   )
 }
 
@@ -100,3 +98,27 @@ export function getLoginIdList(n: number, existingIds: string[]): string[] {
   }
   return fresh
 }
+
+/**
+ * for every request/onCall, check if there are missing keys
+ * @param {string[][]} arr: array of key-message pairs
+ * @param {Request} req: the entire request body
+ * @returns {string[]} message and status
+ */
+export const hasMissingKeys = (
+  arr: string[][],
+  req: Request
+): [ message: string, status: 'missing' | 'has-all'] => {
+  const requestKeys = Object.keys(req.body)
+  const required = arr.map((pair) => pair[0])
+  for (let i = 0; i < required.length; i++) {
+    const key = required[i]
+    if (!requestKeys.includes(key)) {
+      return [arr[i][1], 'missing']
+    }
+  }
+  return ['', 'has-all']
+}
+
+import { deleteDocs } from './deleteDocs'
+export { deleteDocs }
