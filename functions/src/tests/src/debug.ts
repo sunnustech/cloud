@@ -10,12 +10,14 @@ import { readScheduleConfig } from './parsers/scheduleConfig'
 const fn = 'development-createSchedule'
 timestamp(fn)
 
-const filenames = ['src/csv/scheduleConfig.csv', 'src/csv/roundRobinConfig.csv']
-const buffers = filenames.map((f) => fs.readFileSync(f))
-const scheduleConfig: ScheduleConfig = readScheduleConfig(buffers[0])
-const roundRobinConfig = readRoundRobinConfig(buffers[1])
-
-axios.post(cloud(fn), { scheduleConfig, roundRobinConfig }).then((res) => {
-  const data = res.data
-  console.log(data)
-})
+// axios.post(cloud(fn), { scheduleConfig, roundRobinConfig }).then((res) => {
+// const data = res.data
+// console.log(data)
+// })
+//
+const foo = {
+  asdf: 'one',
+  fdsa: 'two',
+  qwer: 'three',
+}
+console.log(Object.entries(foo))

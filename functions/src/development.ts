@@ -29,6 +29,7 @@ import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
 import { deleteDocs, clearCollection } from './utils'
 import { createSchedule } from './schedule/createSchedule'
+import { getSchedule } from './schedule/getSchedule'
 
 export {
   deleteDocs,
@@ -39,5 +40,6 @@ export {
   createUsers,
   assignUsers,
   createSchedule,
-  clearCollection
+  clearCollection,
+  getSchedule,
 }

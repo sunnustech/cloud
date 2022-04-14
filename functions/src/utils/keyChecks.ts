@@ -8,3 +8,10 @@ export const createSchedule = [
     'please supply a round robin config in the property "roundRobinConfig"',
   ],
 ]
+
+export const getSchedule = [
+  [
+    'filter',
+    'please supply a filter in the property "filter"',
+  ],
+]
