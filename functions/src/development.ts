@@ -6,8 +6,8 @@ export const addMessage = https.onRequest(async (req, res) => {
   const original = req.query.text
   // Push the new message into Firestore using the Firebase Admin SDK.
   const writeResult = await firestore()
-      .collection('cloud-functions')
-      .add({ original: original })
+    .collection('cloud-functions')
+    .add({ original: original })
   // Send back a message that we've successfully written the message
   res.json({ result: `Message with ID: ${writeResult.id} added.` })
 })
@@ -28,6 +28,7 @@ import { createUsers } from './users/createUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
 import { deleteDocs } from './utils'
+import { createSchedule } from './schedule/createSchedule'
 
 export {
   deleteDocs,
@@ -37,4 +38,5 @@ export {
   deleteAllUsers,
   createUsers,
   assignUsers,
+  createSchedule,
 }
