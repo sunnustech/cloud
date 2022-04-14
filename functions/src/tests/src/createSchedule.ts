@@ -16,7 +16,7 @@ import {
   Event,
   ScheduleConfig,
 } from '../../types/delete-me-after-done-with-schedule-thanks'
-import { readScheduleConfig } from './createScheduleFromCsv'
+import { readScheduleConfig } from './parsers/scheduleConfig'
 
 /* we only support less than these number of matches. */
 // const maxCapacity: Record<Sport, number> = {
@@ -201,5 +201,3 @@ stringify(
     logger.write(records)
   }
 )
-
-console.log(schedule.length)

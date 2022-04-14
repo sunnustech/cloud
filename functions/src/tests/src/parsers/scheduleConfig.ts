@@ -1,5 +1,5 @@
 import { parse } from 'csv-parse/sync'
-import { ScheduleConfig } from '../../types/delete-me-after-done-with-schedule-thanks'
+import { ScheduleConfig } from '../../../types/delete-me-after-done-with-schedule-thanks'
 
 const True: Record<string, boolean> = {
   yes: true,
