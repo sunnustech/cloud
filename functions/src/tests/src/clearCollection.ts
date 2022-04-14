@@ -11,7 +11,7 @@ axios
   .post(cloud(fn), {
     message: 'please',
     collection,
-    whitelist: ['04sU1cZXTI5BJgDxMnyo'],
+    whitelist: ['__init__'],
   })
   .then((res) => {
     const data = res.data
