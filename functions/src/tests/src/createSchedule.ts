@@ -121,18 +121,6 @@ function time(t: Date): string {
   })
 }
 
-// generate touchRugby timings first
-
-const schedule: Event[] = []
-
-const sport: Sport = 'touchRugby'
-
-console.log(sport)
-
-const matches: number[][] = roundRobinFixtures[sportDensity[sport]]
-
-// handle lunch break
-
 // lunch break is 1200 - 1300
 function duringLunch(t: Date): boolean {
   const h = t.getHours()
@@ -147,10 +135,25 @@ function startEndInit(first: Date, matchLength: number) {
   return [s, e]
 }
 
-courts[sport].forEach((court, index) => {
+// variable initializations
+const sport: Sport = 'touchRugby'
+const schedule: Event[] = []
+const density = sportDensity[sport]
+const matches: number[][] = roundRobinFixtures[density]
+
+function incrementTime(s: Date, e: Date, interval: number): void {
+  s.setMinutes(s.getMinutes() + interval)
+  e.setMinutes(e.getMinutes() + interval)
+}
+
+courts[sport].forEach((court, groupIndex) => {
   // first pair of start and end
   const first = new Date(0, 0, 0, 9)
   const [s, e] = startEndInit(first, matchLength[sport])
+
+  if (density === 4 && groupIndex % 2 === 1) {
+    return
+  }
 
   matches.forEach((match) => {
     // timeskip through lunch break
@@ -159,30 +162,31 @@ courts[sport].forEach((court, index) => {
       e.setTime(new Date(s).getTime())
       e.setMinutes(s.getMinutes() + matchLength[sport])
     }
-    schedule.push({
-      start: time(s),
-      end: time(e),
-      venue: venues[sport],
-      round: 'round_robin',
-      court,
-      sport,
-      A: `${letter(index)}${match[0]}`,
-      B: `${letter(index)}${match[1]}`,
-      winner: 'U'
-    })
-
-    s.setMinutes(s.getMinutes() + matchInterval[sport])
-    e.setMinutes(e.getMinutes() + matchInterval[sport])
+    const add = (inc: number) =>
+      schedule.push({
+        start: time(s),
+        end: time(e),
+        venue: venues[sport],
+        round: 'round_robin',
+        court,
+        sport,
+        A: `${letter(groupIndex + inc)}${match[0]}`,
+        B: `${letter(groupIndex + inc)}${match[1]}`,
+        winner: 'U',
+      })
+    add(0)
+    if (sportDensity[sport] === 4) {
+      add(1)
+    }
+    incrementTime(s, e, matchInterval[sport])
   })
 })
 
 const _courts: string[] = []
-const _logger: string[][] = []
 const field: keyof Event = 'start'
 
-schedule.forEach(e => {
+schedule.forEach((e) => {
   if (!_courts.includes(e[field])) {
-    _logger.push([e[field], JSON.stringify(e.A)])
     _courts.push(e[field])
   }
 })
@@ -190,5 +194,5 @@ schedule.forEach(e => {
 const _court = schedule.filter((e) => e.court === 'Court 4')
 const starts = _court.map((e) => e.start)
 
-console.log(_logger)
+console.log(_courts)
 fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
