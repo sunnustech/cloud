@@ -70,33 +70,23 @@ const matchLength: Record<Sport, number> = {
   captainsBall: 15,
 }
 
-const lunchBreaks: Record<Sport, string[]> = {
-  touchRugby: ['12:00', '13:00'],
-  dodgeball: ['12:00', '13:00'],
-  frisbee: ['12:00', '13:00'],
-  tchoukball: ['13:00', '14:00'],
-  volleyball: ['12:40', '14:00'],
-  captainsBall: ['13:00', '14:00'],
+const getLunchEnd = (sport: Sport): Date => {
+  return dateify(lunchBreaks[sport][1])
 }
 
-const getLunchEnd = (sport: Sport): Date => {
-  const e = lunchBreaks[sport][1]
-  const [h, m] = e.split(':').map(e => parseInt(e))
+function dateify (HHMM: string): Date{
+  const [h, m] = HHMM.split(':').map(e => parseInt(e))
   return new Date(0, 0, 0, h, m)
 }
 
 // lunch break is 1200 - 1300
 function duringLunch(date: Date, sport: Sport): boolean {
-  const [start, end] = lunchBreaks[sport]
-  const [sh, sm] = start.split(':').map(e => parseInt(e))
-  const [eh, em] = end.split(':').map(e => parseInt(e))
-  const sD = new Date(0, 0, 0, sh, sm)
-  const eD = new Date(0, 0, 0, eh, em)
-  const s = sD.getTime()
-  const e = eD.getTime()
+  const [start, end] = lunchBreaks[sport].map(e => dateify(e))
+  const s = start.getTime()
+  const e = end.getTime()
   const t = date.getTime()
   const b = t >= s && t < e
-  console.log(time(sD), time(date), time(eD), b)
+  console.log(time(start), time(date), time(end), b)
   // naive check suffices and is actually less buggy
   return (t >= s && t < e)
 }
@@ -161,10 +151,28 @@ function startEndInit(first: Date, matchLength: number) {
 }
 
 // variable initializations
-const sport: Sport = 'touchRugby'
+const lunchBreaks: Record<Sport, string[]> = {
+  touchRugby: ['12:00', '13:00'],
+  dodgeball: ['12:00', '13:00'],
+  frisbee: ['12:00', '13:00'],
+  tchoukball: ['13:00', '14:00'],
+  volleyball: ['13:00', '14:00'],
+  captainsBall: ['13:00', '14:00'],
+}
+
+const sport: Sport = 'volleyball'
 const schedule: Event[] = []
 const density = sportDensity[sport]
 const matches: number[][] = roundRobinFixtures[density]
+
+const startTimes: Record<Sport, string> = {
+  touchRugby: '9:00',
+  dodgeball: '9:00',
+  frisbee: '9:00',
+  tchoukball: '9:00',
+  volleyball: '8:40',
+  captainsBall: '9:00',
+}
 
 function incrementTime(s: Date, e: Date, interval: number): void {
   s.setMinutes(s.getMinutes() + interval)
@@ -173,7 +181,7 @@ function incrementTime(s: Date, e: Date, interval: number): void {
 
 courts[sport].forEach((court, groupIndex) => {
   // first pair of start and end
-  const first = new Date(0, 0, 0, 9)
+  const first = dateify(startTimes[sport])
   const [s, e] = startEndInit(first, matchLength[sport])
 
   matches.forEach((match) => {
