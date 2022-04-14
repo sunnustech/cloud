@@ -52,8 +52,8 @@ function incrementTime(s: Date, e: Date, interval: number): void {
 }
 
 export const makeSchedule = (
-  scheduleConfig: ScheduleConfig,
-  rr: RoundRobinConfig
+    scheduleConfig: ScheduleConfig,
+    rr: RoundRobinConfig
 ): Event[] => {
   const schedule: Event[] = []
 

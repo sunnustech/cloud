@@ -10,8 +10,5 @@ export const createSchedule = [
 ]
 
 export const getSchedule = [
-  [
-    'filter',
-    'please supply a filter in the property "filter"',
-  ],
+  ['filter', 'please supply a filter in the property "filter"'],
 ]

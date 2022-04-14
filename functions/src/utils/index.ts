@@ -38,7 +38,7 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
  * @return {Promise<string[]>} the list
  */
 export async function listDocIdsAsync(
-  collection: Collection
+    collection: Collection
 ): Promise<string[]> {
   const list: string[] = (await collection.listDocuments()).map((e) => e.id)
   return list
@@ -51,15 +51,15 @@ export async function listDocIdsAsync(
  * @return {[T[], T[]]} the pass-fail array
  */
 export function partition<T>(
-  array: T[],
-  check: (elem: T) => boolean
+    array: T[],
+    check: (elem: T) => boolean
 ): [T[], T[]] {
   return array.reduce(
-    (result: [pass: T[], fail: T[]], element) => {
-      result[check(element) ? 0 : 1].push(element)
-      return result
-    },
-    [[], []]
+      (result: [pass: T[], fail: T[]], element) => {
+        result[check(element) ? 0 : 1].push(element)
+        return result
+      },
+      [[], []]
   )
 }
 
@@ -67,7 +67,7 @@ export function partition<T>(
  * tries for a random login id (6-digit numeric string)
  * @return {string} the login id
  */
-function getLoginId(): string {
+function makeLoginId(): string {
   const [min, max] = [0, 1000000]
   const random = Math.random() * (max - min)
   const integer = Math.floor(random) + min + max
@@ -80,7 +80,7 @@ function getLoginId(): string {
  * @param {string[]} existingIds: list of existing ids
  * @return {string[]} list of new unique ids
  */
-export function getLoginIdList(n: number, existingIds: string[]): string[] {
+export function makeLoginIdList(n: number, existingIds: string[]): string[] {
   const existingIdDict: Record<string, boolean> = {}
   existingIds.forEach((id) => {
     existingIdDict[id] = true
@@ -88,7 +88,7 @@ export function getLoginIdList(n: number, existingIds: string[]): string[] {
   const fresh: string[] = []
   let i = 0
   while (i < n) {
-    const id = getLoginId()
+    const id = makeLoginId()
     if (existingIdDict[id] === true) {
       continue
     }
@@ -106,9 +106,9 @@ export function getLoginIdList(n: number, existingIds: string[]): string[] {
  * @returns {string[]} message and status
  */
 export const hasMissingKeys = (
-  arr: string[][],
-  req: Request
-): [ message: string, status: 'missing' | 'has-all'] => {
+    arr: string[][],
+    req: Request
+): [message: string, status: 'missing' | 'has-all'] => {
   const requestKeys = Object.keys(req.body)
   const required = arr.map((pair) => pair[0])
   for (let i = 0; i < required.length; i++) {

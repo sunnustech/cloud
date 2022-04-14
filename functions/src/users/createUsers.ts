@@ -4,7 +4,7 @@ import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
-import { getLoginIdList } from '../utils'
+import { makeLoginIdList } from '../utils'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
@@ -109,7 +109,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* get list of all existing loginIds */
   const existingLoginIds: string[] =
     (await allUsersData.get()).data()?.loginIdList || []
-  const freshLoginIds = getLoginIdList(userList.length, existingLoginIds)
+  const freshLoginIds = makeLoginIdList(userList.length, existingLoginIds)
 
   /* this queue creates Firebase email-password users */
   const userCreationQueue = getUserCreationQueue(
