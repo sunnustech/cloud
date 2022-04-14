@@ -22,6 +22,7 @@
     "dev:initialize-team": "tsc && node lib/initializeTeam",
     "dev:create-teams": "tsc && node lib/createTeams",
     "dev:create-schedule": "tsc && node lib/createSchedule",
+    "dev:create-schedule-from-csv": "tsc && node lib/createScheduleFromCsv",
     "dev:write-schema": "tsc && node lib/createTeams",
     "dev:delete-docs": "tsc && node lib/deleteDocs",
     "dev:cu": "tsc && node lib/createUsers",
@@ -32,6 +33,7 @@
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
     "dev:cs": "tsc && node lib/createSchedule",
+    "dev:csfc": "tsc && node lib/createScheduleFromCsv",
     "dev:ws": "tsc && node lib/writeSchema",
     "dev:dd": "tsc && node lib/deleteDocs"
   }
