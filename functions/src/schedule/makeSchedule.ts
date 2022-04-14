@@ -4,6 +4,14 @@ import {
   Sport,
   Event,
 } from '../types/schedule'
+import {
+  dateify,
+  letter,
+  time,
+  inBetween,
+  startEndInit,
+  incrementTime,
+} from '../utils/schedule'
 
 const sports: Sport[] = [
   'touchRugby',
@@ -13,43 +21,6 @@ const sports: Sport[] = [
   'volleyball',
   'captainsBall',
 ]
-
-function dateify(HHMM: string): Date {
-  const [h, m] = HHMM.split(':').map((e) => parseInt(e))
-  return new Date(0, 0, 0, h, m)
-}
-
-function inBetween(c: Date, a: Date, b: Date): boolean {
-  const [C, A, B] = [c, a, b].map((e: Date) => e.getTime())
-  return A <= C && C < B
-}
-
-function letter(n: number): string {
-  if (n < 0 || n > 25) {
-    return '_'
-  }
-  return (n + 10).toString(36).toUpperCase()
-}
-
-function time(t: Date): string {
-  return t.toLocaleTimeString('en-sg', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })
-}
-
-function startEndInit(first: Date, matchLength: number) {
-  const s = new Date(first)
-  const e = new Date(first)
-  e.setMinutes(s.getMinutes() + matchLength)
-  return [s, e]
-}
-
-function incrementTime(s: Date, e: Date, interval: number): void {
-  s.setMinutes(s.getMinutes() + interval)
-  e.setMinutes(e.getMinutes() + interval)
-}
 
 export const makeSchedule = (
     scheduleConfig: ScheduleConfig,

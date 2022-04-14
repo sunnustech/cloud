@@ -2,7 +2,7 @@
   "name": "functions",
   "scripts": {
     "build": "tsc",
-    "lint": "prettier --write ./src/**/*.ts && eslint --fix --ext .js,.ts .",
+    "lint": "eslint --fix --ext .js,.ts .",
     "prettier": "prettier --write ./src/**/*.ts",
     "serve": "rm -rf ./lib && tsc && tsc -w | firebase emulators:start --only functions",
     "shell": "tsc && firebase functions:shell",

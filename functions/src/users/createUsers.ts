@@ -4,7 +4,7 @@ import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
-import { makeLoginIdList } from '../utils'
+import { makeLoginIdList } from '../utils/user'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users

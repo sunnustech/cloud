@@ -1,5 +1,4 @@
 // import { firestore } from 'firebase-admin'
-import { Team } from '../types/sunnus-firestore'
 import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 import { Request } from 'firebase-functions'
 
@@ -16,20 +15,6 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
       separateWord[i].charAt(0).toUpperCase() + separateWord[i].substring(1)
   }
   return separateWord.join('')
-}
-
-/**
- * creates an object with team names as keys
- * and team props as values
- * @param {Array<T>} arr: the array of team props
- * @return {Record<string, T>} the final object
- */
-export function makeTeams(arr: Array<Team>): Record<string, Team> {
-  const obj: Record<string, Team> = {}
-  arr.forEach((e: Team) => {
-    obj[e.teamName] = e
-  })
-  return obj
 }
 
 /**
@@ -64,46 +49,10 @@ export function partition<T>(
 }
 
 /**
- * tries for a random login id (6-digit numeric string)
- * @return {string} the login id
- */
-function makeLoginId(): string {
-  const [min, max] = [0, 1000000]
-  const random = Math.random() * (max - min)
-  const integer = Math.floor(random) + min + max
-  return integer.toString().substring(1)
-}
-
-/**
- * generates a list of login ids that do not exist yet
- * @param {number} n: number of unique ids to generate
- * @param {string[]} existingIds: list of existing ids
- * @return {string[]} list of new unique ids
- */
-export function makeLoginIdList(n: number, existingIds: string[]): string[] {
-  const existingIdDict: Record<string, boolean> = {}
-  existingIds.forEach((id) => {
-    existingIdDict[id] = true
-  })
-  const fresh: string[] = []
-  let i = 0
-  while (i < n) {
-    const id = makeLoginId()
-    if (existingIdDict[id] === true) {
-      continue
-    }
-    fresh.push(id)
-    existingIdDict[id] = true
-    i++
-  }
-  return fresh
-}
-
-/**
- * for every request/onCall, check if there are missing keys
- * @param {string[][]} arr: array of key-message pairs
- * @param {Request} req: the entire request body
- * @returns {string[]} message and status
+ * check for missing keys
+ * @param {Array<string[]>} arr: array of key-message pairs
+ * @param {string} req: the entire request body
+ * @return {string[]} the message and status
  */
 export const hasMissingKeys = (
     arr: string[][],
