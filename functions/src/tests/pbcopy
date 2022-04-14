@@ -6,9 +6,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A1",
-        "B": "A2",
-        "winner": "U"
+        "teams": [
+            "A1",
+            "A2"
+        ]
     },
     {
         "start": "09:25",
@@ -17,9 +18,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A3",
-        "B": "A4",
-        "winner": "U"
+        "teams": [
+            "A3",
+            "A4"
+        ]
     },
     {
         "start": "09:50",
@@ -28,9 +30,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A1",
-        "B": "A5",
-        "winner": "U"
+        "teams": [
+            "A1",
+            "A5"
+        ]
     },
     {
         "start": "10:15",
@@ -39,9 +42,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A2",
-        "B": "A3",
-        "winner": "U"
+        "teams": [
+            "A2",
+            "A3"
+        ]
     },
     {
         "start": "10:40",
@@ -50,9 +54,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A4",
-        "B": "A5",
-        "winner": "U"
+        "teams": [
+            "A4",
+            "A5"
+        ]
     },
     {
         "start": "11:05",
@@ -61,9 +66,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A1",
-        "B": "A3",
-        "winner": "U"
+        "teams": [
+            "A1",
+            "A3"
+        ]
     },
     {
         "start": "11:30",
@@ -72,9 +78,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A2",
-        "B": "A4",
-        "winner": "U"
+        "teams": [
+            "A2",
+            "A4"
+        ]
     },
     {
         "start": "13:00",
@@ -83,9 +90,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A3",
-        "B": "A5",
-        "winner": "U"
+        "teams": [
+            "A3",
+            "A5"
+        ]
     },
     {
         "start": "13:25",
@@ -94,9 +102,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A1",
-        "B": "A4",
-        "winner": "U"
+        "teams": [
+            "A1",
+            "A4"
+        ]
     },
     {
         "start": "13:50",
@@ -105,9 +114,10 @@
         "round": "round_robin",
         "court": "Court 1",
         "sport": "touchRugby",
-        "A": "A2",
-        "B": "A5",
-        "winner": "U"
+        "teams": [
+            "A2",
+            "A5"
+        ]
     },
     {
         "start": "09:00",
@@ -116,9 +126,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B1",
-        "B": "B2",
-        "winner": "U"
+        "teams": [
+            "B1",
+            "B2"
+        ]
     },
     {
         "start": "09:25",
@@ -127,9 +138,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B3",
-        "B": "B4",
-        "winner": "U"
+        "teams": [
+            "B3",
+            "B4"
+        ]
     },
     {
         "start": "09:50",
@@ -138,9 +150,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B1",
-        "B": "B5",
-        "winner": "U"
+        "teams": [
+            "B1",
+            "B5"
+        ]
     },
     {
         "start": "10:15",
@@ -149,9 +162,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B2",
-        "B": "B3",
-        "winner": "U"
+        "teams": [
+            "B2",
+            "B3"
+        ]
     },
     {
         "start": "10:40",
@@ -160,9 +174,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B4",
-        "B": "B5",
-        "winner": "U"
+        "teams": [
+            "B4",
+            "B5"
+        ]
     },
     {
         "start": "11:05",
@@ -171,9 +186,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B1",
-        "B": "B3",
-        "winner": "U"
+        "teams": [
+            "B1",
+            "B3"
+        ]
     },
     {
         "start": "11:30",
@@ -182,9 +198,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B2",
-        "B": "B4",
-        "winner": "U"
+        "teams": [
+            "B2",
+            "B4"
+        ]
     },
     {
         "start": "13:00",
@@ -193,9 +210,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B3",
-        "B": "B5",
-        "winner": "U"
+        "teams": [
+            "B3",
+            "B5"
+        ]
     },
     {
         "start": "13:25",
@@ -204,9 +222,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B1",
-        "B": "B4",
-        "winner": "U"
+        "teams": [
+            "B1",
+            "B4"
+        ]
     },
     {
         "start": "13:50",
@@ -215,9 +234,10 @@
         "round": "round_robin",
         "court": "Court 2",
         "sport": "touchRugby",
-        "A": "B2",
-        "B": "B5",
-        "winner": "U"
+        "teams": [
+            "B2",
+            "B5"
+        ]
     },
     {
         "start": "09:00",
@@ -226,9 +246,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C1",
-        "B": "C2",
-        "winner": "U"
+        "teams": [
+            "C1",
+            "C2"
+        ]
     },
     {
         "start": "09:25",
@@ -237,9 +258,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C3",
-        "B": "C4",
-        "winner": "U"
+        "teams": [
+            "C3",
+            "C4"
+        ]
     },
     {
         "start": "09:50",
@@ -248,9 +270,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C1",
-        "B": "C5",
-        "winner": "U"
+        "teams": [
+            "C1",
+            "C5"
+        ]
     },
     {
         "start": "10:15",
@@ -259,9 +282,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C2",
-        "B": "C3",
-        "winner": "U"
+        "teams": [
+            "C2",
+            "C3"
+        ]
     },
     {
         "start": "10:40",
@@ -270,9 +294,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C4",
-        "B": "C5",
-        "winner": "U"
+        "teams": [
+            "C4",
+            "C5"
+        ]
     },
     {
         "start": "11:05",
@@ -281,9 +306,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C1",
-        "B": "C3",
-        "winner": "U"
+        "teams": [
+            "C1",
+            "C3"
+        ]
     },
     {
         "start": "11:30",
@@ -292,9 +318,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C2",
-        "B": "C4",
-        "winner": "U"
+        "teams": [
+            "C2",
+            "C4"
+        ]
     },
     {
         "start": "13:00",
@@ -303,9 +330,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C3",
-        "B": "C5",
-        "winner": "U"
+        "teams": [
+            "C3",
+            "C5"
+        ]
     },
     {
         "start": "13:25",
@@ -314,9 +342,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C1",
-        "B": "C4",
-        "winner": "U"
+        "teams": [
+            "C1",
+            "C4"
+        ]
     },
     {
         "start": "13:50",
@@ -325,9 +354,10 @@
         "round": "round_robin",
         "court": "Court 3",
         "sport": "touchRugby",
-        "A": "C2",
-        "B": "C5",
-        "winner": "U"
+        "teams": [
+            "C2",
+            "C5"
+        ]
     },
     {
         "start": "09:00",
@@ -336,9 +366,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D1",
-        "B": "D2",
-        "winner": "U"
+        "teams": [
+            "D1",
+            "D2"
+        ]
     },
     {
         "start": "09:25",
@@ -347,9 +378,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D3",
-        "B": "D4",
-        "winner": "U"
+        "teams": [
+            "D3",
+            "D4"
+        ]
     },
     {
         "start": "09:50",
@@ -358,9 +390,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D1",
-        "B": "D5",
-        "winner": "U"
+        "teams": [
+            "D1",
+            "D5"
+        ]
     },
     {
         "start": "10:15",
@@ -369,9 +402,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D2",
-        "B": "D3",
-        "winner": "U"
+        "teams": [
+            "D2",
+            "D3"
+        ]
     },
     {
         "start": "10:40",
@@ -380,9 +414,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D4",
-        "B": "D5",
-        "winner": "U"
+        "teams": [
+            "D4",
+            "D5"
+        ]
     },
     {
         "start": "11:05",
@@ -391,9 +426,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D1",
-        "B": "D3",
-        "winner": "U"
+        "teams": [
+            "D1",
+            "D3"
+        ]
     },
     {
         "start": "11:30",
@@ -402,9 +438,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D2",
-        "B": "D4",
-        "winner": "U"
+        "teams": [
+            "D2",
+            "D4"
+        ]
     },
     {
         "start": "13:00",
@@ -413,9 +450,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D3",
-        "B": "D5",
-        "winner": "U"
+        "teams": [
+            "D3",
+            "D5"
+        ]
     },
     {
         "start": "13:25",
@@ -424,9 +462,10 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D1",
-        "B": "D4",
-        "winner": "U"
+        "teams": [
+            "D1",
+            "D4"
+        ]
     },
     {
         "start": "13:50",
@@ -435,8 +474,9 @@
         "round": "round_robin",
         "court": "Court 4",
         "sport": "touchRugby",
-        "A": "D2",
-        "B": "D5",
-        "winner": "U"
+        "teams": [
+            "D2",
+            "D5"
+        ]
     }
 ]

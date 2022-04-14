@@ -28,7 +28,9 @@ type Event = {
   venue: string
   court: string
   round: Round
-  teams: string[]
+  A: string
+  B: string
+  winner: 'A' | 'B' | 'U'
 }
 
 /* we only support less than these number of matches. */
@@ -164,7 +166,9 @@ courts[sport].forEach((court, index) => {
       round: 'round_robin',
       court,
       sport,
-      teams: match.map(e => e.toString())
+      A: `${letter(index)}${match[0]}`,
+      B: `${letter(index)}${match[1]}`,
+      winner: 'U'
     })
 
     s.setMinutes(s.getMinutes() + matchInterval[sport])
@@ -178,7 +182,7 @@ const field: keyof Event = 'start'
 
 schedule.forEach(e => {
   if (!_courts.includes(e[field])) {
-    _logger.push([e[field], JSON.stringify(e.teams)])
+    _logger.push([e[field], JSON.stringify(e.A)])
     _courts.push(e[field])
   }
 })
@@ -187,3 +191,4 @@ const _court = schedule.filter((e) => e.court === 'Court 4')
 const starts = _court.map((e) => e.start)
 
 console.log(_logger)
+fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
