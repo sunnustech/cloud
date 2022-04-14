@@ -151,17 +151,18 @@ courts[sport].forEach((court, groupIndex) => {
   const first = new Date(0, 0, 0, 9)
   const [s, e] = startEndInit(first, matchLength[sport])
 
-  if (density === 4 && groupIndex % 2 === 1) {
-    return
-  }
-
   matches.forEach((match) => {
     // timeskip through lunch break
-    while (duringLunch(s) || duringLunch(e)) {
-      s.setTime(new Date(0, 0, 0, 13).getTime())
-      e.setTime(new Date(s).getTime())
-      e.setMinutes(s.getMinutes() + matchLength[sport])
+    const pastLunch = () => {
+      if (duringLunch(s) || duringLunch(e)) {
+        console.log('pushing')
+        s.setTime(new Date(0, 0, 0, 13).getTime())
+        e.setTime(new Date(s).getTime())
+        e.setMinutes(s.getMinutes() + matchLength[sport])
+        console.log('pushed to', time(s))
+      }
     }
+    const inc = () => incrementTime(s, e, matchInterval[sport])
     const add = (inc: number) =>
       schedule.push({
         start: time(s),
@@ -174,11 +175,14 @@ courts[sport].forEach((court, groupIndex) => {
         B: `${letter(groupIndex + inc)}${match[1]}`,
         winner: 'U',
       })
+    pastLunch()
     add(0)
+    inc()
     if (sportDensity[sport] === 4) {
+      pastLunch()
       add(1)
+      inc()
     }
-    incrementTime(s, e, matchInterval[sport])
   })
 })
 
