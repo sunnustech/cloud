@@ -1,5 +1,5 @@
 import { parse } from 'csv-parse/sync'
-import { RoundRobinConfig } from '../../../types/delete-me-after-done-with-schedule-thanks'
+import { RoundRobinConfig } from '../../../types/schedule'
 
 export const readRoundRobinConfig = (fileData: Buffer): RoundRobinConfig => {
   const config: RoundRobinConfig = {

@@ -9,12 +9,7 @@
 
 import { stringify } from 'csv-stringify'
 import fs from 'fs'
-import {
-  Sport,
-  Event,
-  ScheduleConfig,
-  RoundRobinConfig,
-} from '../../types/delete-me-after-done-with-schedule-thanks'
+import { Sport, Event, ScheduleConfig } from '../../types/schedule'
 import { readRoundRobinConfig } from './parsers/roundRobinConfig'
 import { readScheduleConfig } from './parsers/scheduleConfig'
 
@@ -69,7 +64,7 @@ const schedule: Event[] = []
 const filenames = ['src/csv/scheduleConfig.csv', 'src/csv/roundRobinConfig.csv']
 const buffers = filenames.map((f) => fs.readFileSync(f))
 const scheduleConfig: ScheduleConfig = readScheduleConfig(buffers[0])
-const rr: RoundRobinConfig = readRoundRobinConfig(buffers[1])
+const rr = readRoundRobinConfig(buffers[1])
 
 sports.forEach((sport) => {
   const config = scheduleConfig[sport]
