@@ -9,6 +9,7 @@
  * TODO: handle all number of groups from 9 to 24 inclusive
  */
 
+import { stringify } from 'csv-stringify'
 import fs from 'fs'
 
 type Sport =
@@ -94,9 +95,6 @@ function duringLunch(date: Date, sport: Sport): boolean {
   const s = start.getTime()
   const e = end.getTime()
   const t = date.getTime()
-  const b = t >= s && t < e
-  console.log(time(start), time(date), time(end), b)
-  // naive check suffices and is actually less buggy
   return t >= s && t < e
 }
 
@@ -253,3 +251,14 @@ schedule.forEach((e) => {
 
 console.log(_courts)
 fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
+
+const logger = fs.createWriteStream('schedule.csv')
+stringify(
+  schedule,
+  {
+    header: true,
+  },
+  (_, records) => {
+    logger.write(records)
+  }
+)
