@@ -136,7 +136,7 @@ function startEndInit(first: Date, matchLength: number) {
 }
 
 // variable initializations
-const sport: Sport = 'dodgeball'
+const sport: Sport = 'frisbee'
 const schedule: Event[] = []
 const density = sportDensity[sport]
 const matches: number[][] = roundRobinFixtures[density]
