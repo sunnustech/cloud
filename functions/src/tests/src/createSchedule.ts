@@ -160,7 +160,7 @@ const lunchBreaks: Record<Sport, string[]> = {
   captainsBall: ['13:00', '14:00'],
 }
 
-const sport: Sport = 'volleyball'
+const sport: Sport = 'captainsBall'
 const schedule: Event[] = []
 const density = sportDensity[sport]
 const matches: number[][] = roundRobinFixtures[density]
@@ -172,6 +172,15 @@ const startTimes: Record<Sport, string> = {
   tchoukball: '9:00',
   volleyball: '8:40',
   captainsBall: '9:00',
+}
+
+const alternatingMatches: Record<Sport, boolean> = {
+  touchRugby: false,
+  dodgeball: true,
+  frisbee: false,
+  tchoukball: true,
+  volleyball: true,
+  captainsBall: true,
 }
 
 function incrementTime(s: Date, e: Date, interval: number): void {
@@ -203,16 +212,20 @@ courts[sport].forEach((court, groupIndex) => {
         round: 'round_robin',
         court,
         sport,
-        A: `${letter(groupIndex + inc)}${match[0]}`,
-        B: `${letter(groupIndex + inc)}${match[1]}`,
+        A: `${letter(inc)}${match[0]}`,
+        B: `${letter(inc)}${match[1]}`,
         winner: 'U',
       })
-    pastLunch()
-    add(0)
-    inc()
-    if (sportDensity[sport] === 4) {
+    if (alternatingMatches[sport]) {
       pastLunch()
-      add(1)
+      add(2 * groupIndex)
+      inc()
+      pastLunch()
+      add(2 * groupIndex + 1)
+      inc()
+    } else {
+      pastLunch()
+      add(groupIndex)
       inc()
     }
   })
