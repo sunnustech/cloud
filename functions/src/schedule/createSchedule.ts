@@ -4,7 +4,6 @@ import { hasMissingKeys } from '../utils'
 import { createSchedule as keyCheck } from '../utils/keyChecks'
 import { makeSchedule } from './makeSchedule'
 import { firestore } from 'firebase-admin'
-// import { getAuth, UserRecord } from 'firebase-admin/auth'
 import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 
 export const createSchedule = https.onRequest(async (req, res) => {
@@ -23,21 +22,13 @@ export const createSchedule = https.onRequest(async (req, res) => {
   const makeEventQueue: Promise<DocumentReference<DocumentData>>[] = []
 
   schedule.forEach((event) => {
-    makeEventQueue.push(
-      scheduleCollection.add(event).then((result) => {
-        // do something here to index the resulting doc id
-        return result
-      })
-    )
+    makeEventQueue.push(scheduleCollection.add(event))
   })
 
   const writeResult = await Promise.allSettled(makeEventQueue)
 
-  console.log(schedule)
-
   /* send back the statuses */
   res.json({
-    message: 'yeet',
-    writeResult
+    writeResult,
   })
 })
