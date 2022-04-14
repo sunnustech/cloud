@@ -1,6 +1,7 @@
 import { https } from 'firebase-functions'
 import { Sport } from '../types/schedule'
 import { hasMissingKeys } from '../utils'
+import { createSchedule as keyCheck } from '../utils/keyChecks'
 // import { firestore } from 'firebase-admin'
 // import { getAuth, UserRecord } from 'firebase-admin/auth'
 // import { WriteResult } from '@google-cloud/firestore'
@@ -14,19 +15,6 @@ const sports: Sport[] = [
   'captainsBall',
 ]
 
-console.log(sports)
-
-const keyCheck = [
-  [
-    'scheduleConfig',
-    'please supply a schedule config in the property "scheduleConfig"',
-  ],
-  [
-    'roundRobinConfig',
-    'please supply a round robin config in the property "roundRobinConfig"',
-  ],
-]
-
 export const createSchedule = https.onRequest(async (req, res) => {
   const [err, status] = hasMissingKeys(keyCheck, req)
   if (status === 'missing') {
@@ -34,7 +22,7 @@ export const createSchedule = https.onRequest(async (req, res) => {
     return
   }
 
-  console.log('not supposed to be here')
+  console.log(sports)
 
   /* send back the statuses */
   res.json({
