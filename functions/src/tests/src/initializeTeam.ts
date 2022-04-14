@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { timestamp } from './timestamp'
-import { cloud } from './firebase'
+import { timestamp } from './utils/timestamp'
+import { cloud } from './utils/firebase'
 
 const fn = 'development-initializeTeam'
 timestamp(fn)

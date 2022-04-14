@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { timestamp } from './timestamp'
-import { cloud } from './firebase'
+import { timestamp } from './utils/timestamp'
+import { cloud } from './utils/firebase'
 import { sanitizePhoneNumber } from './utils'
 import { InitializeUser } from '../../types/sunnus-init'
 import { parse } from 'csv-parse/sync'
