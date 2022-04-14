@@ -43,15 +43,6 @@ const maxCapacity: Record<Sport, number> = {
   captainsBall: 20,
 }
 
-const sportDensity: Record<Sport, number> = {
-  touchRugby: 5,
-  dodgeball: 4,
-  frisbee: 6,
-  tchoukball: 4,
-  volleyball: 4,
-  captainsBall: 5,
-}
-
 // prettier-ignore
 const roundRobinFixtures: Record<number, number[][]> = {
   4: [ // = 4 * 3 / 2 = 6
@@ -97,6 +88,15 @@ const courts: Record<Sport, string[]> = {
   captainsBall: ['Court 1', 'Court 2'],
 }
 
+const sportDensity: Record<Sport, number> = {
+  touchRugby: 5,
+  dodgeball: 4,
+  frisbee: 6,
+  tchoukball: 4,
+  volleyball: 4,
+  captainsBall: 5,
+}
+
 const venues: Record<Sport, string> = {
   touchRugby: 'Football Field',
   dodgeball: 'SRC Multi-Purpose Courts',
@@ -136,7 +136,7 @@ function startEndInit(first: Date, matchLength: number) {
 }
 
 // variable initializations
-const sport: Sport = 'touchRugby'
+const sport: Sport = 'dodgeball'
 const schedule: Event[] = []
 const density = sportDensity[sport]
 const matches: number[][] = roundRobinFixtures[density]
@@ -196,7 +196,6 @@ schedule.forEach((e) => {
 })
 
 const _court = schedule.filter((e) => e.court === 'Court 4')
-const starts = _court.map((e) => e.start)
 
 console.log(_courts)
 fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
