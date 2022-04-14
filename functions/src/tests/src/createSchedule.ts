@@ -34,14 +34,14 @@ type Event = {
 }
 
 /* we only support less than these number of matches. */
-const maxCapacity: Record<Sport, number> = {
-  touchRugby: 20,
-  dodgeball: 16,
-  frisbee: 24,
-  tchoukball: 16,
-  volleyball: 16,
-  captainsBall: 20,
-}
+// const maxCapacity: Record<Sport, number> = {
+//   touchRugby: 20,
+//   dodgeball: 16,
+//   frisbee: 24,
+//   tchoukball: 16,
+//   volleyball: 16,
+//   captainsBall: 20,
+// }
 
 // prettier-ignore
 const roundRobinFixtures: Record<number, number[][]> = {
@@ -69,6 +69,38 @@ const matchLength: Record<Sport, number> = {
   volleyball: 20,
   captainsBall: 15,
 }
+
+const lunchBreaks: Record<Sport, string[]> = {
+  touchRugby: ['12:00', '13:00'],
+  dodgeball: ['12:00', '13:00'],
+  frisbee: ['12:00', '13:00'],
+  tchoukball: ['13:00', '14:00'],
+  volleyball: ['12:40', '14:00'],
+  captainsBall: ['13:00', '14:00'],
+}
+
+const getLunchEnd = (sport: Sport): Date => {
+  const e = lunchBreaks[sport][1]
+  const [h, m] = e.split(':').map(e => parseInt(e))
+  return new Date(0, 0, 0, h, m)
+}
+
+// lunch break is 1200 - 1300
+function duringLunch(date: Date, sport: Sport): boolean {
+  const [start, end] = lunchBreaks[sport]
+  const [sh, sm] = start.split(':').map(e => parseInt(e))
+  const [eh, em] = end.split(':').map(e => parseInt(e))
+  const sD = new Date(0, 0, 0, sh, sm)
+  const eD = new Date(0, 0, 0, eh, em)
+  const s = sD.getTime()
+  const e = eD.getTime()
+  const t = date.getTime()
+  const b = t >= s && t < e
+  console.log(time(sD), time(date), time(eD), b)
+  // naive check suffices and is actually less buggy
+  return (t >= s && t < e)
+}
+
 
 const matchInterval: Record<Sport, number> = {
   touchRugby: 25,
@@ -121,13 +153,6 @@ function time(t: Date): string {
   })
 }
 
-// lunch break is 1200 - 1300
-function duringLunch(t: Date): boolean {
-  const h = t.getHours()
-  // naive check suffices and is actually less buggy
-  return h === 12
-}
-
 function startEndInit(first: Date, matchLength: number) {
   const s = new Date(first)
   const e = new Date(first)
@@ -136,7 +161,7 @@ function startEndInit(first: Date, matchLength: number) {
 }
 
 // variable initializations
-const sport: Sport = 'frisbee'
+const sport: Sport = 'touchRugby'
 const schedule: Event[] = []
 const density = sportDensity[sport]
 const matches: number[][] = roundRobinFixtures[density]
@@ -154,12 +179,11 @@ courts[sport].forEach((court, groupIndex) => {
   matches.forEach((match) => {
     // timeskip through lunch break
     const pastLunch = () => {
-      if (duringLunch(s) || duringLunch(e)) {
-        console.log('pushing')
-        s.setTime(new Date(0, 0, 0, 13).getTime())
+      if (duringLunch(s, sport) || duringLunch(e, sport)) {
+        const lunchEnd = getLunchEnd(sport)
+        s.setTime(new Date(lunchEnd).getTime())
         e.setTime(new Date(s).getTime())
         e.setMinutes(s.getMinutes() + matchLength[sport])
-        console.log('pushed to', time(s))
       }
     }
     const inc = () => incrementTime(s, e, matchInterval[sport])
@@ -194,8 +218,6 @@ schedule.forEach((e) => {
     _courts.push(e[field])
   }
 })
-
-const _court = schedule.filter((e) => e.court === 'Court 4')
 
 console.log(_courts)
 fs.writeFileSync('schedule.json', JSON.stringify(schedule, null, 4))
