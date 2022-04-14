@@ -121,4 +121,5 @@ export const hasMissingKeys = (
 }
 
 import { deleteDocs } from './deleteDocs'
-export { deleteDocs }
+import { clearCollection } from './clearCollection'
+export { deleteDocs, clearCollection }

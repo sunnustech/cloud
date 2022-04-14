@@ -3,9 +3,9 @@ import { Event, RoundRobinConfig, ScheduleConfig } from '../types/schedule'
 import { hasMissingKeys } from '../utils'
 import { createSchedule as keyCheck } from '../utils/keyChecks'
 import { makeSchedule } from './makeSchedule'
-// import { firestore } from 'firebase-admin'
+import { firestore } from 'firebase-admin'
 // import { getAuth, UserRecord } from 'firebase-admin/auth'
-// import { WriteResult } from '@google-cloud/firestore'
+import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 
 export const createSchedule = https.onRequest(async (req, res) => {
   const [err, status] = hasMissingKeys(keyCheck, req)
@@ -18,10 +18,26 @@ export const createSchedule = https.onRequest(async (req, res) => {
 
   const schedule: Event[] = makeSchedule(sc, rr)
 
+  const scheduleCollection = firestore().collection('schedule')
+
+  const makeEventQueue: Promise<DocumentReference<DocumentData>>[] = []
+
+  schedule.forEach((event) => {
+    makeEventQueue.push(
+      scheduleCollection.add(event).then((result) => {
+        // do something here to index the resulting doc id
+        return result
+      })
+    )
+  })
+
+  const writeResult = await Promise.allSettled(makeEventQueue)
+
   console.log(schedule)
 
   /* send back the statuses */
   res.json({
     message: 'yeet',
+    writeResult
   })
 })

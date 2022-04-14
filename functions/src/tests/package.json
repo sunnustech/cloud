@@ -35,6 +35,7 @@
     "dev:cs": "tsc && node lib/createSchedule",
     "dev:rr": "tsc && node lib/parsers/roundRobinConfig",
     "dev:ws": "tsc && node lib/writeSchema",
-    "dev:dd": "tsc && node lib/deleteDocs"
+    "dev:dd": "tsc && node lib/deleteDocs",
+    "dev:cc": "tsc && node lib/clearCollection"
   }
 }
