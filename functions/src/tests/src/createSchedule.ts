@@ -11,28 +11,7 @@
 
 import { stringify } from 'csv-stringify'
 import fs from 'fs'
-
-type Sport =
-  | 'touchRugby'
-  | 'dodgeball'
-  | 'frisbee'
-  | 'tchoukball'
-  | 'volleyball'
-  | 'captainsBall'
-
-export type Round = 'round_robin' | 'quarterfinals' | 'semifinals' | 'finals'
-
-type Event = {
-  start: string
-  end: string
-  sport: Sport
-  venue: string
-  court: string
-  round: Round
-  A: string
-  B: string
-  winner: 'A' | 'B' | 'U'
-}
+import { Sport, Event } from '../../types/delete-me-after-done-with-schedule-thanks'
 
 /* we only support less than these number of matches. */
 // const maxCapacity: Record<Sport, number> = {
