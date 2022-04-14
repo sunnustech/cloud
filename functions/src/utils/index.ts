@@ -119,7 +119,3 @@ export const hasMissingKeys = (
   }
   return ['', 'has-all']
 }
-
-import { deleteDocs } from './deleteDocs'
-import { clearCollection } from './clearCollection'
-export { deleteDocs, clearCollection }

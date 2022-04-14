@@ -27,9 +27,10 @@ import { createTeams } from './teams/createTeams'
 import { createUsers } from './users/createUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
-import { deleteDocs, clearCollection } from './utils'
 import { createSchedule } from './schedule/createSchedule'
 import { getSchedule } from './schedule/getSchedule'
+import { deleteDocs } from './deletions/deleteDocs'
+import { clearCollection } from './deletions/clearCollection'
 
 export {
   deleteDocs,
