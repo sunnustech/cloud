@@ -21,6 +21,15 @@ const userList: User[] = [
     uid: 'xo05ywdQhsSLYvXe0CIozFXYnB32', // this is legit
     loginIdNumber: 'supposed to be a number',
   },
+  {
+    teamName: 'developer_team',
+    email: 'kevin@sunnus.com',
+    realEmail: 'actual-kevin@gmail.com',
+    loginId: 'supposed to be long',
+    phoneNumber: '91230412',
+    uid: 'joDEJYPYvfQDS8ukW7bG6MEQUY53', // this is legit
+    loginIdNumber: 'supposed to be a number',
+  },
 ]
 
 const writeUserList = async () => {

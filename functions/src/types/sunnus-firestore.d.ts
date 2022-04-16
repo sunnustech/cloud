@@ -25,6 +25,7 @@ export type Team = InitializeTeam & {
  * keys are collection names.
  */
 export type Firestore = {
+  // COLLECTION: Record<string: DOCUMENT>
   teams: Record<string, Team>
   users: Record<string, User>
 }
