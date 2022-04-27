@@ -11,6 +11,12 @@ export type User = InitializeUser & {
 
 /* a SunNUS team */
 export type Team = InitializeTeam & {
+  TSSTag: {
+    sport: string
+    letter: string
+    number: number
+    id: string
+  }
   members: string[] // array of members' uids
   SOAR: SOARTeamProps
   SOARTimerEvents: number[]

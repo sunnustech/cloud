@@ -16,6 +16,7 @@ const main = async (teamList: InitializeTeam[]) => {
     const teamsOfThisSport = teamList
       .filter((x) => x.registeredEvents.TSS[sport])
       .map((x) => x.teamName)
+    shuffle(teamsOfThisSport)
     console.log(sport, shuffle(teamsOfThisSport))
   })
 }

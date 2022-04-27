@@ -45,11 +45,6 @@ export const writeSchema = https.onRequest(async (_, res) => {
   const everything = await Promise.all([
     push({
       force: true,
-      collection: 'participants',
-      docs: typedParticipants,
-    }),
-    push({
-      force: true,
       collection: 'SOAR',
       docs: typedSOAR,
     }),
