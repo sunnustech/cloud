@@ -4,16 +4,19 @@ import { InitializeTeam } from '../types/sunnus-init'
 // import { WriteResult } from '@google-cloud/firestore'
 import { assignTSSTeams as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils'
+import { sportList } from '../data/constants'
 
 const main = async (teamList: InitializeTeam[]) => {
   // for each sport:
   // randomize order
   // get number of teams
   // assign a letter and a number to each team
-  const volleyballs = teamList
-    .filter((x) => x.registeredEvents.TSS.volleyball)
-    .map((x) => x.teamName)
-  console.log(volleyballs)
+  sportList.forEach((sport) => {
+    const teamsOfThisSport = teamList
+      .filter((x) => x.registeredEvents.TSS[sport])
+      .map((x) => x.teamName)
+    console.log(sport, teamsOfThisSport)
+  })
 }
 
 export const assignTSSTeams = https.onRequest(async (req, res) => {

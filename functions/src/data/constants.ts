@@ -5,6 +5,8 @@ export const sportList: Array<Sport> = [
   'frisbee',
   'volleyball',
   'tchoukball',
+  'touchRugby',
+  'captainsBall',
 ]
 
 export const roundList: Array<Round> = [
