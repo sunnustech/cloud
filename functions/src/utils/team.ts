@@ -22,12 +22,8 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
  */
 export function makeTeam(props: InitializeTeam): Team {
   return {
-    TSSTag: {
-      sport: 'volleyball',
-      letter: 'unassigned',
-      number: 0,
-      id: 'unassigned',
-    },
+    sport: "none",
+    TSSId: "unassigned",
     teamName: props.teamName,
     registeredEvents: props.registeredEvents,
     direction: props.direction,

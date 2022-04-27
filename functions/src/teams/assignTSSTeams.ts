@@ -7,7 +7,6 @@ import { hasMissingKeys } from '../utils'
 import { sportCapacity, sportList } from '../data/constants'
 import { shuffle } from '../utils/team'
 import { Sport } from '../types'
-import { TSSTag } from '../types/sunnus-firestore'
 
 /**
  * @param {InitializeTeam[]} teamList
@@ -26,17 +25,18 @@ function getTeamNamesOfSport(
 /**
  * @param {string[]} teamNames
  * @param {Sport} sport
- * @returns {Record<string, TSSTag>} TSSTags for each team
+ * @returns {TempRecord} TSSIds for each team
  */
-function getTags(teamNames: string[], sport: Sport): Record<string, TSSTag> {
+type TempRecord = Record<string, { sport: Sport; id: string }>
+function getTSSIds(teamNames: string[], sport: Sport): TempRecord {
   const max = sportCapacity[sport]
   const turnUp = teamNames.length
   if (turnUp > max) {
-    console.debug('There are more teams than the maximum capacity allowed')
+    console.warn('There are more teams than the maximum capacity allowed')
     return {}
   }
   const letters: string[] = ['A', 'B', 'C', 'D']
-  const result: Record<string, TSSTag> = {}
+  const result: TempRecord = {}
   const groups = Array(4).fill(max / 4)
   const didntCome = max - turnUp
   for (let i = 0; i < didntCome; i++) {
@@ -48,12 +48,7 @@ function getTags(teamNames: string[], sport: Sport): Record<string, TSSTag> {
       if (teamName === '') {
         console.warn('assignTSSTeams: not enough teamNames supplied')
       }
-      result[teamName] = {
-        sport,
-        letter,
-        number: i + 1,
-        id: `${letter}${i + 1}`,
-      }
+      result[teamName] = { sport, id: `${letter}${i + 1}` }
     }
   })
   return result
@@ -73,12 +68,13 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
     const turnUp = teamNames.length - didntCome
     // end of testing code
     shuffle(teamNames)
-    const TSSTags = getTags(teamNames.slice(0, turnUp), sport)
+    const TSSIds = getTSSIds(teamNames.slice(0, turnUp), sport)
     const teamCollection = firestore().collection('teams')
 
     teamNames.forEach((teamName) => {
+      const team = TSSIds[teamName]
       awaitStack.push(
-        teamCollection.doc(teamName).update({ TSSTag: TSSTags[teamName] })
+        teamCollection.doc(teamName).update({ sport: team.sport, TSSId: team.id })
       )
     })
   })

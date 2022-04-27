@@ -122,7 +122,6 @@ export const createUsers = https.onRequest(async (req, res) => {
    * #leavenomanbehind
    */
   const results = await Promise.allSettled(userCreationQueue)
-  console.log(results)
 
   /* split the successes from the failures */
   const fulfilled = results.filter((result) => result.status === 'fulfilled')

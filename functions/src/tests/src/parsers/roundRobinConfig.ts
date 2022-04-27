@@ -31,9 +31,3 @@ export const readRoundRobinConfig = (fileData: Buffer): RoundRobinConfig => {
   })
   return config
 }
-
-// local testing
-// import fs from 'fs'
-// const file = fs.readFileSync('src/csv/roundRobinConfig.csv')
-// const data = readRoundRobinConfig(file)
-// console.log(data)

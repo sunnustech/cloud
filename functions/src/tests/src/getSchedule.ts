@@ -12,5 +12,5 @@ const filter: Partial<Event> = {
 
 axios.post(cloud(fn), { filter }).then((res) => {
   const data = res.data
-  console.log(data)
+  console.debug(data)
 })

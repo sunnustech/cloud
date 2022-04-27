@@ -10,16 +10,10 @@ export type User = InitializeUser & {
   uid: string // automatically assigned by firebase upon account creation
 }
 
-export type TSSTag = {
-  sport: Sport
-  letter: string
-  number: number
-  id: string
-}
-
 /* a SunNUS team */
 export type Team = InitializeTeam & {
-  TSSTag: TSSTag
+  sport: Sport | 'none'
+  TSSId: string
   members: string[] // array of members' uids
   SOAR: SOARTeamProps
   SOARTimerEvents: number[]

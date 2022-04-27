@@ -13,7 +13,7 @@ export const addMessage = https.onRequest(async (req, res) => {
 })
 
 export const helloWorld = https.onRequest(async (req, res) => {
-  console.log('hello, server!')
+  console.debug('hello, server!')
   res.json({
     message: 'hello, requester!',
     serverReceived: req.body,

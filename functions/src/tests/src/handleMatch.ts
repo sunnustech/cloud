@@ -8,5 +8,5 @@ timestamp(fn)
 const request = { message: 'requester to server, over!' }
 
 axios.post(cloud(fn), request).then((res) => {
-  console.log(res.data)
+  console.debug(res.data)
 })
