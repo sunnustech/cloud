@@ -24,9 +24,9 @@ export function makeTeam(props: InitializeTeam): Team {
   return {
     TSSTag: {
       sport: 'volleyball',
-      letter: '',
+      letter: 'unassigned',
       number: 0,
-      id: '',
+      id: 'unassigned',
     },
     teamName: props.teamName,
     registeredEvents: props.registeredEvents,

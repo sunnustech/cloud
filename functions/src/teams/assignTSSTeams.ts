@@ -1,7 +1,7 @@
 import { https } from 'firebase-functions'
 import { InitializeTeam } from '../types/sunnus-init'
-// import { firestore } from 'firebase-admin'
-// import { WriteResult } from '@google-cloud/firestore'
+import { firestore } from 'firebase-admin'
+import { WriteResult } from '@google-cloud/firestore'
 import { assignTSSTeams as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils'
 import { sportCapacity, sportList } from '../data/constants'
@@ -28,7 +28,7 @@ function getTeamNamesOfSport(
  * @param {Sport} sport
  * @returns {Record<string, TSSTag>} TSSTags for each team
  */
-function addId(teamNames: string[], sport: Sport): Record<string, TSSTag> {
+function getTags(teamNames: string[], sport: Sport): Record<string, TSSTag> {
   const max = sportCapacity[sport]
   const turnUp = teamNames.length
   if (turnUp > max) {
@@ -42,7 +42,6 @@ function addId(teamNames: string[], sport: Sport): Record<string, TSSTag> {
   for (let i = 0; i < didntCome; i++) {
     groups[i % 4] -= 1
   }
-
   letters.forEach((letter, index) => {
     for (let i = 0; i < groups[index]; i++) {
       const teamName = teamNames.pop() || ''
@@ -57,29 +56,34 @@ function addId(teamNames: string[], sport: Sport): Record<string, TSSTag> {
       }
     }
   })
-
-  console.debug('addId:', `${turnUp}/${max} -- ${sport}`)
-  console.debug(`groups: [${groups}]\n`)
-  // console.debug(`slots: [${slots}]\n`)
-  console.debug(result)
   return result
 }
 
-const main = async (teamList: InitializeTeam[]) => {
+const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
   // for each sport:
   // randomize order
   // get number of teams
   // assign a letter and a number to each team
+  const awaitStack: Promise<WriteResult>[] = []
   sportList.forEach((sport) => {
     const teamNames = getTeamNamesOfSport(teamList, sport)
     // for testing purposes
-    const didntCome = 5
+    // for deployment, set didntCome = 0
+    const didntCome = 0
     const turnUp = teamNames.length - didntCome
     // end of testing code
     shuffle(teamNames)
-    addId(teamNames.slice(0, turnUp), sport)
-    // console.log(sport, teamNames)
+    const TSSTags = getTags(teamNames.slice(0, turnUp), sport)
+    const teamCollection = firestore().collection('teams')
+
+    teamNames.forEach((teamName) => {
+      awaitStack.push(
+        teamCollection.doc(teamName).update({ TSSTag: TSSTags[teamName] })
+      )
+    })
   })
+  const writeResult = await Promise.all(awaitStack)
+  return writeResult
 }
 
 export const assignTSSTeams = https.onRequest(async (req, res) => {
@@ -90,8 +94,9 @@ export const assignTSSTeams = https.onRequest(async (req, res) => {
   }
   // const a = res.body.asdf()
   const teamList: InitializeTeam[] = req.body.teamList
-  main(teamList)
+  const writeResult = await main(teamList)
   res.json({
     result: 'server: assigned TSS teams to their starting buckets',
+    writeResult,
   })
 })
