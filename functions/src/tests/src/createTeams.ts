@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { timestamp } from './timestamp'
-import { cloud } from './firebase'
-import { NewTeamProps } from '../../types/participants'
+import { timestamp } from './utils/timestamp'
+import { cloud } from './utils/firebase'
+import { InitializeTeam } from '../../types/sunnus-init'
 import { parse } from 'csv-parse/sync'
 import fs from 'fs'
 
@@ -15,7 +15,7 @@ type CsvTeamProps = {
   direction: 'A' | 'B'
 }
 
-const fn = 'createTeams'
+const fn = 'development-createTeams'
 timestamp(fn)
 
 const request = { message: 'requester to server, over!' }
@@ -28,7 +28,7 @@ const csv: CsvTeamProps[] = parse(fileData, {
   columns: true,
 })
 
-const teamList: NewTeamProps[] = csv.map((csvTeam) => ({
+const teamList: InitializeTeam[] = csv.map((csvTeam) => ({
   teamName: csvTeam.teamName,
   direction: csvTeam.direction,
   registeredEvents: {

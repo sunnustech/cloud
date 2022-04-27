@@ -1,13 +1,7 @@
-import {
-  EmailProps,
-  LoginIdProps,
-  NewTeamProps,
-  ParticipantsDatabase,
-  TeamProps,
-  TeamsDatabase,
-} from '../../types/participants'
+import { Firestore, Team } from '../../types/sunnus-firestore'
 import { SOARTeamProps } from '../../types/SOAR'
-import { makeTeams } from '../../utils'
+import { InitializeTeam } from '../../types/sunnus-init'
+import { makeTeams } from '../../utils/team'
 import { stationOrder } from './SOAR'
 
 const SOARInit: SOARTeamProps = {
@@ -22,10 +16,10 @@ const SOARInit: SOARTeamProps = {
 }
 
 /**
- * @param {NewTeamProps} props: basic details of a fresh team
- * @return {TeamProps} a team object with empty props
+ * @param {InitializeTeam} props: basic details of a fresh team
+ * @return {Team} a firestore-ready team object with empty props
  */
-export function newSunNUSTeam(props: NewTeamProps): TeamProps {
+export function newSunNUSTeam(props: InitializeTeam): Team {
   return {
     SOAR: SOARInit,
     SOARStart: 0,
@@ -94,7 +88,7 @@ const generateRandomID = () => {
   return Math.random().toString(10).substring(2, 5)
 }
 
-const addLoginId = (obj: TeamProps): TeamProps => {
+const addLoginId = (obj: Team): Team => {
   const teamName = trimTeamNameToLowercase(obj.teamName)
   obj.members.forEach((e: any) => {
     e['loginId'] = teamName + generateRandomID()
@@ -102,36 +96,14 @@ const addLoginId = (obj: TeamProps): TeamProps => {
   return obj
 }
 
-const allTeams: Array<TeamProps> = [
+const allTeams: Array<Team> = [
   addLoginId(testOne),
   addLoginId(testTwo),
   addLoginId(testThree),
   Developer,
 ]
 
-const allLoginIds: Record<string, LoginIdProps> = {}
-const allEmails: Record<string, EmailProps> = {}
+const teams: Firestore['teams'] = makeTeams(allTeams)
 
-allTeams.forEach((team) => {
-  team.members.forEach((member, index) => {
-    allLoginIds[member.loginId] = {
-      teamName: team.teamName,
-      index,
-      email: member.email,
-    }
-    allEmails[member.email] = {
-      teamName: team.teamName,
-      index,
-      loginId: member.loginId,
-    }
-  })
-})
-
-const teams: TeamsDatabase = makeTeams(allTeams)
-const participants: ParticipantsDatabase = Object.assign(teams, {
-  allLoginIds,
-  allEmails,
-})
-
-export default participants
+export default teams
 export { SOARInit }

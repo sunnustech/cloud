@@ -7,24 +7,36 @@
     "@types/node": "^17.0.23",
     "axios": "^0.26.1",
     "csv-parse": "^5.0.4",
+    "csv-stringify": "^6.0.5",
     "typescript": "^4.6.3"
   },
   "scripts": {
     "dev": "tsc && node .",
     "build": "tsc",
+    "debug": "tsc && node lib/debug",
     "dev:create-users": "tsc && node lib/createUsers",
+    "dev:assign-users": "tsc && node lib/assignUsers",
     "dev:delete-all-users": "tsc && node lib/deleteAllUsers",
+    "dev:delete-all-teams": "tsc && node lib/deleteAllTeams",
     "dev:handle-match": "tsc && node lib/handleMatch",
     "dev:initialize-team": "tsc && node lib/initializeTeam",
     "dev:create-teams": "tsc && node lib/createTeams",
+    "dev:create-schedule": "tsc && node lib/createSchedule",
+    "dev:create-schedule-from-csv": "tsc && node lib/createScheduleFromCsv",
     "dev:write-schema": "tsc && node lib/createTeams",
     "dev:delete-docs": "tsc && node lib/deleteDocs",
     "dev:cu": "tsc && node lib/createUsers",
+    "dev:au": "tsc && node lib/assignUsers",
     "dev:dau": "tsc && node lib/deleteAllUsers",
+    "dev:dat": "tsc && node lib/deleteAllTeams",
     "dev:hm": "tsc && node lib/handleMatch",
     "dev:it": "tsc && node lib/initializeTeam",
     "dev:ct": "tsc && node lib/createTeams",
+    "dev:cs": "tsc && node lib/createSchedule",
+    "dev:rr": "tsc && node lib/parsers/roundRobinConfig",
     "dev:ws": "tsc && node lib/writeSchema",
-    "dev:dd": "tsc && node lib/deleteDocs"
+    "dev:dd": "tsc && node lib/deleteDocs",
+    "dev:cc": "tsc && node lib/clearCollection",
+    "dev:gs": "tsc && node lib/getSchedule"
   }
 }

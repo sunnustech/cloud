@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { timestamp } from './timestamp'
-import { cloud } from './firebase'
+import { timestamp } from './utils/timestamp'
+import { cloud } from './utils/firebase'
 
-const fn = 'handleMatch'
+const fn = 'development-handleMatch'
 timestamp(fn)
 
 const request = { message: 'requester to server, over!' }

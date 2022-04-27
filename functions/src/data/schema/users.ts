@@ -1,21 +1,34 @@
 import { firestore } from 'firebase-admin'
-import { Member } from '../../types/users'
 import { WriteResult } from '@google-cloud/firestore'
+import { User } from '../../types/sunnus-firestore'
 
-const userList: Member[] = [
+const userList: User[] = [
   {
-    teamName: 'auto_magic',
-    email: 'one@gmail.com',
-    loginId: 'automagic123456',
+    teamName: 'developer_team',
+    email: 'k@sunnus.com',
+    realEmail: 'actual-khang@gmail.com',
+    loginId: 'supposed to be long',
     phoneNumber: '91239845',
-    uid: 'from_writeSchema___asdfghjklsemicolon',
+    uid: 'VMXuhnIg2jcKGGt9y6D1GDV9gBR2', // this is legit
+    loginIdNumber: 'supposed to be a number',
   },
   {
-    teamName: 'auto_matic',
-    email: 'two@gmail.com',
-    loginId: 'automatic987654',
+    teamName: 'developer_team',
+    email: 'r@sunnus.com',
+    realEmail: 'actual-ryan@gmail.com',
+    loginId: 'supposed to be long',
     phoneNumber: '90912365',
-    uid: 'from_writeSchema___qwertyyoueyeohp',
+    uid: 'xo05ywdQhsSLYvXe0CIozFXYnB32', // this is legit
+    loginIdNumber: 'supposed to be a number',
+  },
+  {
+    teamName: 'developer_team',
+    email: 'kevin@sunnus.com',
+    realEmail: 'actual-kevin@gmail.com',
+    loginId: 'supposed to be long',
+    phoneNumber: '91230412',
+    uid: 'joDEJYPYvfQDS8ukW7bG6MEQUY53', // this is legit
+    loginIdNumber: 'supposed to be a number',
   },
 ]
 
