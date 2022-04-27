@@ -1,3 +1,4 @@
+import { Sport } from '.'
 import { SOARTeamProps } from './SOAR'
 import { InitializeTeam, InitializeUser } from './sunnus-init'
 
@@ -9,14 +10,16 @@ export type User = InitializeUser & {
   uid: string // automatically assigned by firebase upon account creation
 }
 
+export type TSSTag = {
+  sport: Sport
+  letter: string
+  number: number
+  id: string
+}
+
 /* a SunNUS team */
 export type Team = InitializeTeam & {
-  TSSTag: {
-    sport: string
-    letter: string
-    number: number
-    id: string
-  }
+  TSSTag: TSSTag
   members: string[] // array of members' uids
   SOAR: SOARTeamProps
   SOARTimerEvents: number[]
