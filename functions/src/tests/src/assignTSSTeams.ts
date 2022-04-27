@@ -18,7 +18,7 @@ type CsvTeamProps = {
   direction: 'A' | 'B'
 }
 
-const fn = 'development-createTeams'
+const fn = 'development-assignTSSTeams'
 timestamp(fn)
 
 /* read from the csv file */
@@ -45,7 +45,7 @@ const teamList: InitializeTeam[] = csv.map((csvTeam) => ({
   },
 }))
 
-axios.post(cloud(fn), { teamList }).then((res) => {
+axios.post(cloud(fn), { teamList, please: "Yes" }).then((res) => {
   const data = res.data
   console.log(data)
 })

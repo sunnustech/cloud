@@ -2,10 +2,12 @@
 
 export type RegisteredEvents = {
   TSS?: {
-    volleyball?: boolean
-    dodgeball?: boolean
-    tchoukball?: boolean
-    frisbee?: boolean
+    captainsBall: boolean
+    dodgeball: boolean
+    frisbee: boolean
+    tchoukball: boolean
+    touchRugby: boolean
+    volleyball: boolean
   }
   SOAR?: boolean
 }
