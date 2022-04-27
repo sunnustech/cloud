@@ -22,8 +22,8 @@ export function makeTeams(arr: Array<Team>): Record<string, Team> {
  */
 export function makeTeam(props: InitializeTeam): Team {
   return {
-    sport: "none",
-    TSSId: "unassigned",
+    sport: 'none',
+    TSSId: 'unassigned',
     teamName: props.teamName,
     registeredEvents: props.registeredEvents,
     direction: props.direction,
@@ -49,11 +49,11 @@ export function makeTeam(props: InitializeTeam): Team {
 /**
  * generic unbiased function to shuffle an array.
  * @param {string[]} array to shuffle
- * @returns {string[]} the shuffled array
+ * @return {string[]} the shuffled array
  */
 export function shuffle(array: string[]): string[] {
-  let currentIndex = array.length,
-    randomIndex
+  let currentIndex = array.length
+  let randomIndex
 
   // While there remain elements to shuffle.
   while (currentIndex != 0) {

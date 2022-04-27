@@ -18,5 +18,5 @@ export const assignTSSTeams = [
 ]
 
 export const createTeams = [
-['teamList', 'please supply a list of users in the property "teamList"']
+  ['teamList', 'please supply a list of users in the property "teamList"'],
 ]

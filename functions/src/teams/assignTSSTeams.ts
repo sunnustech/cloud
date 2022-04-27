@@ -14,12 +14,12 @@ import { Sport } from '../types'
  * @return {string[]} list of teamnames from that sport
  */
 function getTeamNamesOfSport(
-  teamList: InitializeTeam[],
-  sport: Sport
+    teamList: InitializeTeam[],
+    sport: Sport
 ): string[] {
   return teamList
-    .filter((x) => x.registeredEvents.TSS[sport])
-    .map((x) => x.teamName)
+      .filter((x) => x.registeredEvents.TSS[sport])
+      .map((x) => x.teamName)
 }
 
 /**
@@ -74,7 +74,7 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
     teamNames.forEach((teamName) => {
       const team = TSSIds[teamName]
       awaitStack.push(
-        teamCollection.doc(teamName).update({ sport: team.sport, TSSId: team.id })
+          teamCollection.doc(teamName).update({ sport: team.sport, TSSId: team.id })
       )
     })
   })

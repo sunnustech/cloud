@@ -28,6 +28,18 @@ module.exports = {
     'semi': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
     'import/no-unresolved': 0,
+    'require-jsdoc': [
+      'error',
+      {
+        require: {
+          FunctionDeclaration: false,
+          MethodDefinition: false,
+          ClassDeclaration: false,
+          ArrowFunctionExpression: false,
+          FunctionExpression: false,
+        },
+      },
+    ],
     '@typescript-eslint/no-explicit-any': 'off',
   },
 }
