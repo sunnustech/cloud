@@ -29,11 +29,39 @@ function getTeamNamesOfSport(
  * @returns {Record<string, TSSTag>} TSSTags for each team
  */
 function addId(teamNames: string[], sport: Sport): Record<string, TSSTag> {
-  const count = teamNames.length
-  // const letters = ['A', 'B', 'C', 'D']
-  const result = {}
   const max = sportCapacity[sport]
-  console.debug('addId:', `${count}/${max} -- ${sport}`)
+  const turnUp = teamNames.length
+  if (turnUp > max) {
+    console.debug('There are more teams than the maximum capacity allowed')
+    return {}
+  }
+  const letters: string[] = ['A', 'B', 'C', 'D']
+  const result: Record<string, TSSTag> = {}
+  const groups = Array(4).fill(max / 4)
+  const didntCome = max - turnUp
+  for (let i = 0; i < didntCome; i++) {
+    groups[i % 4] -= 1
+  }
+
+  letters.forEach((letter, index) => {
+    for (let i = 0; i < groups[index]; i++) {
+      const teamName = teamNames.pop() || ''
+      if (teamName === '') {
+        console.warn('assignTSSTeams: not enough teamNames supplied')
+      }
+      result[teamName] = {
+        sport,
+        letter,
+        number: i + 1,
+        id: `${letter}${i + 1}`,
+      }
+    }
+  })
+
+  console.debug('addId:', `${turnUp}/${max} -- ${sport}`)
+  console.debug(`groups: [${groups}]\n`)
+  // console.debug(`slots: [${slots}]\n`)
+  console.debug(result)
   return result
 }
 
@@ -45,7 +73,7 @@ const main = async (teamList: InitializeTeam[]) => {
   sportList.forEach((sport) => {
     const teamNames = getTeamNamesOfSport(teamList, sport)
     // for testing purposes
-    const didntCome = 1
+    const didntCome = 5
     const turnUp = teamNames.length - didntCome
     // end of testing code
     shuffle(teamNames)
