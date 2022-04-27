@@ -87,6 +87,14 @@ const Developer = newSunNUSTeam({
   teamName: 'Developer',
   direction: 'A',
   registeredEvents: {
+    TSS: {
+      volleyball: true,
+      frisbee: true,
+      captainsBall: false,
+      dodgeball: true,
+      tchoukball: true,
+      touchRugby: true,
+    },
     SOAR: true,
   },
 })
