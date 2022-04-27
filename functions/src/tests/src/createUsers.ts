@@ -29,5 +29,5 @@ timestamp(fn)
 
 axios.post(cloud(fn), { userList: sanitizedUserList }).then((res) => {
   const data = res.data
-  console.log(data)
+  console.debug(data)
 })

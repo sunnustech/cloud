@@ -1,5 +1,4 @@
 import { firestore } from 'firebase-admin'
-import typedParticipants from './schema/participants'
 import typedTSS from './schema/TSS'
 import typedSOAR from './schema/SOAR'
 import typedRoles from './schema/roles'
@@ -43,11 +42,6 @@ async function push({
 
 export const writeSchema = https.onRequest(async (_, res) => {
   const everything = await Promise.all([
-    push({
-      force: true,
-      collection: 'participants',
-      docs: typedParticipants,
-    }),
     push({
       force: true,
       collection: 'SOAR',

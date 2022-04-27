@@ -17,5 +17,5 @@ const roundRobinConfig = readRoundRobinConfig(buffers[1])
 
 axios.post(cloud(fn), { scheduleConfig, roundRobinConfig }).then((res) => {
   const data = res.data
-  console.log(data)
+  console.debug(data)
 })

@@ -41,7 +41,7 @@ Here's an example workflow of how I write a `helloWorld` cloud function.
 ```js
 // cloud/function/src/index.ts
 export const helloWorld = https.onRequest(async (req, res) => {
-  console.log('hello, server!')
+  console.debug('hello, server!')
   res.json({
     message: 'hello, requester!',
     serverReceived: req.body,

@@ -47,5 +47,5 @@ const teamList: InitializeTeam[] = csv.map((csvTeam) => ({
 
 axios.post(cloud(fn), { teamList, please: "Yes" }).then((res) => {
   const data = res.data
-  console.log(data)
+  console.debug(data)
 })

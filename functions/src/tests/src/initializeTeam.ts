@@ -6,5 +6,5 @@ const fn = 'development-initializeTeam'
 timestamp(fn)
 axios.post(cloud(fn)).then((res) => {
   const data = res.data
-  console.log(data)
+  console.debug(data)
 })

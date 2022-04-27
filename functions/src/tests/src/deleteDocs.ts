@@ -25,5 +25,5 @@ axios
   .post(cloud(fn), { message: 'please', collection, docList })
   .then((res) => {
     const data = res.data
-    console.log(data)
+    console.debug(data)
   })

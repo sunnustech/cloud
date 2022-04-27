@@ -1,4 +1,4 @@
-export type Sport = 'dodgeball' | 'frisbee' | 'volleyball' | 'tchoukball'
+export type Sport = 'dodgeball' | 'frisbee' | 'volleyball' | 'tchoukball' | 'touchRugby' | 'captainsBall'
 
 export type Winner = 'A' | 'B' | 'U'
 

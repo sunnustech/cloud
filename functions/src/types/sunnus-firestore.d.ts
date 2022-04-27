@@ -1,3 +1,4 @@
+import { Sport } from '.'
 import { SOARTeamProps } from './SOAR'
 import { InitializeTeam, InitializeUser } from './sunnus-init'
 
@@ -11,6 +12,8 @@ export type User = InitializeUser & {
 
 /* a SunNUS team */
 export type Team = InitializeTeam & {
+  sport: Sport | 'none'
+  TSSId: string
   members: string[] // array of members' uids
   SOAR: SOARTeamProps
   SOARTimerEvents: number[]

@@ -1,7 +1,7 @@
 /* some shared types for easier future changes */
 
 export type RegisteredEvents = {
-  TSS?: {
+  TSS: {
     captainsBall: boolean
     dodgeball: boolean
     frisbee: boolean
@@ -9,7 +9,7 @@ export type RegisteredEvents = {
     touchRugby: boolean
     volleyball: boolean
   }
-  SOAR?: boolean
+  SOAR: boolean
 }
 
 /* InitializeXYZ will contain the minimum
