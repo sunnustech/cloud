@@ -40,7 +40,11 @@ const testOne = newSunNUSTeam({
   registeredEvents: {
     TSS: {
       volleyball: true,
-      dodgeball: true,
+      captainsBall: false,
+      dodgeball: false,
+      frisbee: false,
+      tchoukball: false,
+      touchRugby: false,
     },
     SOAR: true,
   },
@@ -52,7 +56,11 @@ const testTwo = newSunNUSTeam({
   registeredEvents: {
     TSS: {
       volleyball: true,
-      frisbee: true,
+      frisbee: false,
+      captainsBall: false,
+      dodgeball: false,
+      tchoukball: false,
+      touchRugby: false,
     },
     SOAR: true,
   },
@@ -63,11 +71,14 @@ const testThree = newSunNUSTeam({
   teamName: 'HS123',
   registeredEvents: {
     TSS: {
-      volleyball: true,
-      dodgeball: true,
-      frisbee: true,
+      volleyball: false,
+      frisbee: false,
+      captainsBall: false,
+      dodgeball: false,
+      tchoukball: false,
+      touchRugby: false,
     },
-    SOAR: false,
+    SOAR: true,
   },
   direction: 'A',
 })

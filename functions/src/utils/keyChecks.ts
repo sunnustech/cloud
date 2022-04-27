@@ -12,3 +12,11 @@ export const createSchedule = [
 export const getSchedule = [
   ['filter', 'please supply a filter in the property "filter"'],
 ]
+
+export const assignTSSTeams = [
+  ['please', 'please supply the magic prop'],
+]
+
+export const createTeams = [
+['teamList', 'please supply a list of users in the property "teamList"']
+]

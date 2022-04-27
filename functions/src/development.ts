@@ -24,6 +24,7 @@ export const helloWorld = https.onRequest(async (req, res) => {
 import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
+import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
@@ -35,6 +36,7 @@ import { clearCollection } from './deletions/clearCollection'
 export {
   deleteDocs,
   createTeams,
+  assignTSSTeams,
   handleMatch,
   writeSchema,
   deleteAllUsers,
