@@ -5,6 +5,7 @@ import { InitializeTeam } from '../types/sunnus-init'
 import { assignTSSTeams as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils'
 import { sportList } from '../data/constants'
+import { shuffle } from '../utils/team'
 
 const main = async (teamList: InitializeTeam[]) => {
   // for each sport:
@@ -15,7 +16,7 @@ const main = async (teamList: InitializeTeam[]) => {
     const teamsOfThisSport = teamList
       .filter((x) => x.registeredEvents.TSS[sport])
       .map((x) => x.teamName)
-    console.log(sport, teamsOfThisSport)
+    console.log(sport, shuffle(teamsOfThisSport))
   })
 }
 

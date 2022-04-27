@@ -44,3 +44,27 @@ export function makeTeam(props: InitializeTeam): Team {
   }
 }
 
+/**
+ * generic unbiased function to shuffle an array.
+ * @param {string[]} array to shuffle
+ * @returns {string[]} the shuffled array
+ */
+export function shuffle(array: string[]): string[] {
+  let currentIndex = array.length,
+    randomIndex
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+
+    // And swap it with the current element.
+    ;[array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ]
+  }
+
+  return array
+}
