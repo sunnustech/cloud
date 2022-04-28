@@ -23,11 +23,10 @@ function clear(collection: string) {
     })
 }
 
-// clear schedule
 clear('schedule')
-// clear teams
 clear('teams')
-// clear users
+clear('points')
+
 axios
   .post(cloud('development-deleteAllUsers'), { message: 'please' })
   .then((res) => {

@@ -5,7 +5,9 @@ import { Sport } from '../types'
 import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { sportList } from '../data/constants'
 
+type Group = string
 type CompletedMatch = {
+  group: Group
   A: string
   B: string
   scoreA: number
@@ -21,6 +23,7 @@ async function fetchCompletedMatches(): Promise<CompletedMatch[]> {
   snapshot.forEach((doc) => {
     const data = doc.data()
     completedMatches.push({
+      group: data.group,
       A: data.A,
       B: data.B,
       scoreA: data.scoreA,
@@ -40,41 +43,32 @@ export const updatePoints = https.onRequest(async (req, res) => {
   // write them
 
   const completedMatches = await fetchCompletedMatches()
-
-  const points: Record<Sport, Record<string, number>> = {
-    dodgeball: {},
-    frisbee: {},
-    volleyball: {},
-    tchoukball: {},
-    touchRugby: {},
-    captainsBall: {},
-  }
+  const points: Record<string, [Sport, Group, number]> = {}
 
   // init zero point list
-  const tempTeamList: [Sport, string][] = []
+  const tempTeamList: [Sport, Group, string][] = []
   completedMatches.forEach((match) => {
-    tempTeamList.push([match.sport, match.A])
-    tempTeamList.push([match.sport, match.B])
+    tempTeamList.push([match.sport, match.group, match.A])
+    tempTeamList.push([match.sport, match.group, match.B])
   })
-  const teamList: [Sport, string][] = [...new Set(tempTeamList)]
+  const teamList: [Sport, Group, string][] = [...new Set(tempTeamList)]
   teamList.forEach((e) => {
-    points[e[0]][e[1]] = 0
+    points[e[2]] = [e[0], e[1], 0]
   })
 
   completedMatches.forEach((match) => {
-    const data = points[match.sport]
     // handle draw
     if (match.scoreA === match.scoreB) {
-      data[match.A] += 1
-      data[match.B] += 1
+      points[match.A][2] += 1
+      points[match.B][2] += 1
     }
     // handle win
     else if (match.scoreA > match.scoreB) {
       // A wins
-      data[match.A] += 3
+      points[match.A][2] += 3
     } else {
       // B wins
-      data[match.B] += 3
+      points[match.B][2] += 3
     }
   })
 
@@ -83,13 +77,19 @@ export const updatePoints = https.onRequest(async (req, res) => {
   const docRefs: Record<string, DocumentReference<DocumentData>> = {}
   sportList.forEach((sport) => (docRefs[sport] = pointsCollection.doc(sport)))
   const awaitStack: Promise<WriteResult>[] = []
-  sportList.forEach((sport) => {
-    const data = points[sport]
-    const teamNames: string[] = Object.keys(data)
-    teamNames.forEach((teamName) => {
-      awaitStack.push(docRefs[sport].update({ [teamName]: data[teamName] }))
+
+  // iterate through list of teamNames
+  teamList
+    .map((x) => x[2])
+    .forEach((teamName) => {
+      const [sport, group, point] = points[teamName]
+      console.log(sport, group, point, teamName)
+      awaitStack.push(
+        pointsCollection
+          .doc(sport)
+          .set({ [group]: { [teamName]: point } }, { merge: true })
+      )
     })
-  })
   const writeResult = await Promise.allSettled(awaitStack)
 
   res.json({

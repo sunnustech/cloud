@@ -9,6 +9,7 @@ export type Sport =
 export type Round = 'round_robin' | 'quarterfinals' | 'semifinals' | 'finals'
 
 export type Event = {
+  group: string
   start: string
   end: string
   sport: Sport

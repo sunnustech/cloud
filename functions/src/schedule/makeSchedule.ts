@@ -57,6 +57,7 @@ export const makeSchedule = (
           const scoreA = debugScores ? getRandomInt(10) : -1
           const scoreB = debugScores ? getRandomInt(10) : -1
           schedule.push({
+            group: letter(groupIndex),
             start: time(s),
             end: time(e),
             venue: config.venue,
