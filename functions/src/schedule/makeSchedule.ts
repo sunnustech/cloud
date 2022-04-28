@@ -46,8 +46,8 @@ export const makeSchedule = (
         const add = (groupIndex: number) => {
           const idA = `${letter(groupIndex)}${match[0]}`
           const idB = `${letter(groupIndex)}${match[1]}`
-          const teamNameA = get(cache[sport], idA, "null team")
-          const teamNameB = get(cache[sport], idB, "null team")
+          const teamNameA = get(cache[sport], idA, 'null team')
+          const teamNameB = get(cache[sport], idB, 'null team')
           schedule.push({
             start: time(s),
             end: time(e),
@@ -57,6 +57,8 @@ export const makeSchedule = (
             sport,
             A: teamNameA,
             B: teamNameB,
+            idA,
+            idB,
             winner: 'U',
           })
         }
