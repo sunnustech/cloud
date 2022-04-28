@@ -60,6 +60,7 @@ export const makeSchedule = (
             idA,
             idB,
             winner: 'U',
+            completed: false,
           })
         }
         if (config.alternating) {
