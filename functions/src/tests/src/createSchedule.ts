@@ -15,7 +15,7 @@ const buffers = filenames.map((f) => fs.readFileSync(f))
 const scheduleConfig: ScheduleConfig = readScheduleConfig(buffers[0])
 const roundRobinConfig = readRoundRobinConfig(buffers[1])
 
-axios.post(cloud(fn), { scheduleConfig, roundRobinConfig }).then((res) => {
+axios.post(cloud(fn), { scheduleConfig, roundRobinConfig, debugScores: true }).then((res) => {
   const data = res.data
   console.debug(data)
 })

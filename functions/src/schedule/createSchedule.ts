@@ -28,6 +28,7 @@ export const createSchedule = https.onRequest(async (req, res) => {
     res.json({ message: err })
     return
   }
+  const debugScores = req.body.debugScores
   const sc: ScheduleConfig = req.body.scheduleConfig
   const rr: RoundRobinConfig = req.body.roundRobinConfig
 
@@ -35,7 +36,7 @@ export const createSchedule = https.onRequest(async (req, res) => {
   const tssCache: Record<Sport, Record<string, string>> = await fetchTSSCache()
 
   // build the schedule
-  const schedule: Event[] = makeSchedule(sc, rr, tssCache)
+  const schedule: Event[] = makeSchedule(sc, rr, tssCache, debugScores)
 
   // write the schedule to firebase
   const scheduleCollection = firestore().collection('schedule')
