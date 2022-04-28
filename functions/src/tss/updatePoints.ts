@@ -14,6 +14,16 @@ type CompletedMatch = {
   scoreB: number
   sport: Sport
 }
+type TeamName = string
+type PointsProps = {
+  total: number
+  scored: number
+  conceded: number
+  difference: number
+  group: string
+  sport: string
+}
+type Points = Record<TeamName, PointsProps>
 
 async function fetchCompletedMatches(): Promise<CompletedMatch[]> {
   const scheduleCollection = firestore().collection('schedule')
@@ -42,34 +52,58 @@ export const updatePoints = https.onRequest(async (req, res) => {
   // make a reference to their document in collection.teams
   // write them
 
-  const completedMatches = await fetchCompletedMatches()
-  const points: Record<string, [Sport, Group, number]> = {}
+  const completedMatches: CompletedMatch[] = await fetchCompletedMatches()
+  const points: Points = {}
 
-  // init zero point list
-  const tempTeamList: [Sport, Group, string][] = []
+  // get a list of unique tuples: (team name, sport, group)
+  const tempTeamNames: TeamName[] = []
   completedMatches.forEach((match) => {
-    tempTeamList.push([match.sport, match.group, match.A])
-    tempTeamList.push([match.sport, match.group, match.B])
+    tempTeamNames.push(match.A, match.B)
   })
-  const teamList: [Sport, Group, string][] = [...new Set(tempTeamList)]
-  teamList.forEach((e) => {
-    points[e[2]] = [e[0], e[1], 0]
+  const teamNames: TeamName[] = [...new Set(tempTeamNames)]
+
+  // initialize empty datasets for each team
+  teamNames.forEach((teamName) => {
+    points[teamName] = {
+      total: 0,
+      scored: 0,
+      conceded: 0,
+      difference: 0,
+      group: "",
+      sport: "",
+    }
   })
 
   completedMatches.forEach((match) => {
+    // append neutral data
+    points[match.A].sport = match.sport
+    points[match.B].sport = match.sport
+    points[match.A].group = match.group
+    points[match.B].group = match.group
+    // append stats
+    points[match.A].scored += match.scoreA
+    points[match.B].scored += match.scoreB
+    points[match.A].conceded += match.scoreB
+    points[match.B].conceded += match.scoreA
     // handle draw
     if (match.scoreA === match.scoreB) {
-      points[match.A][2] += 1
-      points[match.B][2] += 1
+      points[match.A].total += 1
+      points[match.B].total += 1
     }
     // handle win
     else if (match.scoreA > match.scoreB) {
       // A wins
-      points[match.A][2] += 3
+      points[match.A].total += 3
     } else {
       // B wins
-      points[match.B][2] += 3
+      points[match.B].total += 3
     }
+  })
+
+  // calculate point difference
+  teamNames.forEach((teamName) => {
+    const data = points[teamName]
+    data.difference = data.scored - data.conceded
   })
 
   // write the points to database (full overwrite, since it reads all completed matches)
@@ -78,18 +112,10 @@ export const updatePoints = https.onRequest(async (req, res) => {
   sportList.forEach((sport) => (docRefs[sport] = pointsCollection.doc(sport)))
   const awaitStack: Promise<WriteResult>[] = []
 
-  // iterate through list of teamNames
-  teamList
-    .map((x) => x[2])
-    .forEach((teamName) => {
-      const [sport, group, point] = points[teamName]
-      console.log(sport, group, point, teamName)
-      awaitStack.push(
-        pointsCollection
-          .doc(sport)
-          .set({ [group]: { [teamName]: point } }, { merge: true })
-      )
-    })
+  // iterate through list of teamNames and write
+  teamNames.forEach((teamName) => {
+    awaitStack.push(pointsCollection.doc(teamName).set(points[teamName]))
+  })
   const writeResult = await Promise.allSettled(awaitStack)
 
   res.json({
