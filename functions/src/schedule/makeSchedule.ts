@@ -10,6 +10,11 @@ import {
   incrementTime,
 } from '../utils/schedule'
 
+// exclude upper bound
+function getRandomInt(max: number): number {
+  return Math.floor(Math.random() * max)
+}
+
 function get<T>(object: Record<string, T>, key: string, default_value: T): T {
   var result = object[key]
   return typeof result !== 'undefined' ? result : default_value
@@ -18,7 +23,8 @@ function get<T>(object: Record<string, T>, key: string, default_value: T): T {
 export const makeSchedule = (
   scheduleConfig: ScheduleConfig,
   rr: RoundRobinConfig,
-  cache: Record<Sport, Record<string, string>>
+  cache: Record<Sport, Record<string, string>>,
+  debugScores: boolean
 ): Event[] => {
   const schedule: Event[] = []
   sportList.forEach((sport) => {
@@ -48,6 +54,8 @@ export const makeSchedule = (
           const idB = `${letter(groupIndex)}${match[1]}`
           const teamNameA = get(cache[sport], idA, 'null team')
           const teamNameB = get(cache[sport], idB, 'null team')
+          const scoreA = debugScores ? getRandomInt(10) : -1
+          const scoreB = debugScores ? getRandomInt(10) : -1
           schedule.push({
             start: time(s),
             end: time(e),
@@ -55,11 +63,12 @@ export const makeSchedule = (
             round: 'round_robin',
             court,
             sport,
+            scoreA,
+            scoreB,
             A: teamNameA,
             B: teamNameB,
             idA,
             idB,
-            winner: 'U',
             completed: false,
           })
         }

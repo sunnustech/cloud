@@ -33,3 +33,18 @@ export const sportCapacity: Record<Sport, number> = {
   touchRugby: 20,
   captainsBall: 20,
 }
+
+export const eventKeys: string[] = [
+  'start',
+  'end',
+  'sport',
+  'venue',
+  'court',
+  'round',
+  'A',
+  'B',
+  'idA',
+  'idB',
+  'completed',
+  'winner',
+]

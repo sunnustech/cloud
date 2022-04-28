@@ -17,10 +17,11 @@ export type Event = {
   round: Round
   A: string
   B: string
+  scoreA: number
+  scoreB: number
   idA: string
   idB: string
   completed: boolean
-  winner: 'A' | 'B' | 'U'
 }
 
 type SportConfig = {
