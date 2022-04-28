@@ -33,9 +33,11 @@ import { getSchedule } from './schedule/getSchedule'
 import { deleteDocs } from './deletions/deleteDocs'
 import { clearCollection } from './deletions/clearCollection'
 import { updatePoints } from './tss/updatePoints'
+import { getQuarterfinalists } from './tss/getQuarterfinalists'
 
 export {
   updatePoints,
+  getQuarterfinalists,
   deleteDocs,
   createTeams,
   assignTSSTeams,

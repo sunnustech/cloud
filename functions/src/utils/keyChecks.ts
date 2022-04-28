@@ -22,3 +22,7 @@ export const assignTSSTeams = [['please', 'please supply the magic prop']]
 export const createTeams = [
   ['teamList', 'please supply a list of users in the property "teamList"'],
 ]
+
+export const getQuarterfinalists = [
+  ['sportList', 'please supply a sportList for which to find top 2 from each group'],
+]

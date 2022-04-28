@@ -15,7 +15,7 @@ type CompletedMatch = {
   sport: Sport
 }
 type TeamName = string
-type PointsProps = {
+export type PointsProps = {
   total: number
   scored: number
   conceded: number
