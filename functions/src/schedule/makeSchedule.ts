@@ -69,7 +69,7 @@ export const makeSchedule = (
             B: teamNameB,
             idA,
             idB,
-            completed: false,
+            completed: debugScores,
           })
         }
         if (config.alternating) {
