@@ -32,8 +32,10 @@ import { createSchedule } from './schedule/createSchedule'
 import { getSchedule } from './schedule/getSchedule'
 import { deleteDocs } from './deletions/deleteDocs'
 import { clearCollection } from './deletions/clearCollection'
+import { updatePoints } from './tss/updatePoints'
 
 export {
+  updatePoints,
   deleteDocs,
   createTeams,
   assignTSSTeams,

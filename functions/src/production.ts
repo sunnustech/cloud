@@ -1,6 +1,6 @@
 import { logger, https } from 'firebase-functions'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
-import { handleMatch } from './knockout'
+import { handleMatch } from './tss'
 
 export { handleMatch }
 
