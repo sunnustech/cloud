@@ -28,6 +28,7 @@
     "cc": "tsc && node lib/clearCollection",
     "gs": "tsc && node lib/getSchedule",
     "ds": "tsc && node lib/deleteSchedule",
-    "att": "tsc && node lib/assignTSSTeams"
+    "att": "tsc && node lib/assignTSSTeams",
+    "RESET": "tsc && node lib/RESET"
   }
 }
