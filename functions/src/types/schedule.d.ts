@@ -17,6 +17,9 @@ export type Event = {
   round: Round
   A: string
   B: string
+  idA: string
+  idB: string
+  completed: boolean
   winner: 'A' | 'B' | 'U'
 }
 

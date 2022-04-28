@@ -14,17 +14,6 @@
     "dev": "tsc && node .",
     "build": "tsc",
     "debug": "tsc && node lib/debug",
-    "create-users": "tsc && node lib/createUsers",
-    "assign-users": "tsc && node lib/assignUsers",
-    "delete-all-users": "tsc && node lib/deleteAllUsers",
-    "delete-all-teams": "tsc && node lib/deleteAllTeams",
-    "handle-match": "tsc && node lib/handleMatch",
-    "initialize-team": "tsc && node lib/initializeTeam",
-    "create-teams": "tsc && node lib/createTeams",
-    "create-schedule": "tsc && node lib/createSchedule",
-    "create-schedule-from-csv": "tsc && node lib/createScheduleFromCsv",
-    "write-schema": "tsc && node lib/createTeams",
-    "delete-docs": "tsc && node lib/deleteDocs",
     "cu": "tsc && node lib/createUsers",
     "au": "tsc && node lib/assignUsers",
     "dau": "tsc && node lib/deleteAllUsers",
@@ -38,6 +27,7 @@
     "dd": "tsc && node lib/deleteDocs",
     "cc": "tsc && node lib/clearCollection",
     "gs": "tsc && node lib/getSchedule",
+    "ds": "tsc && node lib/deleteSchedule",
     "att": "tsc && node lib/assignTSSTeams"
   }
 }
