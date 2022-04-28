@@ -89,11 +89,7 @@ export const getQuarterfinalists = https.onRequest(async (req, res) => {
       }
     }
 
-  const quarterfinalists: string[] = []
-
-  const firsts: string[] = []
-  const seconds: string[] = []
-
+  const temp: string[] = []
   groupLetters.forEach((letter) => {
     const group = groupTable.filter((x) => x.group === letter)
     // since js sort is stable sort, the last sort takes greatest precedence
@@ -101,15 +97,15 @@ export const getQuarterfinalists = https.onRequest(async (req, res) => {
     group.sort(by('difference', 'descending'))
     group.sort(by('total', 'descending'))
     console.log(group.map((x) => x.teamName))
-    firsts.push(group[0].teamName)
-    seconds.push(group[1].teamName)
+    temp.push(group[0].teamName)
+    temp.push(group[1].teamName)
   })
 
-  const dseconds = derange(seconds)
-
-  for (let i = 0; i < 4; i++) {
-    quarterfinalists.push(firsts[i], dseconds[i])
-  }
+  // math checks out, not gonna actually code this
+  // group 1st will play against another group's 2nd,
+  // and the top 2 of each group should not see each other again until finals
+  const seeYouAtFinals = [0, 3, 4, 7, 1, 2, 5, 6]
+  const quarterfinalists: string[] = seeYouAtFinals.map((n) => temp[n])
 
   console.log(quarterfinalists)
 
