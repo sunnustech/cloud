@@ -27,7 +27,7 @@ function getTeamNamesOfSport(
  * @param {Sport} sport
  * @returns {TempRecord} TSSIds for each team
  */
-type TempRecord = Record<string, { sport: Sport; id: string }>
+type TempRecord = Record<string, string>
 function getTSSIds(teamNames: string[], sport: Sport): TempRecord {
   const max = sportCapacity[sport]
   const turnUp = teamNames.length
@@ -48,7 +48,7 @@ function getTSSIds(teamNames: string[], sport: Sport): TempRecord {
       if (teamName === '') {
         console.warn('assignTSSTeams: not enough teamNames supplied')
       }
-      result[teamName] = { sport, id: `${letter}${i + 1}` }
+      result[teamName] = `${letter}${i + 1}`
     }
   })
   return result
@@ -61,6 +61,14 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
   // assign a letter and a number to each team
   const awaitStack: Promise<WriteResult>[] = []
   const teamCollection = firestore().collection('teams')
+  const cache: Record<Sport, Record<string, string>> = {
+    volleyball: {},
+    tchoukball: {},
+    touchRugby: {},
+    frisbee: {},
+    captainsBall: {},
+    dodgeball: {},
+  }
   sportList.forEach((sport) => {
     const teamNames = getTeamNamesOfSport(teamList, sport)
     // for testing purposes
@@ -72,16 +80,17 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
     const TSSIds = getTSSIds(teamNames.slice(0, turnUp), sport)
 
     teamNames.forEach((teamName) => {
-      const team = TSSIds[teamName]
-      awaitStack.push(
-        teamCollection
-          .doc(teamName)
-          .update({ sport: team.sport, TSSId: team.id })
-      )
+      const id = TSSIds[teamName]
+      cache[sport][id] = teamName
+      awaitStack.push(teamCollection.doc(teamName).update({ sport, TSSId: id }))
     })
   })
   awaitStack.push(
-    firestore().collection('shared').doc('main').update({ assignedTeams: true })
+    firestore()
+      .collection('shared')
+      .doc('main')
+      .update({ assignedTeams: true }),
+    firestore().collection('shared').doc('tssCache').update(cache)
   )
   const writeResult = await Promise.all(awaitStack)
   return writeResult

@@ -1,9 +1,6 @@
-import {
-  RoundRobinConfig,
-  ScheduleConfig,
-  Sport,
-  Event,
-} from '../types/schedule'
+import { sportList } from '../data/constants'
+import { Sport } from '../types'
+import { RoundRobinConfig, ScheduleConfig, Event } from '../types/schedule'
 import {
   dateify,
   letter,
@@ -13,22 +10,18 @@ import {
   incrementTime,
 } from '../utils/schedule'
 
-const sports: Sport[] = [
-  'touchRugby',
-  'dodgeball',
-  'frisbee',
-  'tchoukball',
-  'volleyball',
-  'captainsBall',
-]
+function get<T>(object: Record<string, T>, key: string, default_value: T): T {
+  var result = object[key]
+  return typeof result !== 'undefined' ? result : default_value
+}
 
 export const makeSchedule = (
-    scheduleConfig: ScheduleConfig,
-    rr: RoundRobinConfig
+  scheduleConfig: ScheduleConfig,
+  rr: RoundRobinConfig,
+  cache: Record<Sport, Record<string, string>>
 ): Event[] => {
   const schedule: Event[] = []
-
-  sports.forEach((sport) => {
+  sportList.forEach((sport) => {
     const config = scheduleConfig[sport]
     const matches: number[][] = rr[config.density]
     const ls = dateify(config.lunchStart)
@@ -50,7 +43,11 @@ export const makeSchedule = (
           }
         }
         const inc = () => incrementTime(s, e, config.matchInterval)
-        const add = (groupIndex: number) =>
+        const add = (groupIndex: number) => {
+          const idA = `${letter(groupIndex)}${match[0]}`
+          const idB = `${letter(groupIndex)}${match[1]}`
+          const teamNameA = get(cache[sport], idA, "null team")
+          const teamNameB = get(cache[sport], idB, "null team")
           schedule.push({
             start: time(s),
             end: time(e),
@@ -58,10 +55,11 @@ export const makeSchedule = (
             round: 'round_robin',
             court,
             sport,
-            A: `${letter(groupIndex)}${match[0]}`,
-            B: `${letter(groupIndex)}${match[1]}`,
+            A: teamNameA,
+            B: teamNameB,
             winner: 'U',
           })
+        }
         if (config.alternating) {
           skipToAfterLunch()
           add(2 * groupIndex)
