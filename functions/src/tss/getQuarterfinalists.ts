@@ -8,7 +8,7 @@ import { firestore } from 'firebase-admin'
 // import { sportList } from '../data/constants'
 import { getQuarterfinalists as keyCheck } from '../utils/keyChecks'
 import { PointsProps } from './updatePoints'
-import { shuffle } from '../utils/team'
+import { derange } from '../utils/derange'
 
 type PointsPropsWithName = PointsProps & {
   teamName: string
@@ -44,22 +44,6 @@ async function getGroupTable(sport: Sport): Promise<PointsPropsWithName[]> {
     })
   })
   return groupTable
-}
-
-function getRandomInt(min: number, max: number): number {
-  return min + Math.floor(Math.random() * max)
-}
-
-function derange(a: string[]) {
-  const o = [...a]
-  const n = a.length
-  let j;
-  for (let i = 0; i < n - 1; i++) {
-    do {
-      j = getRandomInt(i, n-1)
-    } while (a[j] == o[i])
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
 }
 
 export const getQuarterfinalists = https.onRequest(async (req, res) => {
@@ -121,11 +105,10 @@ export const getQuarterfinalists = https.onRequest(async (req, res) => {
     seconds.push(group[1].teamName)
   })
 
-  derange(firsts)
-  derange(seconds)
+  const dseconds = derange(seconds)
 
   for (let i = 0; i < 4; i++) {
-    quarterfinalists.push(firsts[i], seconds[i])
+    quarterfinalists.push(firsts[i], dseconds[i])
   }
 
   console.log(quarterfinalists)
