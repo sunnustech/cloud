@@ -30,6 +30,6 @@
     "ds": "tsc && node lib/deleteSchedule",
     "att": "tsc && node lib/assignTSSTeams",
     "up": "tsc && node lib/updatePoints",
-    "RESET": "tsc && node lib/RESET"
+    "reset": "tsc && node lib/RESET"
   }
 }
