@@ -14,12 +14,12 @@ import { Sport } from '../types'
  * @return {string[]} list of teamnames from that sport
  */
 function getTeamNamesOfSport(
-    teamList: InitializeTeam[],
-    sport: Sport
+  teamList: InitializeTeam[],
+  sport: Sport
 ): string[] {
   return teamList
-      .filter((x) => x.registeredEvents.TSS[sport])
-      .map((x) => x.teamName)
+    .filter((x) => x.registeredEvents.TSS[sport])
+    .map((x) => x.teamName)
 }
 
 /**
@@ -60,6 +60,7 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
   // get number of teams
   // assign a letter and a number to each team
   const awaitStack: Promise<WriteResult>[] = []
+  const teamCollection = firestore().collection('teams')
   sportList.forEach((sport) => {
     const teamNames = getTeamNamesOfSport(teamList, sport)
     // for testing purposes
@@ -69,15 +70,19 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
     // end of testing code
     shuffle(teamNames)
     const TSSIds = getTSSIds(teamNames.slice(0, turnUp), sport)
-    const teamCollection = firestore().collection('teams')
 
     teamNames.forEach((teamName) => {
       const team = TSSIds[teamName]
       awaitStack.push(
-          teamCollection.doc(teamName).update({ sport: team.sport, TSSId: team.id })
+        teamCollection
+          .doc(teamName)
+          .update({ sport: team.sport, TSSId: team.id })
       )
     })
   })
+  awaitStack.push(
+    firestore().collection('shared').doc('main').update({ assignedTeams: true })
+  )
   const writeResult = await Promise.all(awaitStack)
   return writeResult
 }
