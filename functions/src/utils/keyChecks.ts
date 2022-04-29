@@ -1,30 +1,41 @@
-export const createSchedule = [
-  [
-    'scheduleConfig',
-    'please supply a schedule config in the property "scheduleConfig"',
-  ],
-  [
-    'roundRobinConfig',
-    'please supply a round robin config in the property "roundRobinConfig"',
-  ],
-  [
-    'debugScores',
-    'please supply a boolean value of whether or not to debug scores (false to init a clean db)',
-  ],
-]
+type RequiredKey = {
+  key: string
+  description: string
+}
 
-export const getSchedule = [
-  ['filter', 'please supply a filter in the property "filter"'],
-]
+function getKeyChecks(arr: RequiredKey[]): string[][] {
+  return arr.map((item) => [
+    item.key,
+    `Please supply a ${item.key} in the \`${item.description}\` prop of the request body.`,
+  ])
+}
 
-export const assignTSSTeams = [['please', 'please supply the magic prop']]
+export const createSchedule = getKeyChecks([
+  { key: 'scheduleConfig', description: 'schedule config' },
+  { key: 'roundRobinConfig', description: 'round robin config' },
+  { key: 'debugScores', description: 'boolean' },
+])
 
-export const createTeams = [
-  ['teamList', 'please supply a list of users in the property "teamList"'],
-]
+export const getSchedule = getKeyChecks([
+  { key: 'filter', description: 'filter' },
+])
 
-export const getQuarterfinalists = [
-  ['sportList', 'please supply a sportList for which to find top 2 from each group'],
-]
+export const assignTSSTeams = getKeyChecks([
+  { key: 'please', description: 'magic word' },
+])
 
-export const updatePageAccess = [['tree', 'please supply the access tree in the `tree` prop.']]
+export const createTeams = getKeyChecks([
+  { key: 'teamList', description: 'team data' },
+])
+
+export const getQuarterfinalists = getKeyChecks([
+  { key: 'sportList', description: 'list of sports' },
+])
+
+export const updatePageAccess = getKeyChecks([
+  { key: 'pages', description: 'page access state' },
+])
+
+export const createUsers = getKeyChecks([
+  { key: 'userList', description: 'list of users' },
+])

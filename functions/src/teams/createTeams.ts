@@ -7,11 +7,7 @@ import { createTeams as keyCheck } from '../utils/keyChecks'
 import { makeTeam } from '../utils/team'
 
 export const createTeams = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
 
   const teamList: InitializeTeam[] = req.body.teamList
 

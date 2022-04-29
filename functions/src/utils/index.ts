@@ -1,6 +1,7 @@
 // import { firestore } from 'firebase-admin'
 import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 import { Request } from 'firebase-functions'
+import { Response } from 'express'
 
 type Collection = CollectionReference<DocumentData>
 
@@ -23,7 +24,7 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
  * @return {Promise<string[]>} the list
  */
 export async function listDocIdsAsync(
-    collection: Collection
+  collection: Collection
 ): Promise<string[]> {
   const list: string[] = (await collection.listDocuments()).map((e) => e.id)
   return list
@@ -36,15 +37,15 @@ export async function listDocIdsAsync(
  * @return {[T[], T[]]} the pass-fail array
  */
 export function partition<T>(
-    array: T[],
-    check: (elem: T) => boolean
+  array: T[],
+  check: (elem: T) => boolean
 ): [T[], T[]] {
   return array.reduce(
-      (result: [pass: T[], fail: T[]], element) => {
-        result[check(element) ? 0 : 1].push(element)
-        return result
-      },
-      [[], []]
+    (result: [pass: T[], fail: T[]], element) => {
+      result[check(element) ? 0 : 1].push(element)
+      return result
+    },
+    [[], []]
   )
 }
 
@@ -55,16 +56,18 @@ export function partition<T>(
  * @return {string[]} the message and status
  */
 export const hasMissingKeys = (
-    arr: string[][],
-    req: Request
-): [message: string, status: 'missing' | 'has-all'] => {
+  arr: string[][],
+  req: Request,
+  res: Response<any>
+): boolean => {
   const requestKeys = Object.keys(req.body)
   const required = arr.map((pair) => pair[0])
   for (let i = 0; i < required.length; i++) {
     const key = required[i]
     if (!requestKeys.includes(key)) {
-      return [arr[i][1], 'missing']
+      res.json({ message: arr[i][1] })
+      return true
     }
   }
-  return ['', 'has-all']
+  return false
 }

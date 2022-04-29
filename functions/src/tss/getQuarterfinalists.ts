@@ -46,11 +46,8 @@ async function getGroupTable(sport: Sport): Promise<PointsPropsWithName[]> {
 }
 
 export const getQuarterfinalists = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
+
   const sportList = req.body.sportList
 
   // try with volleyball first

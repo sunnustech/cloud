@@ -30,6 +30,7 @@
     "ds": "tsc && node lib/deleteSchedule",
     "att": "tsc && node lib/assignTSSTeams",
     "up": "tsc && node lib/updatePoints",
+    "upa": "tsc && node lib/updatePageAccess",
     "gq": "tsc && node lib/getQuarterfinalists",
     "reset": "tsc && node lib/RESET"
   }

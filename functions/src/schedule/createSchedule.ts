@@ -23,11 +23,8 @@ async function fetchTSSCache(): Promise<Record<Sport,Record<string,string>>> {
 }
 
 export const createSchedule = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
+
   const debugScores = req.body.debugScores
   const sc: ScheduleConfig = req.body.scheduleConfig
   const rr: RoundRobinConfig = req.body.roundRobinConfig

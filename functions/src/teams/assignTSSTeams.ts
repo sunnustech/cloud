@@ -97,11 +97,8 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
 }
 
 export const assignTSSTeams = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
+
   // const a = res.body.asdf()
   const teamList: InitializeTeam[] = req.body.teamList
   const writeResult = await main(teamList)
