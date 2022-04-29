@@ -13,7 +13,7 @@ import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 import { assignTSSTeams } from './teams/assignTSSTeams'
-import { createUsers } from './users/createUsers'
+import { createUsers, createAdmins } from './users/createUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
 import { createSchedule } from './schedule/createSchedule'
@@ -37,6 +37,7 @@ export {
   writeSchema,
   deleteAllUsers,
   createUsers,
+  createAdmins,
   assignUsers,
   createSchedule,
   clearCollection,

@@ -8,7 +8,10 @@ import { getFreshLoginIds } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
 import { getUserCreationQueue } from './firebase'
 import { getCsvHeadersFromString, getUsersFromCsv } from '../utils/parseCsv'
+import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { isSubset, hasMissingKeys } from '../utils/exits'
+// import { partition } from '../utils/array'
+import { getExistingDict } from '../utils/firestore'
 
 type CreateFirebaseUsersResult = {
   writeResult: PromiseSettledResult<UserRecord>[]
@@ -40,6 +43,24 @@ const createFirebaseUsers = async (
   }
 }
 
+async function updateUserMeta(
+  createdUsers: User[],
+  meta: DocumentReference<DocumentData>
+) {
+  const UIDs = createdUsers.map((user) => user.uid)
+  const loginIdNumbers = createdUsers.map((user) => user.loginIdNumber)
+  const emails = createdUsers.map((user) => user.realEmail)
+  const fv = firestore.FieldValue
+
+  // add uids of artificially created users to be able to delete them later
+  await meta.update({
+    uidList: fv.arrayUnion(...UIDs),
+    loginIdList: fv.arrayUnion(...loginIdNumbers),
+    emailList: fv.arrayUnion(...emails),
+  })
+  await meta.update({ uidList: fv.arrayRemove('') })
+}
+
 /**
  * creates sunnus users.
  * since firebase doesn't support natively implemented users to have extra
@@ -50,18 +71,11 @@ const createFirebaseUsers = async (
 const createSunnusUsers = async (
   createdUsers: User[]
 ): CreateSunnusUsersResult => {
-  const createdUIDs = createdUsers.map((user) => user.uid)
-  const createdLoginIdNumbers = createdUsers.map((user) => user.loginIdNumber)
   // get reference to collection
   const usersCollection = firestore().collection('users')
   const allUsersData = usersCollection.doc('allUsersData')
-  const fv = firestore.FieldValue
-  // add uids of artificially created users to be able to delete them later
-  allUsersData.update({
-    uidList: fv.arrayUnion(...createdUIDs),
-    loginIdList: fv.arrayUnion(...createdLoginIdNumbers),
-  })
-  allUsersData.update({ uidList: fv.arrayRemove('') })
+  await updateUserMeta(createdUsers, allUsersData)
+
   const q: Promise<WriteResult>[] = createdUsers.map((user) => {
     const uid = user.uid
     const userDocument = usersCollection.doc(uid)
@@ -82,7 +96,74 @@ export const createUsers = https.onRequest(async (req, res) => {
     res
   )
   if (insufficientHeaders) return
-  const userList: InitializeUser[] = getUsersFromCsv(req.body.userListCsvString)
+  const rawUserList: InitializeUser[] = getUsersFromCsv(
+    req.body.userListCsvString
+  )
+
+  /* get existing list of emails
+   * reject any readEmails that are already in that list
+   * const [fulfilled, rejected] = partition(userList, () => true)
+   */
+  const existingEmails = await getExistingDict('users', 'allUsersData', 'emailList')
+  const userList = rawUserList.filter(
+    (user) => existingEmails[user.email] !== true
+  )
+
+  if (userList.length === 0) {
+    res.json({
+      message: "No new users created."
+    })
+    return
+  }
+
+  const firebaseResult = await createFirebaseUsers(userList)
+  const createdUsers = firebaseResult.createdUsers
+  const sunnusResult = await createSunnusUsers(createdUsers)
+
+  /* send back the statuses */
+  res.json({
+    createdUsers,
+    firebaseWriteResult: firebaseResult.writeResult,
+    sunnusWriteResult: sunnusResult,
+  })
+})
+
+export const createAdmins = https.onRequest(async (req, res) => {
+  if (hasMissingKeys(keyCheck, req, res)) return
+  const userListCsvString = req.body.userListCsvString
+  const headers = getCsvHeadersFromString(userListCsvString)
+  const insufficientHeaders = !isSubset(
+    [
+      'teamName',
+      'email',
+      'phoneNumber',
+      'admin',
+      'TSSOfficial',
+      'TSSVolunteer',
+      'SOARFacilitator',
+    ],
+    headers,
+    'Check to make sure you have all the required headers.',
+    res
+  )
+  if (insufficientHeaders) return
+  const rawUserList: InitializeUser[] = getUsersFromCsv(req.body.userListCsvString)
+
+  /* get existing list of emails
+   * reject any readEmails that are already in that list
+   * const [fulfilled, rejected] = partition(userList, () => true)
+   */
+  const existingEmails = await getExistingDict('users', 'allUsersData', 'emailList')
+  const userList = rawUserList.filter(
+    (user) => existingEmails[user.email] !== true
+  )
+
+  if (userList.length === 0) {
+    res.json({
+      message: "No new users created."
+    })
+    return
+  }
 
   const firebaseResult = await createFirebaseUsers(userList)
   const createdUsers = firebaseResult.createdUsers
