@@ -6,8 +6,9 @@ import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
 import { makeLoginIdList } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
-import { hasMissingKeys } from '../utils'
 import { makeFirebaseUser } from './makeFirebaseUser'
+import { getCsvHeadersFromString, getUsersFromCsv } from '../utils/parseCsv'
+import { isSubset, hasMissingKeys } from '../utils/exits'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
@@ -68,17 +69,21 @@ const getUserCreationQueue = (
 export const createUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
-  const userList: InitializeUser[] = req.body.userList
+  const userListCsvString = req.body.userListCsvString
+  const headers = getCsvHeadersFromString(userListCsvString)
+  console.debug(headers)
 
-  // const sharedCollection = firestore().collection('shared')
-  // const loginIdsDoc = sharedCollection.doc('loginIds')
-  const usersCollection = firestore().collection('users')
-  const allUsersData = usersCollection.doc('allUsersData')
+  const insufficientHeaders = !isSubset(
+    ['teamName', 'email', 'phoneNumber'],
+    headers,
+    'Check that the headers contain all of: teamName, email, phoneNumber',
+    res
+  )
+  if (insufficientHeaders) return
 
-  /* get list of all existing loginIds */
-  const existingLoginIds: string[] =
-    (await allUsersData.get()).data()?.loginIdList || []
-  const freshLoginIds = makeLoginIdList(userList.length, existingLoginIds)
+  const userList = getUsersFromCsv(req.body.userListCsvString)
+
+  const freshLoginIds = await makeLoginIdList(userList.length)
 
   /* this queue creates Firebase email-password users */
 
@@ -102,6 +107,8 @@ export const createUsers = https.onRequest(async (req, res) => {
     (user) => user.loginIdNumber
   )
 
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
   allUsersData.update({
     uidList: firestore.FieldValue.arrayUnion(...successfulUIDs),
     loginIdList: firestore.FieldValue.arrayUnion(...successfulLoginIds),

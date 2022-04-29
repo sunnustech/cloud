@@ -18,4 +18,4 @@ export const updatePageAccess = [
   { key: 'pages', description: 'page access state' },
 ]
 
-export const createUsers = [{ key: 'userList', description: 'list of users' }]
+export const createUsers = [{ key: 'userListCsvString', description: 'list of users' }]

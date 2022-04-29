@@ -2,7 +2,7 @@ import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
-import { partition } from '../utils'
+import { partition } from '../utils/array'
 
 export const assignUsers = https.onRequest(async (req, res) => {
   const requestKeys = Object.keys(req.body)
