@@ -56,7 +56,7 @@ export function partition<T>(
  * @return {string[]} the message and status
  */
 export const hasMissingKeys = (
-  arr: string[][],
+  arr: string[],
   req: Request,
   res: Response<any>
 ): boolean => {

@@ -3,11 +3,11 @@ type RequiredKey = {
   description: string
 }
 
-function getKeyChecks(arr: RequiredKey[]): string[][] {
-  return arr.map((item) => [
-    item.key,
-    `Please supply a ${item.key} in the \`${item.description}\` prop of the request body.`,
-  ])
+function getKeyChecks(arr: RequiredKey[]): string[] {
+  return arr.map(
+    (item) =>
+      `Please supply the ${item.key} in the \`${item.description}\` prop of the request body.`
+  )
 }
 
 export const createSchedule = getKeyChecks([
