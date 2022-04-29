@@ -21,10 +21,10 @@ function get<T>(object: Record<string, T>, key: string, defaultValue: T): T {
 }
 
 export const makeSchedule = (
-    scheduleConfig: ScheduleConfig,
-    rr: RoundRobinConfig,
-    cache: Record<Sport, Record<string, string>>,
-    debugScores: boolean
+  scheduleConfig: ScheduleConfig,
+  rr: RoundRobinConfig,
+  cache: Record<Sport, Record<string, string>>,
+  debugScores: boolean
 ): Event[] => {
   const schedule: Event[] = []
   sportList.forEach((sport) => {

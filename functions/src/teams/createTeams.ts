@@ -16,7 +16,7 @@ export const createTeams = https.onRequest(async (req, res) => {
 
   teamList.forEach((team) => {
     createTeamsQueue.push(
-        teamsCollection.doc(team.teamName).create(makeTeam(team))
+      teamsCollection.doc(team.teamName).create(makeTeam(team))
     )
   })
 

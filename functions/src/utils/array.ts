@@ -34,15 +34,15 @@ export function isSubset<T>(a: T[], b: T[]): boolean {
  * @return {[T[], T[]]} the pass-fail array
  */
 export function partition<T>(
-    array: T[],
-    check: (elem: T) => boolean
+  array: T[],
+  check: (elem: T) => boolean
 ): [T[], T[]] {
   return array.reduce(
-      (result: [pass: T[], fail: T[]], element) => {
-        result[check(element) ? 0 : 1].push(element)
-        return result
-      },
-      [[], []]
+    (result: [pass: T[], fail: T[]], element) => {
+      result[check(element) ? 0 : 1].push(element)
+      return result
+    },
+    [[], []]
   )
 }
 

@@ -49,17 +49,17 @@ export const assignUsers = https.onRequest(async (req, res) => {
     }
     const teamDoc = teamCollection.doc(user.teamName)
     assignQueue.push(
-        teamDoc.update({
-          members: firestore.FieldValue.arrayUnion(user.uid),
-        })
+      teamDoc.update({
+        members: firestore.FieldValue.arrayUnion(user.uid),
+      })
     )
   })
 
   const writeResults = await Promise.allSettled(assignQueue)
 
   const [fulfilled, rejected] = partition(
-      writeResults,
-      (result) => result.status === 'fulfilled'
+    writeResults,
+    (result) => result.status === 'fulfilled'
   )
 
   /* get list of all teams */

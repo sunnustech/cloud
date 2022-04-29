@@ -18,12 +18,11 @@ import { isSubset, hasMissingKeys } from '../utils/exits'
  * the users requested
  */
 const getUserCreationQueue = (
-    userList: InitializeUser[],
-    freshLoginIds: string[]
+  userList: InitializeUser[],
+  freshLoginIds: string[]
 ): [User[], Promise<UserRecord>[]] => {
   const successList: User[] = []
   const userCreationQueue: Promise<UserRecord>[] = []
-
   /**
    * add a user to the successfulUserList
    * @param {InitializeUser} user: requested props
@@ -32,9 +31,9 @@ const getUserCreationQueue = (
    * @return {UserRecord} bypass the callback
    */
   function appendSuccessfulAddition(
-      user: InitializeUser,
-      index: number,
-      rec: UserRecord
+    user: InitializeUser,
+    index: number,
+    rec: UserRecord
   ): UserRecord {
     const loginIdNumber = freshLoginIds[index]
     const loginId = `${user.teamName}${loginIdNumber}`
@@ -50,34 +49,29 @@ const getUserCreationQueue = (
     })
     return rec
   }
-
   /* create a queue of user creation commands if that
    * command succeeds in execution later, save that user
    * into successfulUserList
    */
   userList.forEach((user, index) => {
     userCreationQueue.push(
-        getAuth()
-            .createUser(makeFirebaseUser(user, freshLoginIds[index]))
-            .then((rec) => appendSuccessfulAddition(user, index, rec))
+      getAuth()
+        .createUser(makeFirebaseUser(user, freshLoginIds[index]))
+        .then((rec) => appendSuccessfulAddition(user, index, rec))
     )
   })
-
   return [successList, userCreationQueue]
 }
 
 export const createUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
-
   const userListCsvString = req.body.userListCsvString
   const headers = getCsvHeadersFromString(userListCsvString)
-  console.debug(headers)
-
   const insufficientHeaders = !isSubset(
-      ['teamName', 'email', 'phoneNumber'],
-      headers,
-      'Check that the headers contain all of: teamName, email, phoneNumber',
-      res
+    ['teamName', 'email', 'phoneNumber'],
+    headers,
+    'Check that the headers contain all of: teamName, email, phoneNumber',
+    res
   )
   if (insufficientHeaders) return
 
@@ -88,8 +82,8 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* this queue creates Firebase email-password users */
 
   const [successfulUserList, userCreationQueue] = getUserCreationQueue(
-      userList,
-      freshLoginIds
+    userList,
+    freshLoginIds
   )
 
   /* await all to settle, regardless of success or failure
@@ -104,7 +98,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   /* add the successful ones to SunNUS user database */
   const successfulUIDs = successfulUserList.map((user) => user.uid)
   const successfulLoginIds = successfulUserList.map(
-      (user) => user.loginIdNumber
+    (user) => user.loginIdNumber
   )
 
   const usersCollection = firestore().collection('users')

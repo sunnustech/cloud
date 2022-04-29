@@ -71,8 +71,8 @@ export const getQuarterfinalists = https.onRequest(async (req, res) => {
 
   const by =
     (
-        field: 'total' | 'difference' | 'scored',
-        direction: 'ascending' | 'descending'
+      field: 'total' | 'difference' | 'scored',
+      direction: 'ascending' | 'descending'
     ) =>
       (a: PointsPropsWithName, b: PointsPropsWithName) => {
         const [A, B] = [a[field], b[field]]

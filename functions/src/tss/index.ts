@@ -45,8 +45,8 @@ const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   }
 
   const writeResult = await firestore()
-      .collection('match-records')
-      .add(serverMatchRecord)
+    .collection('match-records')
+    .add(serverMatchRecord)
   return writeResult
 }
 
@@ -69,11 +69,11 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
   // If the round is finals, we only need to update this round
   if (data.round === 'finals') {
     docRef.set(
-        {
-          [data.round]: thisRoundData,
-          champions: winnerTeamName,
-        },
-        { merge: true }
+      {
+        [data.round]: thisRoundData,
+        champions: winnerTeamName,
+      },
+      { merge: true }
     )
     return 'updated: finals'
   }
@@ -88,11 +88,11 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
   }
 
   docRef.set(
-      {
-        [data.round]: thisRoundData,
-        [nextRound]: nextRoundData,
-      },
-      { merge: true }
+    {
+      [data.round]: thisRoundData,
+      [nextRound]: nextRoundData,
+    },
+    { merge: true }
   )
   return 'updated: non-finals'
 }
@@ -125,16 +125,16 @@ export const _handleMatch = https.onRequest(async (req, res) => {
 })
 
 export const handleMatch = https.onCall(
-    async (req: IncomingHandleMatchRequest, context) => {
+  async (req: IncomingHandleMatchRequest, context) => {
     // TODO: use context to only allow uids that are inside of facils/admins
-      const results = await Promise.all([
-        saveMatchRecordAsync(req),
-        updateKnockoutTable(req),
-      ])
+    const results = await Promise.all([
+      saveMatchRecordAsync(req),
+      updateKnockoutTable(req),
+    ])
 
-      // Send back a message that we've successfully written the match
-      return {
-        result: `Match with ID: ${results[0].id} written.`,
-      }
+    // Send back a message that we've successfully written the match
+    return {
+      result: `Match with ID: ${results[0].id} written.`,
     }
+  }
 )

@@ -14,9 +14,9 @@ type RequiredKey = {
  * @return {boolean}
  */
 export const hasMissingKeys = (
-    arr: RequiredKey[],
-    req: Request,
-    res: Response<any>
+  arr: RequiredKey[],
+  req: Request,
+  res: Response<any>
 ): boolean => {
   function getMessage(item: RequiredKey): string {
     const vowel = ['a', 'e', 'i', 'o', 'u']
@@ -43,10 +43,10 @@ export const hasMissingKeys = (
  * @return {boolean}
  */
 export function isSubset<T>(
-    a: T[],
-    b: T[],
-    message: string,
-    res: Response<any>
+  a: T[],
+  b: T[],
+  message: string,
+  res: Response<any>
 ): boolean {
   const ok = a.every((val) => b.includes(val))
   if (!ok) {
