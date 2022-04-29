@@ -8,7 +8,6 @@ import { firestore } from 'firebase-admin'
 // import { sportList } from '../data/constants'
 import { getQuarterfinalists as keyCheck } from '../utils/keyChecks'
 import { PointsProps } from './updatePoints'
-import { derange } from '../utils/derange'
 
 type PointsPropsWithName = PointsProps & {
   teamName: string

@@ -26,3 +26,5 @@ export const createTeams = [
 export const getQuarterfinalists = [
   ['sportList', 'please supply a sportList for which to find top 2 from each group'],
 ]
+
+export const updatePageAccess = [['tree', 'please supply the access tree in the `tree` prop.']]
