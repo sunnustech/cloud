@@ -6,8 +6,6 @@ import fs from 'fs'
 /* read from the csv file */
 const fileData = fs.readFileSync('src/csv/createUsers.csv')
 
-// const sanitizedUserList: InitializeUser[] = csv.map((user) => createUser(user))
-
 const fn = 'development-createUsers'
 timestamp(fn)
 
