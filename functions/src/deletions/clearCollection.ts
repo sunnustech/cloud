@@ -1,20 +1,11 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
+import { clearCollection as keyCheck } from '../utils/keyChecks'
+import { hasMissingKeys } from '../utils/exits'
 
 export const clearCollection = https.onRequest(async (req, res) => {
-  const requestKeys = Object.keys(req.body)
-  const has = (e: string) => requestKeys.includes(e)
-
-  /* check to see if userList is a property of the request body */
-  if (!has('collection')) {
-    res.json({
-      keys: requestKeys,
-      message: 'please supply a collection name to delete',
-      data: req.body,
-    })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
 
   const whitelist: string[] = req.body.whitelist || []
 

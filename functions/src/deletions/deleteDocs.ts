@@ -1,21 +1,11 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
+import { hasMissingKeys } from '../utils/exits'
+import { deleteDocs as keyCheck } from '../utils/keyChecks'
 
 export const deleteDocs = https.onRequest(async (req, res) => {
-  const requestKeys = Object.keys(req.body)
-  const has = (e: string) => requestKeys.includes(e)
-
-  /* check to see if userList is a property of the request body */
-  if (!has('collection') || !has('docList')) {
-    res.json({
-      keys: requestKeys,
-      message:
-        'please supply both a collection name and a list of documents to delete',
-      data: req.body,
-    })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
 
   const collectionRef = firestore().collection(req.body.collection)
   const docList: string[] = req.body.docList

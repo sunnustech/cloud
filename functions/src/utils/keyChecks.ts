@@ -18,4 +18,22 @@ export const updatePageAccess = [
   { key: 'pages', description: 'page access state' },
 ]
 
-export const createUsers = [{ key: 'userListCsvString', description: 'list of users' }]
+export const createUsers = [
+  { key: 'userListCsvString', description: 'list of users' },
+]
+
+export const deleteDocs = [
+  { key: 'collection', description: 'collection name' },
+  { key: 'documents', description: 'list of documents' },
+]
+
+export const deleteAllUsers = [
+  { key: 'collection', description: 'collection name' },
+  { key: 'documents', description: 'list of documents' },
+]
+
+export const please = [{ key: 'please', description: 'magic word' }]
+
+export const clearCollection = [
+  { key: 'collection', description: 'collection name' },
+]
