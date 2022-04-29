@@ -3,12 +3,11 @@ import { firestore } from 'firebase-admin'
 import { UserRecord } from 'firebase-admin/auth'
 import { InitializeUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
-import { WriteResult } from '@google-cloud/firestore'
+import { WriteResult, DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { getFreshLoginIds } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
 import { getUserCreationQueue } from './firebase'
 import { getCsvHeadersFromString, getUsersFromCsv } from '../utils/parseCsv'
-import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { isSubset, hasMissingKeys } from '../utils/exits'
 // import { partition } from '../utils/array'
 import { getExistingDict } from '../utils/firestore'
@@ -111,7 +110,7 @@ export const createUsers = https.onRequest(async (req, res) => {
 
   if (userList.length === 0) {
     res.json({
-      message: "No new users created."
+      message: 'No new users created.',
     })
     return
   }
@@ -160,7 +159,7 @@ export const createAdmins = https.onRequest(async (req, res) => {
 
   if (userList.length === 0) {
     res.json({
-      message: "No new users created."
+      message: 'No new users created.',
     })
     return
   }

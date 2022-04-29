@@ -1,6 +1,6 @@
 import { firestore } from 'firebase-admin'
 
-import { CollectionReference, DocumentData, } from '@google-cloud/firestore'
+import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 
 type Collection = CollectionReference<DocumentData>
 
