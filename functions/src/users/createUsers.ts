@@ -1,12 +1,13 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { getAuth, UserRecord } from 'firebase-admin/auth'
-import { InitializeUser, InitializeFirebaseUser } from '../types/sunnus-init'
+import { InitializeUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
 import { makeLoginIdList } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils'
+import { makeFirebaseUser } from './makeFirebaseUser'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
@@ -50,28 +51,6 @@ const getUserCreationQueue = (
     return rec
   }
 
-  /**
-   * takes a InitializeUser and adds basic information
-   * for firebase to be able to create a full user
-   * @param {InitializeUser} user: requested props
-   * @param {number} index
-   * @return {InitializeFirebaseUser}
-   */
-  function newUser(
-    user: InitializeUser,
-    index: number
-  ): InitializeFirebaseUser {
-    const loginIdNumber = freshLoginIds[index]
-    const loginId = `${user.teamName}${loginIdNumber}`
-    const email = `${loginId}@sunnus.com`
-    return {
-      email,
-      emailVerified: false,
-      password: 'sunnus',
-      disabled: false,
-    }
-  }
-
   /* create a queue of user creation commands if that
    * command succeeds in execution later, save that user
    * into successfulUserList
@@ -79,7 +58,7 @@ const getUserCreationQueue = (
   userList.forEach((user, index) => {
     userCreationQueue.push(
       getAuth()
-        .createUser(newUser(user, index))
+        .createUser(makeFirebaseUser(user, freshLoginIds[index]))
         .then((rec) => appendSuccessfulAddition(user, index, rec))
     )
   })
