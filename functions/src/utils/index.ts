@@ -49,23 +49,32 @@ export function partition<T>(
   )
 }
 
+type RequiredKey = {
+  key: string
+  description: string
+}
+
 /**
  * check for missing keys
- * @param {Array<string[]>} arr: array of key-message pairs
+ * @param {RequiredKey[]} arr: array of key-message pairs
  * @param {string} req: the entire request body
  * @return {string[]} the message and status
  */
 export const hasMissingKeys = (
-  arr: string[],
+  arr: RequiredKey[],
   req: Request,
   res: Response<any>
 ): boolean => {
-  const requestKeys = Object.keys(req.body)
-  const required = arr.map((pair) => pair[0])
-  for (let i = 0; i < required.length; i++) {
-    const key = required[i]
-    if (!requestKeys.includes(key)) {
-      res.json({ message: arr[i][1] })
+  function getMessage(item: RequiredKey): string {
+    const vowel = ['a', 'e', 'i', 'o', 'u']
+    const an = vowel.includes(item.key[0]) ? 'an' : 'a'
+    return `Please supply ${an} ${item.key} in the \`${item.description}\` prop of the request body.`
+  }
+  const requestedKeys = Object.keys(req.body)
+  for (let i = 0; i < arr.length; i++) {
+    const pair = arr[i]
+    if (!requestedKeys.includes(pair.key)) {
+      res.json({ message: getMessage(pair) })
       return true
     }
   }

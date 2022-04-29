@@ -11,17 +11,16 @@ import { makeFirebaseUser } from './makeFirebaseUser'
 
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
- * @param {User[]} successList: the list that successfully created new
- * users will be added to
+ * new users will be added to
  * @param {string[]} freshLoginIds: a list of existing login ids
  * @return {Promise<UserRecord>[]} a queue that can be executed to create
  * the users requested
  */
 const getUserCreationQueue = (
   userList: InitializeUser[],
-  successList: User[],
   freshLoginIds: string[]
-): Promise<UserRecord>[] => {
+): [User[], Promise<UserRecord>[]] => {
+  const successList: User[] = []
   const userCreationQueue: Promise<UserRecord>[] = []
 
   /**
@@ -63,14 +62,13 @@ const getUserCreationQueue = (
     )
   })
 
-  return userCreationQueue
+  return [successList, userCreationQueue]
 }
 
 export const createUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
   const userList: InitializeUser[] = req.body.userList
-  const successfulUserList: User[] = []
 
   // const sharedCollection = firestore().collection('shared')
   // const loginIdsDoc = sharedCollection.doc('loginIds')
@@ -83,9 +81,9 @@ export const createUsers = https.onRequest(async (req, res) => {
   const freshLoginIds = makeLoginIdList(userList.length, existingLoginIds)
 
   /* this queue creates Firebase email-password users */
-  const userCreationQueue = getUserCreationQueue(
+
+  const [successfulUserList, userCreationQueue] = getUserCreationQueue(
     userList,
-    successfulUserList,
     freshLoginIds
   )
 
