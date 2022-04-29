@@ -2,16 +2,12 @@ import { https } from 'firebase-functions'
 import { InitializeTeam } from '../types/sunnus-init'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
-import { hasMissingKeys } from '../utils'
+import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'
 import { makeTeam } from '../utils/team'
 
 export const createTeams = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
 
   const teamList: InitializeTeam[] = req.body.teamList
 
@@ -20,7 +16,7 @@ export const createTeams = https.onRequest(async (req, res) => {
 
   teamList.forEach((team) => {
     createTeamsQueue.push(
-        teamsCollection.doc(team.teamName).create(makeTeam(team))
+      teamsCollection.doc(team.teamName).create(makeTeam(team))
     )
   })
 

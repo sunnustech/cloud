@@ -37,4 +37,5 @@ export type InitializeUser = {
   email: string
   phoneNumber: string
   teamName: string
+  role: string
 }

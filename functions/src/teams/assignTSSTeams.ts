@@ -2,8 +2,8 @@ import { https } from 'firebase-functions'
 import { InitializeTeam } from '../types/sunnus-init'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
-import { assignTSSTeams as keyCheck } from '../utils/keyChecks'
-import { hasMissingKeys } from '../utils'
+import { please as keyCheck } from '../utils/keyChecks'
+import { hasMissingKeys } from '../utils/exits'
 import { sportCapacity, sportList } from '../data/constants'
 import { shuffle } from '../utils/team'
 import { Sport } from '../types'
@@ -97,11 +97,8 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
 }
 
 export const assignTSSTeams = https.onRequest(async (req, res) => {
-  const [err, status] = hasMissingKeys(keyCheck, req)
-  if (status === 'missing') {
-    res.json({ message: err })
-    return
-  }
+  if (hasMissingKeys(keyCheck, req, res)) return
+
   // const a = res.body.asdf()
   const teamList: InitializeTeam[] = req.body.teamList
   const writeResult = await main(teamList)

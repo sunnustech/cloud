@@ -1,22 +1,39 @@
 export const createSchedule = [
-  [
-    'scheduleConfig',
-    'please supply a schedule config in the property "scheduleConfig"',
-  ],
-  [
-    'roundRobinConfig',
-    'please supply a round robin config in the property "roundRobinConfig"',
-  ],
+  { key: 'scheduleConfig', description: 'schedule config' },
+  { key: 'roundRobinConfig', description: 'round robin config' },
+  { key: 'debugScores', description: 'boolean' },
 ]
 
-export const getSchedule = [
-  ['filter', 'please supply a filter in the property "filter"'],
+export const getSchedule = [{ key: 'filter', description: 'filter' }]
+
+export const assignTSSTeams = [{ key: 'please', description: 'magic word' }]
+
+export const createTeams = [{ key: 'teamList', description: 'team data' }]
+
+export const getQuarterfinalists = [
+  { key: 'sportList', description: 'list of sports' },
 ]
 
-export const assignTSSTeams = [
-  ['please', 'please supply the magic prop'],
+export const updatePageAccess = [
+  { key: 'pages', description: 'page access state' },
 ]
 
-export const createTeams = [
-  ['teamList', 'please supply a list of users in the property "teamList"'],
+export const createUsers = [
+  { key: 'userListCsvString', description: 'list of users' },
+]
+
+export const deleteDocs = [
+  { key: 'collection', description: 'collection name' },
+  { key: 'documents', description: 'list of documents' },
+]
+
+export const deleteAllUsers = [
+  { key: 'collection', description: 'collection name' },
+  { key: 'documents', description: 'list of documents' },
+]
+
+export const please = [{ key: 'please', description: 'magic word' }]
+
+export const clearCollection = [
+  { key: 'collection', description: 'collection name' },
 ]

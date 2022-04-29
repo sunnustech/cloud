@@ -15,6 +15,7 @@
     "build": "tsc",
     "debug": "tsc && node lib/debug",
     "cu": "tsc && node lib/createUsers",
+    "ca": "tsc && node lib/createAdmins",
     "au": "tsc && node lib/assignUsers",
     "dau": "tsc && node lib/deleteAllUsers",
     "dat": "tsc && node lib/deleteAllTeams",
@@ -28,6 +29,10 @@
     "cc": "tsc && node lib/clearCollection",
     "gs": "tsc && node lib/getSchedule",
     "ds": "tsc && node lib/deleteSchedule",
-    "att": "tsc && node lib/assignTSSTeams"
+    "att": "tsc && node lib/assignTSSTeams",
+    "up": "tsc && node lib/updatePoints",
+    "upa": "tsc && node lib/updatePageAccess",
+    "gq": "tsc && node lib/getQuarterfinalists",
+    "reset": "tsc && node lib/RESET"
   }
 }

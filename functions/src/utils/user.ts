@@ -1,3 +1,5 @@
+import { firestore } from 'firebase-admin'
+
 /**
  * tries for a random login id (6-digit numeric string)
  * @return {string} the login id
@@ -12,14 +14,21 @@ function makeLoginId(): string {
 /**
  * generates a list of login ids that do not exist yet
  * @param {number} n: number of unique ids to generate
- * @param {string[]} existingIds: list of existing ids
  * @return {string[]} list of new unique ids
  */
-export function makeLoginIdList(n: number, existingIds: string[]): string[] {
+export async function getFreshLoginIds(n: number): Promise<string[]> {
+  /* get list of all existing loginIds */
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
+  const existingIds: string[] =
+    (await allUsersData.get()).data()?.loginIdList || []
+
   const existingIdDict: Record<string, boolean> = {}
+
   existingIds.forEach((id) => {
     existingIdDict[id] = true
   })
+
   const fresh: string[] = []
   let i = 0
   while (i < n) {

@@ -8,6 +8,7 @@ export type User = InitializeUser & {
   loginId: string
   loginIdNumber: string
   uid: string // automatically assigned by firebase upon account creation
+  role: string
 }
 
 /* a SunNUS team */
