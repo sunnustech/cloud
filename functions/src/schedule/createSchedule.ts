@@ -1,6 +1,6 @@
 import { https } from 'firebase-functions'
 import { Event, RoundRobinConfig, ScheduleConfig } from '../types/schedule'
-import { hasMissingKeys } from '../utils'
+import { hasMissingKeys } from '../utils/exits'
 import { createSchedule as keyCheck } from '../utils/keyChecks'
 import { makeSchedule } from './makeSchedule'
 import { firestore } from 'firebase-admin'

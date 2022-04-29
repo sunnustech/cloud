@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { hasMissingKeys } from '../utils'
+import { hasMissingKeys } from '../utils/exits'
 import { getSchedule as keyCheck } from '../utils/keyChecks'
 import { firestore } from 'firebase-admin'
 import { DocumentData, Query } from '@google-cloud/firestore'

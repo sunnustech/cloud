@@ -1,6 +1,6 @@
 import { https } from 'firebase-functions'
 import { Sport } from '../types'
-import { hasMissingKeys } from '../utils'
+import { hasMissingKeys } from '../utils/exits'
 import { firestore } from 'firebase-admin'
 // import { WriteResult } from '@google-cloud/firestore'
 // import { Sport } from '../types'

@@ -2,7 +2,7 @@ import { https } from 'firebase-functions'
 import { InitializeTeam } from '../types/sunnus-init'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
-import { hasMissingKeys } from '../utils'
+import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'
 import { makeTeam } from '../utils/team'
 
