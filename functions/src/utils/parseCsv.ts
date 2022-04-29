@@ -16,6 +16,7 @@ const createUser = (user: InitializeUser): InitializeUser => {
     email: user.email,
     teamName: user.teamName,
     phoneNumber: sanitizePhoneNumber('65', user.phoneNumber),
+    role: user.role || ""
   }
 }
 

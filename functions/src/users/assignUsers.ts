@@ -1,6 +1,5 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import { User } from '../types/sunnus-firestore'
 import { WriteResult } from '@google-cloud/firestore'
 import { partition } from '../utils/array'
 
@@ -34,15 +33,7 @@ export const assignUsers = https.onRequest(async (req, res) => {
 
   users.forEach((doc) => {
     const d = doc.data()
-    const user: User = {
-      email: d.email,
-      realEmail: d.realEmail,
-      loginId: d.loginId,
-      phoneNumber: d.phoneNumber,
-      teamName: d.teamName,
-      uid: d.uid,
-      loginIdNumber: d.loginIdNumber,
-    }
+    const user = { teamName: d.teamName, uid: d.uid }
     // skip if no teamName
     if (!user.teamName) {
       return
@@ -61,11 +52,6 @@ export const assignUsers = https.onRequest(async (req, res) => {
     writeResults,
     (result) => result.status === 'fulfilled'
   )
-
-  /* get list of all teams */
-  /* get list of team-less users */
-  /* return list of users that got added to their team */
-  /* return list of users that did not get added to a team */
 
   /* send back the statuses */
   res.json({ message: '[WIP] assigning users...', fulfilled, rejected })

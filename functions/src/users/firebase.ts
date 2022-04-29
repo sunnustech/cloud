@@ -27,17 +27,18 @@ function makeFirebaseUser(
  * @param {InitializeUser} user: requested props
  * @param {string} loginIdNumber
  * @param {UserRecord} rec: the assgined props after user creation
+ * @param {User[]} createdUsers
  * @return {UserRecord} bypass the callback
  */
 function appendSuccessfulAddition(
   user: InitializeUser,
   loginIdNumber: string,
   rec: UserRecord,
-  successList: User[]
+  createdUsers: User[]
 ): UserRecord {
   const loginId = `${user.teamName}${loginIdNumber}`
   const email = `${loginId}@sunnus.com`
-  successList.push({
+  createdUsers.push({
     uid: rec.uid,
     phoneNumber: user.phoneNumber,
     realEmail: user.email,
@@ -45,22 +46,29 @@ function appendSuccessfulAddition(
     email,
     loginId,
     loginIdNumber,
+    role: user.role,
   })
   return rec
+}
+
+type UserCreationQueueResult = {
+  createdUsers: User[]
+  userCreationQueue: Promise<UserRecord>[]
+
 }
 
 /**
  * @param {InitializeUser[]} users: the incoming request array of users
  * new users will be added to
  * @param {string[]} loginIds
- * @return {Promise<UserRecord>[]} a queue that can be executed to create
+ * @return {UserCreationQueueResult} a queue that can be executed to create
  * the users requested
  */
 export function getUserCreationQueue(
   users: InitializeUser[],
   loginIds: string[]
-): [User[], Promise<UserRecord>[]] {
-  const successList: User[] = []
+): UserCreationQueueResult {
+  const createdUsers: User[] = []
   const userCreationQueue: Promise<UserRecord>[] = []
   /* create a queue of user creation commands if that
    * command succeeds in execution later, save that user
@@ -71,9 +79,9 @@ export function getUserCreationQueue(
       getAuth()
         .createUser(makeFirebaseUser(user, loginIds[index]))
         .then((rec) =>
-          appendSuccessfulAddition(user, loginIds[index], rec, successList)
+          appendSuccessfulAddition(user, loginIds[index], rec, createdUsers)
         )
     )
   })
-  return [successList, userCreationQueue]
+  return { createdUsers, userCreationQueue }
 }

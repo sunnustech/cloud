@@ -11,6 +11,7 @@ const userList: User[] = [
     phoneNumber: '91239845',
     uid: 'VMXuhnIg2jcKGGt9y6D1GDV9gBR2', // this is legit
     loginIdNumber: 'supposed to be a number',
+    role: 'admin',
   },
   {
     teamName: 'developer_team',
@@ -20,6 +21,7 @@ const userList: User[] = [
     phoneNumber: '90912365',
     uid: 'xo05ywdQhsSLYvXe0CIozFXYnB32', // this is legit
     loginIdNumber: 'supposed to be a number',
+    role: 'admin',
   },
   {
     teamName: 'developer_team',
@@ -29,6 +31,7 @@ const userList: User[] = [
     phoneNumber: '91230412',
     uid: 'joDEJYPYvfQDS8ukW7bG6MEQUY53', // this is legit
     loginIdNumber: 'supposed to be a number',
+    role: 'tester',
   },
 ]
 

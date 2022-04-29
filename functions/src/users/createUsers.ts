@@ -20,24 +20,23 @@ type CreateSunnusUsersResult = Promise<PromiseSettledResult<WriteResult>[]>
 /**
  * creates firebase users
  * a by-product is that all users will automatically be assigned a unique UID
- * @param {InitializeUser[]} userList
- * @returns {Promise<CreateFirebaseUsersResult>}
+ * @param {InitializeUser[]} users
+ * @return {Promise<CreateFirebaseUsersResult>}
  */
 const createFirebaseUsers = async (
   users: InitializeUser[]
 ): Promise<CreateFirebaseUsersResult> => {
   const freshLoginIds = await getFreshLoginIds(users.length)
   /* this queue creates Firebase email-password users */
-  const [createdUsers, userCreationQueue] = getUserCreationQueue(
-    users, freshLoginIds
-  )
+  // const [createdUsers, userCreationQueue] = getUserCreationQueue(users, freshLoginIds)
+  const result = getUserCreationQueue(users, freshLoginIds)
   /* await all to settle, regardless of success or failure
    * #leavenomanbehind
    */
-  const writeResult = await Promise.allSettled(userCreationQueue)
+  const writeResult = await Promise.allSettled(result.userCreationQueue)
   return {
     writeResult,
-    createdUsers,
+    createdUsers: result.createdUsers,
   }
 }
 
@@ -46,7 +45,7 @@ const createFirebaseUsers = async (
  * since firebase doesn't support natively implemented users to have extra
  * attributes, we will write the required attributes to the database.
  * @param {User[]} createdUsers
- * @returns {CreateSunnusUsersResult}
+ * @return {CreateSunnusUsersResult}
  */
 const createSunnusUsers = async (
   createdUsers: User[]
