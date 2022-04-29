@@ -10,6 +10,13 @@ import { makeFirebaseUser } from './makeFirebaseUser'
 import { getCsvHeadersFromString, getUsersFromCsv } from '../utils/parseCsv'
 import { isSubset, hasMissingKeys } from '../utils/exits'
 
+type CreateFirebaseUsersResult = {
+  writeResult: PromiseSettledResult<UserRecord>[]
+  createdUsers: User[]
+}
+
+type CreateSunnusUsersResult = Promise<PromiseSettledResult<WriteResult>[]>
+
 /**
  * @param {InitializeUser[]} userList: the incoming request array of users
  * new users will be added to
@@ -24,7 +31,7 @@ const getUserCreationQueue = (
   const successList: User[] = []
   const userCreationQueue: Promise<UserRecord>[] = []
   /**
-   * add a user to the successfulUserList
+   * add a user to the createdUsers
    * @param {InitializeUser} user: requested props
    * @param {number} index
    * @param {UserRecord} rec: the assgined props after user creation
@@ -51,7 +58,7 @@ const getUserCreationQueue = (
   }
   /* create a queue of user creation commands if that
    * command succeeds in execution later, save that user
-   * into successfulUserList
+   * into createdUsers
    */
   userList.forEach((user, index) => {
     userCreationQueue.push(
@@ -61,6 +68,62 @@ const getUserCreationQueue = (
     )
   })
   return [successList, userCreationQueue]
+}
+
+/**
+ * creates firebase users
+ * a by-product is that all users will automatically be assigned a unique UID
+ * @param {InitializeUser[]} userList
+ * @returns {Promise<CreateFirebaseUsersResult>}
+ */
+const createFirebaseUsers = async (
+  userList: InitializeUser[]
+): Promise<CreateFirebaseUsersResult> => {
+  const freshLoginIds = await makeLoginIdList(userList.length)
+  /* this queue creates Firebase email-password users */
+  const [createdUsers, userCreationQueue] = getUserCreationQueue(
+    userList,
+    freshLoginIds
+  )
+  /* await all to settle, regardless of success or failure
+   * #leavenomanbehind
+   */
+  const writeResult = await Promise.allSettled(userCreationQueue)
+  return {
+    writeResult,
+    createdUsers,
+  }
+}
+
+/**
+ * creates sunnus users.
+ * since firebase doesn't support natively implemented users to have extra
+ * attributes, we will write the required attributes to the database.
+ * @param {User[]} createdUsers
+ * @returns {CreateSunnusUsersResult}
+ */
+const createSunnusUsers = async (
+  createdUsers: User[]
+): CreateSunnusUsersResult => {
+  const createdUIDs = createdUsers.map((user) => user.uid)
+  const createdLoginIdNumbers = createdUsers.map((user) => user.loginIdNumber)
+  // get reference to collection
+  const usersCollection = firestore().collection('users')
+  const allUsersData = usersCollection.doc('allUsersData')
+  const fv = firestore.FieldValue
+  // add uids of artificially created users to be able to delete them later
+  allUsersData.update({
+    uidList: fv.arrayUnion(...createdUIDs),
+    loginIdList: fv.arrayUnion(...createdLoginIdNumbers),
+  })
+  allUsersData.update({ uidList: fv.arrayRemove('') })
+  const q: Promise<WriteResult>[] = createdUsers.map((user) => {
+    const uid = user.uid
+    const userDocument = usersCollection.doc(uid)
+    return userDocument.set(user)
+  })
+  const result = await Promise.allSettled(q)
+  return result
 }
 
 export const createUsers = https.onRequest(async (req, res) => {
@@ -74,59 +137,16 @@ export const createUsers = https.onRequest(async (req, res) => {
     res
   )
   if (insufficientHeaders) return
+  const userList: InitializeUser[] = getUsersFromCsv(req.body.userListCsvString)
 
-  const userList = getUsersFromCsv(req.body.userListCsvString)
-
-  const freshLoginIds = await makeLoginIdList(userList.length)
-
-  /* this queue creates Firebase email-password users */
-
-  const [successfulUserList, userCreationQueue] = getUserCreationQueue(
-    userList,
-    freshLoginIds
-  )
-
-  /* await all to settle, regardless of success or failure
-   * #leavenomanbehind
-   */
-  const results = await Promise.allSettled(userCreationQueue)
-
-  /* split the successes from the failures */
-  const fulfilled = results.filter((result) => result.status === 'fulfilled')
-  const rejected = results.filter((result) => result.status === 'rejected')
-
-  /* add the successful ones to SunNUS user database */
-  const successfulUIDs = successfulUserList.map((user) => user.uid)
-  const successfulLoginIds = successfulUserList.map(
-    (user) => user.loginIdNumber
-  )
-
-  const usersCollection = firestore().collection('users')
-  const allUsersData = usersCollection.doc('allUsersData')
-  allUsersData.update({
-    uidList: firestore.FieldValue.arrayUnion(...successfulUIDs),
-    loginIdList: firestore.FieldValue.arrayUnion(...successfulLoginIds),
-  })
-  allUsersData.update({
-    uidList: firestore.FieldValue.arrayRemove(''),
-  })
-
-  const setUserQueue: Promise<WriteResult>[] = []
-
-  successfulUserList.forEach((user) => {
-    const uid = user.uid
-    const userDocument = usersCollection.doc(uid)
-    setUserQueue.push(userDocument.set(user))
-  })
-
-  const userWriteResult = await Promise.allSettled(setUserQueue)
+  const firebaseResult = await createFirebaseUsers(userList)
+  const createdUsers = firebaseResult.createdUsers
+  const sunnusResult = await createSunnusUsers(createdUsers)
 
   /* send back the statuses */
   res.json({
-    fulfilled,
-    rejected,
-    successfulUserList,
-    successfulUIDs,
-    userWriteResult,
+    createdUsers,
+    firebaseWriteResult: firebaseResult.writeResult,
+    sunnusWriteResult: sunnusResult,
   })
 })
