@@ -7,7 +7,7 @@ import { firestore } from 'firebase-admin'
 import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { Sport } from '../types'
 
-async function fetchTSSCache(): Promise<Record<Sport,Record<string,string>>> {
+async function fetchTSSCache(): Promise<Record<Sport, Record<string, string>>> {
   const sharedCollection = firestore().collection('shared')
   const rawCache = (await sharedCollection.doc('tssCache').get()).data()
   const tssCache: Record<Sport, Record<string, string>> = {
@@ -19,7 +19,6 @@ async function fetchTSSCache(): Promise<Record<Sport,Record<string,string>>> {
     captainsBall: rawCache?.captainsBall || {},
   }
   return tssCache
-
 }
 
 export const createSchedule = https.onRequest(async (req, res) => {

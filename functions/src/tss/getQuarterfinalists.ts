@@ -71,19 +71,19 @@ export const getQuarterfinalists = https.onRequest(async (req, res) => {
 
   const by =
     (
-      field: 'total' | 'difference' | 'scored',
-      direction: 'ascending' | 'descending'
+        field: 'total' | 'difference' | 'scored',
+        direction: 'ascending' | 'descending'
     ) =>
-    (a: PointsPropsWithName, b: PointsPropsWithName) => {
-      const [A, B] = [a[field], b[field]]
-      if (A === B) {
-        return 0
-      } else if (A < B) {
-        return direction === 'ascending' ? -1 : 1
-      } else {
-        return direction === 'ascending' ? 1 : -1
+      (a: PointsPropsWithName, b: PointsPropsWithName) => {
+        const [A, B] = [a[field], b[field]]
+        if (A === B) {
+          return 0
+        } else if (A < B) {
+          return direction === 'ascending' ? -1 : 1
+        } else {
+          return direction === 'ascending' ? 1 : -1
+        }
       }
-    }
 
   const temp: string[] = []
   groupLetters.forEach((letter) => {

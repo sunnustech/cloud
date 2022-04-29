@@ -15,16 +15,16 @@ function getRandomInt(max: number): number {
   return Math.floor(Math.random() * max)
 }
 
-function get<T>(object: Record<string, T>, key: string, default_value: T): T {
-  var result = object[key]
-  return typeof result !== 'undefined' ? result : default_value
+function get<T>(object: Record<string, T>, key: string, defaultValue: T): T {
+  const result = object[key]
+  return typeof result !== 'undefined' ? result : defaultValue
 }
 
 export const makeSchedule = (
-  scheduleConfig: ScheduleConfig,
-  rr: RoundRobinConfig,
-  cache: Record<Sport, Record<string, string>>,
-  debugScores: boolean
+    scheduleConfig: ScheduleConfig,
+    rr: RoundRobinConfig,
+    cache: Record<Sport, Record<string, string>>,
+    debugScores: boolean
 ): Event[] => {
   const schedule: Event[] = []
   sportList.forEach((sport) => {

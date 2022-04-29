@@ -22,7 +22,7 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
  * @return {Promise<string[]>} the list
  */
 export async function listDocIdsAsync(
-  collection: Collection
+    collection: Collection
 ): Promise<string[]> {
   const list: string[] = (await collection.listDocuments()).map((e) => e.id)
   return list

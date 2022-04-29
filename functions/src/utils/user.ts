@@ -17,7 +17,6 @@ function makeLoginId(): string {
  * @return {string[]} list of new unique ids
  */
 export async function makeLoginIdList(n: number): Promise<string[]> {
-
   /* get list of all existing loginIds */
   const usersCollection = firestore().collection('users')
   const allUsersData = usersCollection.doc('allUsersData')

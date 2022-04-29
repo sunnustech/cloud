@@ -25,9 +25,9 @@ export const getSchedule = https.onRequest(async (req, res) => {
   }
 
   let query: Query<DocumentData> = scheduleCollection.where(
-    pairs[0][0],
-    '==',
-    pairs[0][1]
+      pairs[0][0],
+      '==',
+      pairs[0][1]
   )
 
   for (let i = 1; i < pairs.length; i++) {

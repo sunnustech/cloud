@@ -8,8 +8,8 @@ import { InitializeFirebaseUser, InitializeUser } from '../types/sunnus-init'
  * @return {InitializeFirebaseUser}
  */
 export function makeFirebaseUser(
-  user: InitializeUser,
-  loginIdNumber: string
+    user: InitializeUser,
+    loginIdNumber: string
 ): InitializeFirebaseUser {
   const loginId = `${user.teamName}${loginIdNumber}`
   const email = `${loginId}@sunnus.com`

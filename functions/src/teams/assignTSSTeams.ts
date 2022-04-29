@@ -14,12 +14,12 @@ import { Sport } from '../types'
  * @return {string[]} list of teamnames from that sport
  */
 function getTeamNamesOfSport(
-  teamList: InitializeTeam[],
-  sport: Sport
+    teamList: InitializeTeam[],
+    sport: Sport
 ): string[] {
   return teamList
-    .filter((x) => x.registeredEvents.TSS[sport])
-    .map((x) => x.teamName)
+      .filter((x) => x.registeredEvents.TSS[sport])
+      .map((x) => x.teamName)
 }
 
 /**
@@ -86,11 +86,11 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
     })
   })
   awaitStack.push(
-    firestore()
-      .collection('shared')
-      .doc('main')
-      .update({ assignedTeams: true }),
-    firestore().collection('shared').doc('tssCache').update(cache)
+      firestore()
+          .collection('shared')
+          .doc('main')
+          .update({ assignedTeams: true }),
+      firestore().collection('shared').doc('tssCache').update(cache)
   )
   const writeResult = await Promise.all(awaitStack)
   return writeResult

@@ -1,8 +1,11 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import { WriteResult } from '@google-cloud/firestore'
+import {
+  WriteResult,
+  DocumentData,
+  DocumentReference,
+} from '@google-cloud/firestore'
 import { Sport } from '../types'
-import { DocumentData, DocumentReference } from '@google-cloud/firestore'
 import { sportList } from '../data/constants'
 
 type Group = string
@@ -69,8 +72,8 @@ export const updatePoints = https.onRequest(async (req, res) => {
       scored: 0,
       conceded: 0,
       difference: 0,
-      group: "",
-      sport: "",
+      group: '',
+      sport: '',
     }
   })
 
@@ -85,13 +88,10 @@ export const updatePoints = https.onRequest(async (req, res) => {
     points[match.B].scored += match.scoreB
     points[match.A].conceded += match.scoreB
     points[match.B].conceded += match.scoreA
-    // handle draw
-    if (match.scoreA === match.scoreB) {
+    if (match.scoreA === match.scoreB) { // handle draw
       points[match.A].total += 1
       points[match.B].total += 1
-    }
-    // handle win
-    else if (match.scoreA > match.scoreB) {
+    } else if (match.scoreA > match.scoreB) { // handle win
       // A wins
       points[match.A].total += 3
     } else {
@@ -119,7 +119,7 @@ export const updatePoints = https.onRequest(async (req, res) => {
   const writeResult = await Promise.allSettled(awaitStack)
 
   res.json({
-    result: `updated tss points!`,
+    result: 'updated tss points!',
     points,
     writeResult,
   })
