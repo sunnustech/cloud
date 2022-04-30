@@ -1,8 +1,7 @@
-import { InitializeUser } from '../types/sunnus-init'
 import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
-import { Sunnus } from '../classes'
+import { Csv, Sunnus } from '../classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -13,8 +12,8 @@ export const getCsvHeadersFromString = (string: string): string[] => {
   return result[0]
 }
 
-export const getUsersFromCsv = (userListCsv: string): InitializeUser[] => {
-  const parsedCsv: InitializeUser[] = parse(userListCsv, {
+export const getUsersFromCsv = (userListCsv: string): Sunnus.User[] => {
+  const parsedCsv: Csv.User[] = parse(userListCsv, {
     delimiter: ',',
     trim: true,
     columns: true,

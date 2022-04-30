@@ -1,7 +1,5 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import { UserRecord } from 'firebase-admin/auth'
-import { InitializeUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
 import {
   WriteResult,
@@ -10,19 +8,11 @@ import {
 } from '@google-cloud/firestore'
 import { getFreshLoginIds } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
-import { getUserCreationQueue } from './firebase'
-import {
-  getCsvHeadersFromString,
-  getUsersFromCsv,
-  hasMissingHeaders,
-} from '../utils/parseCsv'
-import { isSubset, hasMissingKeys } from '../utils/exits'
-import { getExistingDict } from '../utils/firestore'
-
-type CreateFirebaseUsersResult = {
-  writeResult: PromiseSettledResult<UserRecord>[]
-  createdUsers: User[]
-}
+import { makeFirebaseUsers } from './firebase'
+import { getUsersFromCsv, hasMissingHeaders } from '../utils/parseCsv'
+import { hasMissingKeys } from '../utils/exits'
+import { getAllExistingValues } from '../utils/firestore'
+import { Sunnus } from '../classes'
 
 type CreateSunnusUsersResult = Promise<PromiseSettledResult<WriteResult>[]>
 
@@ -33,20 +23,13 @@ type CreateSunnusUsersResult = Promise<PromiseSettledResult<WriteResult>[]>
  * @return {Promise<CreateFirebaseUsersResult>}
  */
 const createFirebaseUsers = async (
-  users: InitializeUser[]
-): Promise<CreateFirebaseUsersResult> => {
+  users: Sunnus.User[]
+): Promise<Sunnus.User[]> => {
   const freshLoginIds = await getFreshLoginIds(users.length)
-  /* this queue creates Firebase email-password users */
-  // const [createdUsers, userCreationQueue] = getUserCreationQueue(users, freshLoginIds)
-  const result = getUserCreationQueue(users, freshLoginIds)
-  /* await all to settle, regardless of success or failure
-   * #leavenomanbehind
-   */
-  const writeResult = await Promise.allSettled(result.userCreationQueue)
-  return {
-    writeResult,
-    createdUsers: result.createdUsers,
-  }
+  /* creates Firebase email-password users */
+  const q = makeFirebaseUsers(users, freshLoginIds)
+  await Promise.allSettled(q)
+  return users
 }
 
 async function updateUserMeta(
@@ -100,38 +83,25 @@ export const createUsers = https.onRequest(async (req, res) => {
   const required = ['teamName', 'email', 'phoneNumber']
   if (hasMissingHeaders(required, csv, res)) return
 
-  const rawUserList: InitializeUser[] = getUsersFromCsv(
-    req.body.userListCsvString
-  )
-  console.debug(rawUserList)
+  /* get existing list of emails */
+  const already = await getAllExistingValues('users', 'email')
 
-  res.json({debug: 'end of debug run'})
-
-  /* get existing list of emails
-   * reject any readEmails that are already in that list
-   * const [fulfilled, rejected] = partition(userList, () => true)
-   */
-  const existingEmails = await getExistingDict(
-    'users',
-    'allUsersData',
-    'emailList'
-  )
-  const userList = rawUserList.filter(
-    (user) => existingEmails[user.email] !== true
+  /* get list of new users to make */
+  const userList: Sunnus.User[] = getUsersFromCsv(csv).filter(
+    (user) => !already.exists(user.email)
   )
 
   if (userList.length === 0) {
-    res.json({
-      message: 'No new users created.',
-    })
+    res.json({ message: 'No new users created.' })
     return
   }
 
-
-  // const firebaseResult = await createFirebaseUsers(userList)
-  // const createdUsers = firebaseResult.createdUsers
+  const createdUsers = await createFirebaseUsers(userList)
+  console.log(createSunnusUsers)
+  console.log('===============================')
+  console.debug(createdUsers)
   // const sunnusResult = await createSunnusUsers(createdUsers)
-
+  //
   // /* send back the statuses */
   // res.json({
   //   createdUsers,
@@ -141,57 +111,52 @@ export const createUsers = https.onRequest(async (req, res) => {
   return
 })
 
-export const createAdmins = https.onRequest(async (req, res) => {
-  if (hasMissingKeys(keyCheck, req, res)) return
-  const userListCsvString = req.body.userListCsvString
-  const headers = getCsvHeadersFromString(userListCsvString)
-  const insufficientHeaders = !isSubset(
-    [
-      'teamName',
-      'email',
-      'phoneNumber',
-      'admin',
-      'TSSOfficial',
-      'TSSVolunteer',
-      'SOARFacilitator',
-    ],
-    headers,
-    'Check to make sure you have all the required headers.',
-    res
-  )
-  if (insufficientHeaders) return
-  const rawUserList: InitializeUser[] = getUsersFromCsv(
-    req.body.userListCsvString
-  )
-
-  /* get existing list of emails
-   * reject any readEmails that are already in that list
-   * const [fulfilled, rejected] = partition(userList, () => true)
-   */
-  const existingEmails = await getExistingDict(
-    'users',
-    'allUsersData',
-    'emailList'
-  )
-  const userList = rawUserList.filter(
-    (user) => existingEmails[user.email] !== true
-  )
-
-  if (userList.length === 0) {
-    res.json({
-      message: 'No new users created.',
-    })
-    return
-  }
-
-  const firebaseResult = await createFirebaseUsers(userList)
-  const createdUsers = firebaseResult.createdUsers
-  const sunnusResult = await createSunnusUsers(createdUsers)
-
-  /* send back the statuses */
-  res.json({
-    createdUsers,
-    firebaseWriteResult: firebaseResult.writeResult,
-    sunnusWriteResult: sunnusResult,
-  })
-})
+// export const createAdmins = https.onRequest(async (req, res) => {
+//   if (hasMissingKeys(keyCheck, req, res)) return
+//   const userListCsvString = req.body.userListCsvString
+//   const headers = getCsvHeadersFromString(userListCsvString)
+//   const insufficientHeaders = !isSubset(
+//     [
+//       'teamName',
+//       'email',
+//       'phoneNumber',
+//       'admin',
+//       'TSSOfficial',
+//       'TSSVolunteer',
+//       'SOARFacilitator',
+//     ],
+//     headers,
+//     'Check to make sure you have all the required headers.',
+//     res
+//   )
+//   if (insufficientHeaders) return
+//   const rawUserList: InitializeUser[] = getUsersFromCsv(
+//     req.body.userListCsvString
+//   )
+//
+//   /* get existing list of emails
+//    * reject any readEmails that are already in that list
+//    * const [fulfilled, rejected] = partition(userList, () => true)
+//    */
+//   const existingEmails = await getAllExistingValues('users', 'email')
+//   const userList = rawUserList.filter(() => true)
+//   console.log(existingEmails)
+//
+//   if (userList.length === 0) {
+//     res.json({
+//       message: 'No new users created.',
+//     })
+//     return
+//   }
+//
+//   const firebaseResult = await createFirebaseUsers(userList)
+//   const createdUsers = firebaseResult.createdUsers
+//   const sunnusResult = await createSunnusUsers(createdUsers)
+//
+//   /* send back the statuses */
+//   res.json({
+//     createdUsers,
+//     firebaseWriteResult: firebaseResult.writeResult,
+//     sunnusWriteResult: sunnusResult,
+//   })
+// })
