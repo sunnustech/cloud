@@ -28,8 +28,7 @@ export const deleteDocs = [
 ]
 
 export const deleteAllUsers = [
-  { key: 'collection', description: 'collection name' },
-  { key: 'documents', description: 'list of documents' },
+  { key: 'whitelist', description: 'whitelist' },
 ]
 
 export const please = [{ key: 'please', description: 'magic word' }]
@@ -37,3 +36,4 @@ export const please = [{ key: 'please', description: 'magic word' }]
 export const clearCollection = [
   { key: 'collection', description: 'collection name' },
 ]
+
