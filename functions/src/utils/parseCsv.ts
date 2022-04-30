@@ -1,24 +1,8 @@
 import { InitializeUser } from '../types/sunnus-init'
+import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
-
-function removeSpaces(string: string): string {
-  return string.replace(/ /g, '')
-}
-
-function sanitizePhoneNumber(prefix: string, phone: string): string {
-  const noSpaces = removeSpaces(phone)
-  const re = new RegExp(`^\\+${prefix}`)
-  return noSpaces.replace(re, '')
-}
-
-const createUser = (user: InitializeUser): InitializeUser => {
-  return {
-    email: user.email,
-    teamName: user.teamName,
-    phoneNumber: sanitizePhoneNumber('65', user.phoneNumber),
-    role: user.role || 'participant',
-  }
-}
+import { isSubset } from './exits'
+import { Sunnus } from '../classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -35,5 +19,20 @@ export const getUsersFromCsv = (userListCsv: string): InitializeUser[] => {
     trim: true,
     columns: true,
   })
-  return parsedCsv.map((user) => createUser(user))
+  return parsedCsv.map((initializeUser) => new Sunnus.User(initializeUser))
+}
+
+export function hasMissingHeaders(
+  requiredHeaders: string[],
+  userListCsvString: string,
+  res: Response<any>
+): boolean {
+  const headers = getCsvHeadersFromString(userListCsvString)
+  const hasMissing: boolean = !isSubset(
+    requiredHeaders,
+    headers,
+    'Check that all headers are provided.',
+    res
+  )
+  return hasMissing
 }

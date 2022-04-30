@@ -3,13 +3,20 @@ import { firestore } from 'firebase-admin'
 import { UserRecord } from 'firebase-admin/auth'
 import { InitializeUser } from '../types/sunnus-init'
 import { User } from '../types/sunnus-firestore'
-import { WriteResult, DocumentData, DocumentReference } from '@google-cloud/firestore'
+import {
+  WriteResult,
+  DocumentData,
+  DocumentReference,
+} from '@google-cloud/firestore'
 import { getFreshLoginIds } from '../utils/user'
 import { createUsers as keyCheck } from '../utils/keyChecks'
 import { getUserCreationQueue } from './firebase'
-import { getCsvHeadersFromString, getUsersFromCsv } from '../utils/parseCsv'
+import {
+  getCsvHeadersFromString,
+  getUsersFromCsv,
+  hasMissingHeaders,
+} from '../utils/parseCsv'
 import { isSubset, hasMissingKeys } from '../utils/exits'
-// import { partition } from '../utils/array'
 import { getExistingDict } from '../utils/firestore'
 
 type CreateFirebaseUsersResult = {
@@ -85,25 +92,30 @@ const createSunnusUsers = async (
 }
 
 export const createUsers = https.onRequest(async (req, res) => {
+  // check keys
   if (hasMissingKeys(keyCheck, req, res)) return
-  const userListCsvString = req.body.userListCsvString
-  const headers = getCsvHeadersFromString(userListCsvString)
-  const insufficientHeaders = !isSubset(
-    ['teamName', 'email', 'phoneNumber'],
-    headers,
-    'Check that the headers contain all of: teamName, email, phoneNumber',
-    res
-  )
-  if (insufficientHeaders) return
+
+  // check csv headers
+  const csv = req.body.userListCsvString
+  const required = ['teamName', 'email', 'phoneNumber']
+  if (hasMissingHeaders(required, csv, res)) return
+
   const rawUserList: InitializeUser[] = getUsersFromCsv(
     req.body.userListCsvString
   )
+  console.debug(rawUserList)
+
+  res.json({debug: 'end of debug run'})
 
   /* get existing list of emails
    * reject any readEmails that are already in that list
    * const [fulfilled, rejected] = partition(userList, () => true)
    */
-  const existingEmails = await getExistingDict('users', 'allUsersData', 'emailList')
+  const existingEmails = await getExistingDict(
+    'users',
+    'allUsersData',
+    'emailList'
+  )
   const userList = rawUserList.filter(
     (user) => existingEmails[user.email] !== true
   )
@@ -115,16 +127,18 @@ export const createUsers = https.onRequest(async (req, res) => {
     return
   }
 
-  const firebaseResult = await createFirebaseUsers(userList)
-  const createdUsers = firebaseResult.createdUsers
-  const sunnusResult = await createSunnusUsers(createdUsers)
 
-  /* send back the statuses */
-  res.json({
-    createdUsers,
-    firebaseWriteResult: firebaseResult.writeResult,
-    sunnusWriteResult: sunnusResult,
-  })
+  // const firebaseResult = await createFirebaseUsers(userList)
+  // const createdUsers = firebaseResult.createdUsers
+  // const sunnusResult = await createSunnusUsers(createdUsers)
+
+  // /* send back the statuses */
+  // res.json({
+  //   createdUsers,
+  //   firebaseWriteResult: firebaseResult.writeResult,
+  //   sunnusWriteResult: sunnusResult,
+  // })
+  return
 })
 
 export const createAdmins = https.onRequest(async (req, res) => {
@@ -146,13 +160,19 @@ export const createAdmins = https.onRequest(async (req, res) => {
     res
   )
   if (insufficientHeaders) return
-  const rawUserList: InitializeUser[] = getUsersFromCsv(req.body.userListCsvString)
+  const rawUserList: InitializeUser[] = getUsersFromCsv(
+    req.body.userListCsvString
+  )
 
   /* get existing list of emails
    * reject any readEmails that are already in that list
    * const [fulfilled, rejected] = partition(userList, () => true)
    */
-  const existingEmails = await getExistingDict('users', 'allUsersData', 'emailList')
+  const existingEmails = await getExistingDict(
+    'users',
+    'allUsersData',
+    'emailList'
+  )
   const userList = rawUserList.filter(
     (user) => existingEmails[user.email] !== true
   )

@@ -11,3 +11,11 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
   return separateWord.join('')
 }
 
+/**
+ * does what it says
+ * @param {string} string
+ * @returns {string}
+ */
+export function removeSpaces(string: string): string {
+  return string.replace(/ /g, '')
+}
