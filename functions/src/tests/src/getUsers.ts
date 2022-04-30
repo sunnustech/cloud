@@ -2,7 +2,7 @@ import axios from 'axios'
 import { timestamp } from './utils/timestamp'
 import { cloud } from './utils/firebase'
 
-const fn = 'development-deleteAllUsers'
+const fn = 'development-getUsers'
 timestamp(fn)
 
 axios.post(cloud(fn), { please: 'sudo' }).then((res) => {

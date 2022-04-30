@@ -15,6 +15,7 @@
     "build": "tsc",
     "debug": "tsc && node lib/debug",
     "cu": "tsc && node lib/createUsers",
+    "gu": "tsc && node lib/getUsers",
     "ca": "tsc && node lib/createAdmins",
     "au": "tsc && node lib/assignUsers",
     "dau": "tsc && node lib/deleteAllUsers",

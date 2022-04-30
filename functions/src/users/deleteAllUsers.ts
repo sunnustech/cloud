@@ -5,14 +5,21 @@ import { WriteResult } from '@google-cloud/firestore'
 import { please as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 
+async function getUidsToRemove() {
+  const users = await getAuth().listUsers()
+  const real = ['k@sunnus.com', 'r@sunnus.com', 'kevin@sunnus.com']
+  const filtered = users.users.filter(x => !real.includes(x.email || ''))
+  return filtered.map(x => x.uid)
+}
+
 export const deleteAllUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
   const usersCollection = firestore().collection('users')
   const allUsersData = usersCollection.doc('allUsersData')
   /* get list of all uids to remove */
-  const uidsToRemove: string[] =
-    (await allUsersData.get()).data()?.uidList || []
+
+  const uidsToRemove: string[] = await getUidsToRemove()
 
   /* from the list of uids, obtain the list of corresponding
    * loginIds and emails to remove

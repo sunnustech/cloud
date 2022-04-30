@@ -14,6 +14,7 @@ import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
+import { getUsers } from './users/getUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
 import { createSchedule } from './schedule/createSchedule'
@@ -26,6 +27,7 @@ import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
 
 export {
+  getUsers,
   pageAccess,
   updatePageAccess,
   updatePoints,
