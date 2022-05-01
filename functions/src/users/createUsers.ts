@@ -26,20 +26,18 @@ export const createUsers = https.onRequest(async (req, res) => {
   )
 
   const writeSummary = await createFirebaseUsers(userList)
-  const userCollection = firestore().collection('users')
+  const userCollection = firestore()
+    .collection('users')
+    .withConverter(sunnus.User.converter)
 
+  // write the user data to collections
   const q: Promise<WriteResult>[] = []
   userList.forEach((user) => {
-    q.push(
-      userCollection
-        .doc(user.uid)
-        .withConverter(sunnus.User.converter)
-        .set(user)
-    )
+    q.push(userCollection.doc(user.uid).set(user))
   })
-  const result = await Promise.all(q)
+  await Promise.all(q) // only returns writeTime, nothing to capture here
 
   /* send back the statuses */
-  res.json({ writeSummary, result })
+  res.json({ writeSummary })
   return
 })
