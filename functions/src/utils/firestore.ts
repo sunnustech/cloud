@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 
 import { CollectionReference, DocumentData } from '@google-cloud/firestore'
-import { UniquenessChecker } from '../classes'
+import { UniquenessChecker } from '../classes/data'
 
 type Collection = CollectionReference<DocumentData>
 
