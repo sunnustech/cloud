@@ -36,4 +36,3 @@ export const please = [{ key: 'please', description: 'magic word' }]
 export const clearCollection = [
   { key: 'collection', description: 'collection name' },
 ]
-

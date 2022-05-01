@@ -14,6 +14,7 @@
     "dev": "tsc && node .",
     "build": "tsc",
     "debug": "tsc && node lib/debug",
+    "ic": "tsc && node lib/initializeCollections",
     "cu": "tsc && node lib/createUsers",
     "cou": "tsc && node lib/createOneUser",
     "gu": "tsc && node lib/getUsers",

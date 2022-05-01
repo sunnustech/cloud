@@ -5,7 +5,7 @@
     "lint": "eslint --fix --ext .js,.ts .",
     "prettier": "prettier --write ./src/**/*.ts",
     "deploy": "firebase deploy --only functions",
-    "unnode": "lsof -i -a -c node -t | xargs kill -9",
+    "unnode": "lsof -i -a -c node -c java -t | xargs kill -9",
     "uncache": "rm -rf ./lib",
     "start:functions": "tsc -w | firebase emulators:start --only functions",
     "start:local": "tsc -w | firebase emulators:start",
