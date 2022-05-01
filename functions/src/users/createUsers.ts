@@ -3,6 +3,7 @@ import { createUsers as keyCheck } from '../utils/keyChecks'
 import { createFirebaseUsers } from './firebase'
 import { getUsersFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { hasMissingKeys } from '../utils/exits'
+import { firestore } from 'firebase-admin'
 import { getAllExistingValues } from '../utils/firestore'
 import { Sunnus } from '../classes'
 
@@ -24,6 +25,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   )
 
   const writeSummary = await createFirebaseUsers(userList)
+  const userCollection = firestore().collection('users')
 
   /* send back the statuses */
   res.json({ writeSummary })
