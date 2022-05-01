@@ -1,10 +1,16 @@
+import { firestore } from 'firebase-admin'
 import { removeSpaces } from '../utils/string'
+import { FirestoreDataConverter } from '@google-cloud/firestore'
+import { SetOptions, WriteResult } from '@google-cloud/firestore'
 
 // reference:
 // https://firebase.google.com/docs/firestore/manage-data/add-data
 
 function sanitizeCsvUser(props: Csv.User): Csv.User {
   function sanitizePhoneNumber(prefix: string, phone: string): string {
+    if (phone === '') {
+      return ''
+    }
     const noSpaces = removeSpaces(phone)
     const re = new RegExp(`^\\+${prefix}`)
     return noSpaces.replace(re, '')
@@ -38,6 +44,53 @@ export namespace Sunnus {
     uid: string
     registeredInFirebase: boolean
     registeredInSunnus: boolean
+    static converter: FirestoreDataConverter<User> = {
+      toFirestore: (user: User) => {
+        return {
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          realEmail: user.email,
+          role: user.role,
+          teamName: user.teamName,
+          loginId: user.loginId,
+          uid: user.uid,
+        }
+      },
+      fromFirestore: (snapshot) => {
+        const data = snapshot.data()
+        const user = new User({
+          phoneNumber: data.phoneNumber,
+          role: data.role,
+          email: data.email,
+          teamName: data.teamName,
+        })
+        user.setUid(data.uid)
+        user.setLoginId(data.loginId)
+        return user
+      },
+    }
+    static async get(uid: string) {
+      const ref = firestore()
+        .collection('users')
+        .doc(uid)
+        .withConverter(this.converter)
+      const docSnap = await ref.get()
+      if (docSnap.exists) {
+        return docSnap.data()
+      }
+      return this.empty()
+    }
+    static async set(user: User, options: SetOptions): Promise<WriteResult> {
+      const ref = firestore()
+        .collection('users')
+        .doc(user.uid)
+        .withConverter(this.converter)
+      const result = await ref.set(user, options)
+      return result
+    }
+    static empty() {
+      return new User({ phoneNumber: '', role: '', email: '', teamName: '' })
+    }
     // constructor values can be read directly from csv
     constructor(props: Csv.User) {
       const clean = sanitizeCsvUser(props)
@@ -59,6 +112,10 @@ export namespace Sunnus {
       this.loginIdNumberPart = value
       this.loginId = `${this.teamName}${value}`
       this.email = `${this.loginId}@sunnus.com`
+    }
+    isEmpty(): boolean {
+      const values = Object.values(this)
+      return values.every(x => x === '' || x === false)
     }
   }
 }
