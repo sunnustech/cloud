@@ -14,6 +14,7 @@ import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
+import { autoDeleteUser } from './users/trigger'
 import { getUsers } from './users/getUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
@@ -27,6 +28,7 @@ import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
 
 export {
+  autoDeleteUser,
   getUsers,
   pageAccess,
   updatePageAccess,
