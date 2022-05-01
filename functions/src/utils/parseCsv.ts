@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
-import { Csv, sunnus } from '../classes'
+import * as sunnus from '../classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -13,7 +13,7 @@ export const getCsvHeadersFromString = (string: string): string[] => {
 }
 
 export const getUsersFromCsv = (userListCsv: string): sunnus.User[] => {
-  const parsedCsv: Csv.User[] = parse(userListCsv, {
+  const parsedCsv: sunnus.User[]  = parse(userListCsv, {
     delimiter: ',',
     trim: true,
     columns: true,

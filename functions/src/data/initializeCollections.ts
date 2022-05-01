@@ -5,36 +5,26 @@ import { WriteResult } from '@google-cloud/firestore'
 import { please as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 
+const collections: Record<string, string[]> = {
+  shared: ['users', 'tssRoundRobinCache'],
+  users: [],
+  teams: [],
+  schedule: [],
+  notifications: [],
+}
+
 export const initializeCollections = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
-  const collections: string[] = [
-    'shared',
-    'users',
-    'teams',
-    'schedule',
-    'notifications',
-  ]
-  const q: Record<string, Promise<WriteResult>[]> = {
-    create: [],
-    yeet: [],
-  }
-  collections.forEach((name) => {
-    const doc = firestore().collection(name).doc()
-    q.create.push(
-      doc.create({
-        type: 'initialization',
-        message:
-          'By-product of initializing the database. Nothing to see here.',
-        important: 'I use Arch btw.',
-      })
-    )
-    q.yeet.push(doc.delete())
+  const q: Promise<WriteResult>[] = []
+  Object.keys(collections).forEach((name) => {
+    const col = firestore().collection(name)
+    const init = col.doc('---init---')
+    q.push(init.create({ created: firestore.FieldValue.serverTimestamp() }))
+    collections[name].forEach((name) => {
+      const doc = col.doc(name)
+      q.push(doc.create({ created: firestore.FieldValue.serverTimestamp() }))
+    })
   })
-  const r: Record<string, PromiseSettledResult<WriteResult>[]> = {
-    create: [],
-    yeet: [],
-  }
-  r.create = await Promise.allSettled(q.create)
-  // r.yeet = await Promise.allSettled(q.yeet)
+  await Promise.allSettled(q)
   res.json({ message: 'initialized collection structure' })
 })
