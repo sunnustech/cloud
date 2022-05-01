@@ -5,7 +5,7 @@ import { getUsersFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { hasMissingKeys } from '../utils/exits'
 import { firestore } from 'firebase-admin'
 import { getAllExistingValues } from '../utils/firestore'
-import { Sunnus } from '../classes'
+import { sunnus } from '../classes'
 
 export const createUsers = https.onRequest(async (req, res) => {
   // check keys
@@ -20,7 +20,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   const already = await getAllExistingValues('users', 'email')
 
   /* get list of new users to make */
-  const userList: Sunnus.User[] = getUsersFromCsv(csv).filter(
+  const userList: sunnus.User[] = getUsersFromCsv(csv).filter(
     (user) => !already.exists(user.email)
   )
 

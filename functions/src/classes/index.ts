@@ -32,7 +32,7 @@ export namespace Csv {
   }
 }
 
-export namespace Sunnus {
+export namespace sunnus {
   export class User {
     realEmail: string
     role: string
