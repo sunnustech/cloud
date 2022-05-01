@@ -3,7 +3,7 @@ import { createFirebaseUsers } from './firebase'
 import { getUsersFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { hasMissingKeys } from '../utils/exits'
 import { getAllExistingValues } from '../utils/firestore'
-import { sunnus } from '../classes'
+import { User } from '../classes/user'
 import { https } from 'firebase-functions'
 import { WriteResult } from '@google-cloud/firestore'
 import { firestore } from 'firebase-admin'
@@ -21,14 +21,14 @@ export const createUsers = https.onRequest(async (req, res) => {
   const already = await getAllExistingValues('users', 'email')
 
   /* get list of new users to make */
-  const userList: sunnus.User[] = getUsersFromCsv(csv).filter(
+  const userList: User[] = getUsersFromCsv(csv).filter(
     (user) => !already.exists(user.email)
   )
 
   const writeSummary = await createFirebaseUsers(userList)
   const userCollection = firestore()
     .collection('users')
-    .withConverter(sunnus.User.converter)
+    .withConverter(User.converter)
 
   // write the user data to collections
   const q: Promise<WriteResult>[] = []

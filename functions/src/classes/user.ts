@@ -4,18 +4,6 @@ import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { SetOptions, WriteResult } from '@google-cloud/firestore'
 import * as sunnus from '../types/classes'
 
-// reference:
-// https://firebase.google.com/docs/firestore/manage-data/add-data
-
-namespace Init {
-  export interface User {
-    phoneNumber: string
-    email: string
-    role: string
-    teamName: string
-  }
-}
-
 export class User implements sunnus.User {
   realEmail: string
   role: string
@@ -77,7 +65,7 @@ export class User implements sunnus.User {
     return result
   }
   // constructor values can be read directly from csv
-  public constructor(props: Init.User) {
+  public constructor(props: sunnus.Init.User) {
     this.phoneNumber = sanitizePhoneNumber(props.phoneNumber)
     this.realEmail = props.email
     this.role = props.role || ''

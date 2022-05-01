@@ -1,7 +1,7 @@
 import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { SetOptions, WriteResult } from '@google-cloud/firestore'
 
-declare namespace Csv {
+declare namespace Init {
   export interface User {
     phoneNumber: string
     email: string
@@ -23,7 +23,7 @@ export class User {
   static converter: FirestoreDataConverter<User>
   static get(uid: string): Promise<User>
   static set(user: User, options: SetOptions): Promise<WriteResult>
-  constructor(props: Csv.User)
+  constructor(props: Init.User)
   isEmpty(): boolean
   setUid(value: string): void
   setLoginId(value: string): void

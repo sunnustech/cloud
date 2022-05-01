@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase-admin/auth'
 import { getFreshLoginIds } from '../utils/user'
 import { ResultSummary, resultSummary } from '../utils/response'
-import { sunnus } from '../classes'
+import { User } from '../classes/user'
 
 /**
  * creates firebase users (uid will be auto-generatered)
@@ -9,13 +9,13 @@ import { sunnus } from '../classes'
  * @return {Promise<ResultSummary>}
  */
 export const createFirebaseUsers = async (
-  users: sunnus.User[]
+  users: User[]
 ): Promise<ResultSummary> => {
   if (users.length === 0) {
     return { fulfilled: 0, rejected: 0 }
   }
   const freshLoginIds = await getFreshLoginIds(users.length)
-  const queue: Promise<sunnus.User>[] = []
+  const queue: Promise<User>[] = []
   users.forEach((user, index) => {
     user.setLoginId(freshLoginIds[index])
     queue.push(

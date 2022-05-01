@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
-import * as sunnus from '../classes'
+import { User } from '../classes/user'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -12,13 +12,13 @@ export const getCsvHeadersFromString = (string: string): string[] => {
   return result[0]
 }
 
-export const getUsersFromCsv = (userListCsv: string): sunnus.User[] => {
-  const parsedCsv: sunnus.User[]  = parse(userListCsv, {
+export const getUsersFromCsv = (userListCsv: string): User[] => {
+  const parsedCsv: User[]  = parse(userListCsv, {
     delimiter: ',',
     trim: true,
     columns: true,
   })
-  return parsedCsv.map((initializeUser) => new sunnus.User(initializeUser))
+  return parsedCsv.map((initializeUser) => new User(initializeUser))
 }
 
 export function hasMissingHeaders(
