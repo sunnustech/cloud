@@ -1,7 +1,9 @@
 import { firestore } from 'firebase-admin'
 import { removeSpaces } from '../utils/string'
-import { FirestoreDataConverter } from '@google-cloud/firestore'
+import { FirestoreDataConverter, } from '@google-cloud/firestore'
 import { SetOptions, WriteResult } from '@google-cloud/firestore'
+// import { app } from '../firebase'
+// import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 
 // reference:
 // https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -33,6 +35,11 @@ export namespace Csv {
 }
 
 export namespace sunnus {
+  // export class Database {
+  //   static readonly col = firestore(app).collection
+  //   static readonly users: CollectionReference<DocumentData> = this.col('users')
+  //   static readonly teams: CollectionReference<DocumentData> = this.col('teams')
+  // }
   export class User {
     realEmail: string
     role: string
@@ -42,7 +49,12 @@ export namespace sunnus {
     loginIdNumberPart: string
     loginId: string
     uid: string
-    static empty = new User({ phoneNumber: '', role: '', email: '', teamName: '' })
+    static empty = new User({
+      phoneNumber: '',
+      role: '',
+      email: '',
+      teamName: '',
+    })
     static converter: FirestoreDataConverter<User> = {
       toFirestore: (user: User) => {
         return {
@@ -101,7 +113,7 @@ export namespace sunnus {
     }
     isEmpty(): boolean {
       const values = Object.values(this)
-      return values.every(v => v === '')
+      return values.every((v) => v === '')
     }
     setUid(value: string) {
       this.uid = value
