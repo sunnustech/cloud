@@ -1,31 +1,38 @@
 import { getAuth } from 'firebase-admin/auth'
+import { getFreshLoginIds } from '../utils/user'
+import { ResultSummary, resultSummary } from '../utils/response'
 import { Sunnus } from '../classes'
 
 /**
- * @param {Sunnus.User[]} users
- * @param {string[]} loginIds
- * @return {Promise<Sunnus.User>[]} queue that will create the users requested
+ * creates firebase users (uid will be auto-generatered)
+ * @param {InitializeUser[]} users
+ * @return {Promise<ResultSummary>}
  */
-export function makeFirebaseUsers(
-  users: Sunnus.User[],
-  loginIds: string[]
-): Promise<Sunnus.User>[] {
-  const firebaseUserCreationQueue: Promise<Sunnus.User>[] = []
+export const createFirebaseUsers = async (
+  users: Sunnus.User[]
+): Promise<ResultSummary> => {
+  if (users.length === 0) {
+    return { fulfilled: 0, rejected: 0 }
+  }
+  const freshLoginIds = await getFreshLoginIds(users.length)
+  const queue: Promise<Sunnus.User>[] = []
   users.forEach((user, index) => {
-    user.setLoginId(loginIds[index])
-    firebaseUserCreationQueue.push(
+    user.setLoginId(freshLoginIds[index])
+    queue.push(
       getAuth()
         .createUser({
+          // creates the firebase user
           email: user.email,
           emailVerified: false,
           password: 'sunnus',
           disabled: false,
         })
         .then((rec) => {
+          // saves the auto-generatered uid
           user.setUid(rec.uid)
           return user
         })
     )
   })
-  return firebaseUserCreationQueue
+  return resultSummary(await Promise.allSettled(queue))
 }
