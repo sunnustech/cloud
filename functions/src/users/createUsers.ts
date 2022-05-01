@@ -1,10 +1,12 @@
-import { https } from 'firebase-functions'
 import { createUsers as keyCheck } from '../utils/keyChecks'
 import { createFirebaseUsers } from './firebase'
 import { getUsersFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { hasMissingKeys } from '../utils/exits'
 import { getAllExistingValues } from '../utils/firestore'
 import { sunnus } from '../classes'
+import { https } from 'firebase-functions'
+import { WriteResult } from '@google-cloud/firestore'
+import { firestore } from 'firebase-admin'
 
 export const createUsers = https.onRequest(async (req, res) => {
   // check keys
@@ -24,13 +26,20 @@ export const createUsers = https.onRequest(async (req, res) => {
   )
 
   const writeSummary = await createFirebaseUsers(userList)
-  // const userCollection = sunnus.Database.users
-  // const q = []
-  // userList.forEach(user => {
-  //   q.push(userCollection.doc(user.uid).set(user))
-  // })
+  const userCollection = firestore().collection('users')
+
+  const q: Promise<WriteResult>[] = []
+  userList.forEach((user) => {
+    q.push(
+      userCollection
+        .doc(user.uid)
+        .withConverter(sunnus.User.converter)
+        .set(user)
+    )
+  })
+  const result = await Promise.all(q)
 
   /* send back the statuses */
-  res.json({ writeSummary })
+  res.json({ writeSummary, result })
   return
 })

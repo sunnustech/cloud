@@ -1,9 +1,7 @@
 import { firestore } from 'firebase-admin'
 import { removeSpaces } from '../utils/string'
-import { FirestoreDataConverter, } from '@google-cloud/firestore'
+import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { SetOptions, WriteResult } from '@google-cloud/firestore'
-// import { app } from '../firebase'
-// import { CollectionReference, DocumentData } from '@google-cloud/firestore'
 
 // reference:
 // https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -21,7 +19,7 @@ function sanitizeCsvUser(props: Csv.User): Csv.User {
     email: props.email,
     teamName: props.teamName,
     phoneNumber: sanitizePhoneNumber('65', props.phoneNumber),
-    role: props.role,
+    role: props.role || '',
   }
 }
 
@@ -35,11 +33,6 @@ export namespace Csv {
 }
 
 export namespace sunnus {
-  // export class Database {
-  //   static readonly col = firestore(app).collection
-  //   static readonly users: CollectionReference<DocumentData> = this.col('users')
-  //   static readonly teams: CollectionReference<DocumentData> = this.col('teams')
-  // }
   export class User {
     realEmail: string
     role: string
