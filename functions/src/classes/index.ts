@@ -19,7 +19,7 @@ function sanitizeCsvUser(props: Csv.User): Csv.User {
     email: props.email,
     teamName: props.teamName,
     phoneNumber: sanitizePhoneNumber('65', props.phoneNumber),
-    role: props.role || 'participant',
+    role: props.role,
   }
 }
 
@@ -42,8 +42,7 @@ export namespace Sunnus {
     loginIdNumberPart: string
     loginId: string
     uid: string
-    registeredInFirebase: boolean
-    registeredInSunnus: boolean
+    static empty = new User({ phoneNumber: '', role: '', email: '', teamName: '' })
     static converter: FirestoreDataConverter<User> = {
       toFirestore: (user: User) => {
         return {
@@ -78,7 +77,7 @@ export namespace Sunnus {
       if (docSnap.exists) {
         return docSnap.data()
       }
-      return this.empty()
+      return this.empty
     }
     static async set(user: User, options: SetOptions): Promise<WriteResult> {
       const ref = firestore()
@@ -87,9 +86,6 @@ export namespace Sunnus {
         .withConverter(this.converter)
       const result = await ref.set(user, options)
       return result
-    }
-    static empty() {
-      return new User({ phoneNumber: '', role: '', email: '', teamName: '' })
     }
     // constructor values can be read directly from csv
     constructor(props: Csv.User) {
@@ -102,8 +98,10 @@ export namespace Sunnus {
       this.loginId = ''
       this.loginIdNumberPart = ''
       this.uid = ''
-      this.registeredInFirebase = false
-      this.registeredInSunnus = false
+    }
+    isEmpty(): boolean {
+      const values = Object.values(this)
+      return values.every(v => v === '')
     }
     setUid(value: string) {
       this.uid = value
@@ -112,10 +110,6 @@ export namespace Sunnus {
       this.loginIdNumberPart = value
       this.loginId = `${this.teamName}${value}`
       this.email = `${this.loginId}@sunnus.com`
-    }
-    isEmpty(): boolean {
-      const values = Object.values(this)
-      return values.every(x => x === '' || x === false)
     }
   }
 }
