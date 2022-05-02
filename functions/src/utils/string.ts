@@ -34,3 +34,12 @@ export function sanitizePhoneNumber(phone: string): string {
   const re = new RegExp(`^\\+${prefix}`)
   return noSpaces.replace(re, '')
 }
+
+
+export function isEmpty(string: string): boolean {
+  return string === ''
+}
+
+export function notEmpty(string: string): boolean {
+  return string !== ''
+}

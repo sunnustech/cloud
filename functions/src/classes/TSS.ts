@@ -1,4 +1,5 @@
 import * as sunnus from '../types/classes'
+import { notEmpty } from '../utils/string'
 import { BaseTeam } from './team'
 
 export namespace TSS {
@@ -10,14 +11,23 @@ export namespace TSS {
     touchRugby: boolean
     volleyball: boolean
     TSSId: string
-    constructor(props: sunnus.Init.TSSTeam) {
-      super({ teamName: props.teamName })
-      this.captainsBall = props.registeredEvents.TSS.captainsBall
-      this.dodgeball = props.registeredEvents.TSS.dodgeball
-      this.frisbee = props.registeredEvents.TSS.frisbee
-      this.tchoukball = props.registeredEvents.TSS.tchoukball
-      this.touchRugby = props.registeredEvents.TSS.touchRugby
-      this.volleyball = props.registeredEvents.TSS.volleyball
+    constructor(props: sunnus.Init.Team) {
+      super({
+        teamName: props.teamName,
+        direction: props.direction,
+        touchRugby: props.touchRugby,
+        captainsBall: props.captainsBall,
+        volleyball: props.volleyball,
+        tchoukball: props.tchoukball,
+        frisbee: props.frisbee,
+        dodgeball: props.dodgeball,
+      })
+      this.touchRugby = notEmpty(props.touchRugby)
+      this.captainsBall = notEmpty(props.captainsBall)
+      this.volleyball = notEmpty(props.volleyball)
+      this.tchoukball = notEmpty(props.tchoukball)
+      this.frisbee = notEmpty(props.frisbee)
+      this.dodgeball = notEmpty(props.dodgeball)
       this.TSSId = ''
     }
     group(): string {

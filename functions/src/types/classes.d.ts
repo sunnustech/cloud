@@ -1,7 +1,8 @@
 import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { SetOptions, WriteResult } from '@google-cloud/firestore'
-import { RegisteredEvents } from './sunnus-init'
 
+// every thing in namespace Init comes from a csv
+// so every type in here should be a subset of string.
 declare namespace Init {
   export interface User {
     phoneNumber: string
@@ -11,12 +12,13 @@ declare namespace Init {
   }
   export interface Team {
     teamName: string
-  }
-  export interface SOARTeam extends Team {
     direction: 'A' | 'B'
-  }
-  export interface TSSTeam extends Team {
-    registeredEvents: RegisteredEvents
+    captainsBall: string
+    dodgeball: string
+    frisbee: string
+    tchoukball: string
+    touchRugby: string
+    volleyball: string
   }
 }
 

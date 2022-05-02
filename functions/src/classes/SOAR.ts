@@ -1,5 +1,5 @@
 import * as sunnus from '../types/classes'
-import { BaseTeam } from './team' 
+import { BaseTeam } from './team'
 import { SOARTimestamp } from '../types/SOAR'
 import { QR } from './QR'
 
@@ -40,8 +40,17 @@ export namespace SOAR {
     stationsCompleted: string[]
     stationsRemaining: string[]
     direction: 'A' | 'B'
-    constructor(props: sunnus.Init.SOARTeam) {
-      super({ teamName: props.teamName })
+    constructor(props: sunnus.Init.Team) {
+      super({
+        teamName: props.teamName,
+        direction: props.direction,
+        touchRugby: props.touchRugby,
+        captainsBall: props.captainsBall,
+        volleyball: props.volleyball,
+        tchoukball: props.tchoukball,
+        frisbee: props.frisbee,
+        dodgeball: props.dodgeball,
+      })
       this.direction = props.direction
       this.started = false
       this.stopped = false

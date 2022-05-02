@@ -17,10 +17,10 @@ export const createUsers = https.onRequest(async (req, res) => {
   const required = ['teamName', 'email', 'phoneNumber']
   if (hasMissingHeaders(required, csv, res)) return
 
-  /* get existing list of emails */
+  // get existing list of emails
   const already = await getAllExistingValues('users', 'email')
 
-  /* get list of new users to make */
+  // get list of new users to make
   const userList: User[] = getUsersFromCsv(csv).filter(
     (user) => !already.exists(user.email)
   )

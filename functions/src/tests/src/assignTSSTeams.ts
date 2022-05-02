@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { isEmpty } from './utils/index'
+import { notEmpty } from './utils/index'
 import { timestamp } from './utils/timestamp'
 import { cloud } from './utils/firebase'
 import { InitializeTeam } from '../../types/sunnus-init'
@@ -34,12 +34,12 @@ const teamList: InitializeTeam[] = csv.map((csvTeam) => ({
   direction: csvTeam.direction,
   registeredEvents: {
     TSS: {
-      touchRugby: isEmpty(csvTeam.touchRugby),
-      captainsBall: isEmpty(csvTeam.captainsBall),
-      volleyball: isEmpty(csvTeam.volleyball),
-      tchoukball: isEmpty(csvTeam.tchoukball),
-      frisbee: isEmpty(csvTeam.frisbee),
-      dodgeball: isEmpty(csvTeam.dodgeball),
+      touchRugby: notEmpty(csvTeam.touchRugby),
+      captainsBall: notEmpty(csvTeam.captainsBall),
+      volleyball: notEmpty(csvTeam.volleyball),
+      tchoukball: notEmpty(csvTeam.tchoukball),
+      frisbee: notEmpty(csvTeam.frisbee),
+      dodgeball: notEmpty(csvTeam.dodgeball),
     },
     SOAR: csvTeam.SOAR !== '',
   },

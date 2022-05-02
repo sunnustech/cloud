@@ -2,6 +2,8 @@ import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
 import { User } from '../classes/user'
+import { BaseTeam } from '../classes/team'
+import * as sunnus from '../types/classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -9,24 +11,37 @@ export const getCsvHeadersFromString = (string: string): string[] => {
     trim: true,
     to: 2,
   })
+  if (result.length === 0) {
+    return []
+  }
   return result[0]
 }
 
-export const getUsersFromCsv = (userListCsv: string): User[] => {
-  const parsedCsv: User[]  = parse(userListCsv, {
+const getFromCsv = <T>(csv: string): T[] => {
+  const parsedCsv = parse(csv, {
     delimiter: ',',
     trim: true,
     columns: true,
   })
-  return parsedCsv.map((initializeUser) => new User(initializeUser))
+  return parsedCsv
+}
+
+export const getUsersFromCsv = (csv: string) => {
+  const parsed = getFromCsv<sunnus.Init.User>(csv)
+  return parsed.map((e) => new User(e))
+}
+
+export const getTeamsFromCsv = (csv: string) => {
+  const parsed = getFromCsv<sunnus.Init.Team>(csv)
+  return parsed.map((e) => new BaseTeam(e))
 }
 
 export function hasMissingHeaders(
   requiredHeaders: string[],
-  userListCsvString: string,
+  csv: string,
   res: Response<any>
 ): boolean {
-  const headers = getCsvHeadersFromString(userListCsvString)
+  const headers = getCsvHeadersFromString(csv)
   const hasMissing: boolean = !isSubset(
     requiredHeaders,
     headers,
