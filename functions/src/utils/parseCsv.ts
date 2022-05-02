@@ -1,24 +1,9 @@
-import { InitializeUser } from '../types/sunnus-init'
+import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
-
-function removeSpaces(string: string): string {
-  return string.replace(/ /g, '')
-}
-
-function sanitizePhoneNumber(prefix: string, phone: string): string {
-  const noSpaces = removeSpaces(phone)
-  const re = new RegExp(`^\\+${prefix}`)
-  return noSpaces.replace(re, '')
-}
-
-const createUser = (user: InitializeUser): InitializeUser => {
-  return {
-    email: user.email,
-    teamName: user.teamName,
-    phoneNumber: sanitizePhoneNumber('65', user.phoneNumber),
-    role: user.role || 'participant',
-  }
-}
+import { isSubset } from './exits'
+import { User } from '../classes/user'
+import { BaseTeam } from '../classes/team'
+import * as sunnus from '../types/classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -26,14 +11,42 @@ export const getCsvHeadersFromString = (string: string): string[] => {
     trim: true,
     to: 2,
   })
+  if (result.length === 0) {
+    return []
+  }
   return result[0]
 }
 
-export const getUsersFromCsv = (userListCsv: string): InitializeUser[] => {
-  const parsedCsv: InitializeUser[] = parse(userListCsv, {
+const getFromCsv = <T>(csv: string): T[] => {
+  const parsedCsv = parse(csv, {
     delimiter: ',',
     trim: true,
     columns: true,
   })
-  return parsedCsv.map((user) => createUser(user))
+  return parsedCsv
+}
+
+export const getUsersFromCsv = (csv: string) => {
+  const parsed = getFromCsv<sunnus.Init.User>(csv)
+  return parsed.map((e) => new User(e))
+}
+
+export const getTeamsFromCsv = (csv: string) => {
+  const parsed = getFromCsv<sunnus.Init.Team>(csv)
+  return parsed.map((e) => new BaseTeam(e))
+}
+
+export function hasMissingHeaders(
+  requiredHeaders: string[],
+  csv: string,
+  res: Response<any>
+): boolean {
+  const headers = getCsvHeadersFromString(csv)
+  const hasMissing: boolean = !isSubset(
+    requiredHeaders,
+    headers,
+    'Check that all headers are provided.',
+    res
+  )
+  return hasMissing
 }

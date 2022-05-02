@@ -9,11 +9,14 @@ export const helloWorld = https.onRequest(async (req, res) => {
 })
 
 /* sunnus functions */
+import { initializeCollections } from './data/initializeCollections'
 import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 import { assignTSSTeams } from './teams/assignTSSTeams'
-import { createUsers, createAdmins } from './users/createUsers'
+import { createUsers } from './users/createUsers'
+import { autoLinkNewUser, autoLinkChangedUser } from './users/trigger'
+import { getUsers } from './users/getUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
 import { createSchedule } from './schedule/createSchedule'
@@ -26,6 +29,9 @@ import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
 
 export {
+  autoLinkNewUser,
+  autoLinkChangedUser,
+  getUsers,
   pageAccess,
   updatePageAccess,
   updatePoints,
@@ -37,9 +43,9 @@ export {
   writeSchema,
   deleteAllUsers,
   createUsers,
-  createAdmins,
   assignUsers,
   createSchedule,
   clearCollection,
   getSchedule,
+  initializeCollections
 }

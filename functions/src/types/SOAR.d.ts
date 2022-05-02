@@ -114,7 +114,7 @@ export type SOARTeamProps = {
   startTime: number
   stopTime: number
   timerRunning: boolean
-  allEvents: Array<SOARTimestamp>
+  allEvents: SOARTimestamp[]
   direction: 'A' | 'B'
   points: number
 }

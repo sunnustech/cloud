@@ -36,6 +36,7 @@ export const hasMissingKeys = (
 
 /**
  * required that a <= b, else exit firebase with message
+ * where a is the required list
  * @param {T[]} a
  * @param {T[]} b
  * @param {string} message
@@ -48,6 +49,10 @@ export function isSubset<T>(
   message: string,
   res: Response<any>
 ): boolean {
+  if (b.length === 0) {
+    res.json({ message: "list has no elements" })
+    return false
+  }
   const ok = a.every((val) => b.includes(val))
   if (!ok) {
     res.json({ message, missingElements: a.filter((x) => !b.includes(x)) })

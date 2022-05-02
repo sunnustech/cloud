@@ -1,87 +1,38 @@
-import { getAuth, UserRecord } from 'firebase-admin/auth'
-import { User } from '../types/sunnus-firestore'
-import { InitializeFirebaseUser, InitializeUser } from '../types/sunnus-init'
+import { getAuth } from 'firebase-admin/auth'
+import { getFreshLoginIds } from '../utils/user'
+import { ResultSummary, resultSummary } from '../utils/response'
+import { User } from '../classes/user'
 
 /**
- * takes a InitializeUser and adds basic information
- * for firebase to be able to create a full user
- * @param {InitializeUser} user: requested props
- * @param {string} loginIdNumber
- * @return {InitializeFirebaseUser}
+ * creates firebase users (uid will be auto-generatered)
+ * @param {InitializeUser[]} users
+ * @return {Promise<ResultSummary>}
  */
-function makeFirebaseUser(
-  user: InitializeUser,
-  loginIdNumber: string
-): InitializeFirebaseUser {
-  const loginId = `${user.teamName}${loginIdNumber}`
-  const email = `${loginId}@sunnus.com`
-  return {
-    email,
-    emailVerified: false,
-    password: 'sunnus',
-    disabled: false,
+export const createFirebaseUsers = async (
+  users: User[]
+): Promise<ResultSummary> => {
+  if (users.length === 0) {
+    return { fulfilled: 0, rejected: 0 }
   }
-}
-
-/**
- * @param {InitializeUser} user: requested props
- * @param {string} loginIdNumber
- * @param {UserRecord} rec: the assgined props after user creation
- * @param {User[]} createdUsers
- * @return {UserRecord} bypass the callback
- */
-function appendSuccessfulAddition(
-  user: InitializeUser,
-  loginIdNumber: string,
-  rec: UserRecord,
-  createdUsers: User[]
-): UserRecord {
-  const loginId = `${user.teamName}${loginIdNumber}`
-  const email = `${loginId}@sunnus.com`
-  createdUsers.push({
-    uid: rec.uid,
-    phoneNumber: user.phoneNumber,
-    realEmail: user.email,
-    teamName: user.teamName,
-    email,
-    loginId,
-    loginIdNumber,
-    role: user.role,
-  })
-  return rec
-}
-
-type UserCreationQueueResult = {
-  createdUsers: User[]
-  userCreationQueue: Promise<UserRecord>[]
-
-}
-
-/**
- * @param {InitializeUser[]} users: the incoming request array of users
- * new users will be added to
- * @param {string[]} loginIds
- * @return {UserCreationQueueResult} a queue that can be executed to create
- * the users requested
- */
-export function getUserCreationQueue(
-  users: InitializeUser[],
-  loginIds: string[]
-): UserCreationQueueResult {
-  const createdUsers: User[] = []
-  const userCreationQueue: Promise<UserRecord>[] = []
-  /* create a queue of user creation commands if that
-   * command succeeds in execution later, save that user
-   * into createdUsers
-   */
+  const freshLoginIds = await getFreshLoginIds(users.length)
+  const queue: Promise<User>[] = []
   users.forEach((user, index) => {
-    userCreationQueue.push(
+    user.setLoginId(freshLoginIds[index])
+    queue.push(
       getAuth()
-        .createUser(makeFirebaseUser(user, loginIds[index]))
-        .then((rec) =>
-          appendSuccessfulAddition(user, loginIds[index], rec, createdUsers)
-        )
+        .createUser({
+          // creates the firebase user
+          email: user.email,
+          emailVerified: false,
+          password: 'sunnus',
+          disabled: false,
+        })
+        .then((rec) => {
+          // saves the auto-generatered uid
+          user.setUid(rec.uid)
+          return user
+        })
     )
   })
-  return { createdUsers, userCreationQueue }
+  return resultSummary(await Promise.allSettled(queue))
 }

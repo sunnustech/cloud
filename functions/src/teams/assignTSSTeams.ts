@@ -90,7 +90,7 @@ const main = async (teamList: InitializeTeam[]): Promise<WriteResult[]> => {
       .collection('shared')
       .doc('main')
       .update({ assignedTeams: true }),
-    firestore().collection('shared').doc('tssCache').update(cache)
+    firestore().collection('shared').doc('tssRoundRobinCache').update(cache)
   )
   const writeResult = await Promise.all(awaitStack)
   return writeResult

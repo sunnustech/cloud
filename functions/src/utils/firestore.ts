@@ -1,6 +1,7 @@
 import { firestore } from 'firebase-admin'
 
 import { CollectionReference, DocumentData } from '@google-cloud/firestore'
+import { UniquenessChecker } from '../classes/data'
 
 type Collection = CollectionReference<DocumentData>
 
@@ -17,7 +18,7 @@ export async function listDocIdsAsync(
 }
 
 /**
- * retrives an existing array of strings in dictionary form.
+ * retrieves a database array as a dictionary
  * mainly used to check for uniqueness
  * @param {string} collection
  * @param {string} document
@@ -30,13 +31,35 @@ export async function getExistingDict(
   field: string
 ): Promise<Record<string, boolean>> {
   const result: Record<string, boolean> = {}
-  const data = (await firestore().collection(collection).doc(document).get()).data()
+  const data = (
+    await firestore().collection(collection).doc(document).get()
+  ).data()
   if (!data) {
     return {}
   }
   const existingData: string[] = data[field]
   existingData.forEach((e) => {
     result[e] = true
+  })
+  return result
+}
+
+/**
+ * searches all documents in {collection} and
+ * retrives all values of {field}
+ * @param {string} collection
+ * @param {string} field
+ * @return {UniquenessChecker<string>}
+ */
+export async function getAllExistingValues(
+  collection: string,
+  field: string
+): Promise<UniquenessChecker<string>> {
+  const result = new UniquenessChecker<string>()
+  const snapshot =  await firestore().collection(collection).get()
+  snapshot.forEach((doc) => {
+    const value = doc.data()[field]
+    result.push(value)
   })
   return result
 }

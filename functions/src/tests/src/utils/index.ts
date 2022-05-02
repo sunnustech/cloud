@@ -9,5 +9,9 @@ export function sanitizePhoneNumber(prefix: string, phone: string): string {
 }
 
 export function isEmpty(string: string): boolean {
+  return string === ''
+}
+
+export function notEmpty(string: string): boolean {
   return string !== ''
 }

@@ -1,29 +1,45 @@
 import { https } from 'firebase-functions'
-import { InitializeTeam } from '../types/sunnus-init'
-import { firestore } from 'firebase-admin'
+import { BaseTeam } from '../classes/team'
 import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'
-import { makeTeam } from '../utils/team'
+// import { makeTeam } from '../utils/team'
+import { getTeamsFromCsv, hasMissingHeaders } from '../utils/parseCsv'
+import { firestore } from 'firebase-admin'
+import { getAllExistingValues } from '../utils/firestore'
 
 export const createTeams = https.onRequest(async (req, res) => {
+  // check keys
   if (hasMissingKeys(keyCheck, req, res)) return
 
-  const teamList: InitializeTeam[] = req.body.teamList
+  // check csv headers
+  const csv = req.body.teamListCsvString
+  // prettier-ignore
+  const required = [ 'teamName', 'touchRugby', 'dodgeball', 'frisbee',
+    'tchoukball', 'volleyball', 'captainsBall', 'SOAR', 'direction' ]
+  if (hasMissingHeaders(required, csv, res)) return
 
-  const teamsCollection = firestore().collection('teams')
-  const createTeamsQueue: Promise<WriteResult>[] = []
+  // get existing list of team names
+  const already = await getAllExistingValues('teams', 'teamName')
 
+  // get list of new teams to make
+  const teamList: BaseTeam[] = getTeamsFromCsv(csv).filter(
+    (team) => !already.exists(team.teamName)
+  )
+
+  const teamsCollection = firestore()
+    .collection('teams')
+    .withConverter(BaseTeam.converter)
+
+  // write the team data to collections
+  const q: Promise<WriteResult>[] = []
   teamList.forEach((team) => {
-    createTeamsQueue.push(
-      teamsCollection.doc(team.teamName).create(makeTeam(team))
-    )
+    q.push(teamsCollection.doc(team.teamName).set(team))
   })
-
-  const writeResult = await Promise.allSettled(createTeamsQueue)
-
+  const result = await Promise.all(q) // only returns writeTime, nothing to capture here
+  
   res.json({
-    result: 'Round robin handler at your service!',
-    writeResult,
+    message: "successfully created teams",
+    result
   })
 })

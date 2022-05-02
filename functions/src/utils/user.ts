@@ -1,13 +1,25 @@
-import { firestore } from 'firebase-admin'
+import { getAllExistingValues } from './firestore'
 
 /**
- * tries for a random login id (6-digit numeric string)
+ * generates a random number x
+ * min <= x < max
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function randInt(min: number, max: number): number {
+  const random = Math.random() * (max - min)
+  return Math.floor(random) + min
+}
+
+/**
+ * tries for a random login id (n-digit numeric string)
+ * @param {number} n
  * @return {string} the login id
  */
-function makeLoginId(): string {
-  const [min, max] = [0, 1000000]
-  const random = Math.random() * (max - min)
-  const integer = Math.floor(random) + min + max
+function makeLoginId(n: number): string {
+  const t = 10 ** n
+  const integer = randInt(0, t) + t
   return integer.toString().substring(1)
 }
 
@@ -18,26 +30,17 @@ function makeLoginId(): string {
  */
 export async function getFreshLoginIds(n: number): Promise<string[]> {
   /* get list of all existing loginIds */
-  const usersCollection = firestore().collection('users')
-  const allUsersData = usersCollection.doc('allUsersData')
-  const existingIds: string[] =
-    (await allUsersData.get()).data()?.loginIdList || []
-
-  const existingIdDict: Record<string, boolean> = {}
-
-  existingIds.forEach((id) => {
-    existingIdDict[id] = true
-  })
+  const already = await getAllExistingValues('users', 'loginIdNumber')
 
   const fresh: string[] = []
   let i = 0
   while (i < n) {
-    const id = makeLoginId()
-    if (existingIdDict[id] === true) {
+    const id = makeLoginId(6)
+    if (already.exists(id)) {
       continue
     }
+    already.push(id)
     fresh.push(id)
-    existingIdDict[id] = true
     i++
   }
   return fresh

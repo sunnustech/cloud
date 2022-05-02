@@ -11,3 +11,35 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
   return separateWord.join('')
 }
 
+/**
+ * does what it says
+ * @param {string} string
+ * @returns {string}
+ */
+export function removeSpaces(string: string): string {
+  return string.replace(/ /g, '')
+}
+
+/**
+ * cleans up a phone number
+ * @param {string} phone
+ * @returns {string} 8-digit, no spaces
+ */
+export function sanitizePhoneNumber(phone: string): string {
+  if (phone === '') {
+    return ''
+  }
+  const prefix = "65"
+  const noSpaces = removeSpaces(phone)
+  const re = new RegExp(`^\\+${prefix}`)
+  return noSpaces.replace(re, '')
+}
+
+
+export function isEmpty(string: string): boolean {
+  return string === ''
+}
+
+export function notEmpty(string: string): boolean {
+  return string !== ''
+}

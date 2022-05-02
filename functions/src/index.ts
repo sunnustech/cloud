@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase-admin/app'
 import * as development from './development'
+import { initializeApp } from 'firebase-admin/app'
 import { authTest, handleMatch } from './production'
 
 /* [production.ts]

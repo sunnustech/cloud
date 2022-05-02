@@ -4,7 +4,7 @@ import { cloud } from './utils/firebase'
 import fs from 'fs'
 
 /* read from the csv file */
-const fileData = fs.readFileSync('src/csv/createUsers.csv')
+const fileData = fs.readFileSync('src/csv/createOneUser.csv')
 
 const fn = 'development-createUsers'
 timestamp(fn)
