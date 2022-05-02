@@ -1,7 +1,8 @@
 import * as sunnus from '../types/classes'
+import { BaseTeam } from './team'
 
 export namespace TSS {
-  export class Team extends sunnus.Team {
+  export class Team extends BaseTeam {
     captainsBall: boolean
     dodgeball: boolean
     frisbee: boolean
