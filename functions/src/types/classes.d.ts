@@ -11,8 +11,12 @@ declare namespace Init {
   }
   export interface Team {
     teamName: string
-    members: string[]
-    // registeredEvents: RegisteredEvents
+  }
+  export interface SOARTeam extends Team {
+    direction: 'A' | 'B'
+  }
+  export interface TSSTeam extends Team {
+    registeredEvents: RegisteredEvents
   }
 }
 
@@ -36,20 +40,7 @@ export class User {
 }
 
 export class Team {
-  realEmail: string
-  role: string
-  phoneNumber: string
+  members: string[]
   teamName: string
-  email: string
-  loginIdNumberPart: string
-  loginId: string
-  uid: string
-  static empty(): User
-  static converter: FirestoreDataConverter<User>
-  static get(uid: string): Promise<User>
-  static set(user: User, options: SetOptions): Promise<WriteResult>
-  constructor(props: Init.User)
-  isEmpty(): boolean
-  setUid(value: string): void
-  setLoginId(value: string): void
+  constructor(props: Init.Team)
 }
