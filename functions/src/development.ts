@@ -15,7 +15,7 @@ import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
-import { autoLinkNewUser } from './users/trigger'
+import { autoLinkNewUser, autoLinkChangedUser } from './users/trigger'
 import { getUsers } from './users/getUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
@@ -30,6 +30,7 @@ import { updatePageAccess } from './access/updatePageAccess'
 
 export {
   autoLinkNewUser,
+  autoLinkChangedUser,
   getUsers,
   pageAccess,
   updatePageAccess,
