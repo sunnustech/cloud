@@ -1,11 +1,20 @@
-import { firestore } from 'firebase-functions'
-import { firestore as fa } from 'firebase-admin'
+import { firestore as fs } from 'firebase-functions'
+import { firestore } from 'firebase-admin'
 
-export const autoDeleteUser = firestore
+export const autoLinkNewUser = fs
   .document('users/{uid}')
   .onWrite((change, context) => {
-    console.log(context.params.uid)
-    console.log(Object.keys(change))
-    context.params.smash = 'Hello'
-     fa().collection('shared').doc('logs').set({ lastChange: context.params.uid })
+    const after = change.after.data()
+    if (!after) {
+      return
+    }
+    const teamName = after.smashed
+    if (!teamName) {
+      return
+    }
+    const teamsCollection = firestore().collection('teams')
+    const teamDoc = teamsCollection.doc(teamName)
+    teamDoc.update({
+      members: firestore.FieldValue.arrayUnion(context.params.uid),
+    })
   })
