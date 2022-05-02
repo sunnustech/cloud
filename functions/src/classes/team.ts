@@ -1,7 +1,10 @@
-// import { firestore } from 'firebase-admin'
-// import { sanitizePhoneNumber } from '../utils/string'
-// import { FirestoreDataConverter } from '@google-cloud/firestore'
-// import { SetOptions, WriteResult } from '@google-cloud/firestore'
 import * as sunnus from '../types/classes'
-// import { Sport } from '../types'
 
+export class BaseTeam implements sunnus.Team {
+  members: string[]
+  teamName: string
+  constructor(props: sunnus.Init.Team) {
+    this.teamName = props.teamName
+    this.members = []
+  }
+}

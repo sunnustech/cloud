@@ -6,7 +6,7 @@ import { please as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 
 const collections: Record<string, string[]> = {
-  shared: ['users', 'tssRoundRobinCache'],
+  shared: ['users', 'tssRoundRobinCache', 'main'],
   users: [],
   teams: [],
   schedule: [],

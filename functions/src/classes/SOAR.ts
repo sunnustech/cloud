@@ -1,52 +1,13 @@
 import * as sunnus from '../types/classes'
+import { BaseTeam } from './team' 
 import { SOARTimestamp } from '../types/SOAR'
 import { QR } from './QR'
-
-type HaventDecided =
-  | 'fn01'
-  | 'fn02'
-  | 'fn03'
-  | 'fn04'
-  | 'fn05'
-  | 'fn06'
-  | 'fn07'
-  | 'fn08'
-  | 'fn09'
-  | 'fn10'
-  | 'fn11'
-  | 'fn12'
-  | 'fn13'
-  | 'fn14'
-  | 'fn15'
-  | 'fn16'
-  | 'fn17'
-  | 'fn18'
-  | 'fn19'
-  | 'fn20'
 
 export namespace SOAR {
   export type Timestamp = {
     timestamp: number
     QR: QR.CommandProps
   }
-  export type Command =
-    | 'start'
-    | 'pause'
-    | 'stopFinal'
-    | 'resume'
-    | 'TimerNotRunning'
-    | 'completeStage'
-    | 'WrongStation'
-    | 'HaveNotStartedSOAR'
-    | 'AlreadyPaused'
-    | 'AlreadyResumed'
-    | 'AlreadyStartedSOAR'
-    | 'AlreadyCompletedSOAR'
-    | 'AlreadyCompletedAllStations'
-    | 'AlreadyCompletedStation'
-    | 'WarnStopFinal'
-    | ''
-    | HaventDecided
   export const stationOrder = {
     A: [
       'Slide',
@@ -65,7 +26,7 @@ export namespace SOAR {
       'Relay2Maze',
     ],
   }
-  export class Team extends sunnus.Team {
+  export class Team extends BaseTeam {
     started: boolean
     stopped: boolean
     startTime: number
