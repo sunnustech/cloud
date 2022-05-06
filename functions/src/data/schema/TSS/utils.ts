@@ -1,4 +1,4 @@
-import { Match, Matches } from 'types'
+import { Match, Matches } from '../../../types/TSS'
 
 /**
  * @param {string} A: the first team name

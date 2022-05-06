@@ -1,4 +1,4 @@
-import { TSSSchedule, Rounds, TSSDatabase } from 'types'
+import { TSSSchedule, Rounds, TSSDatabase } from '../../../types/TSS'
 import { emptyRounds } from './emptyRounds'
 import { filledRounds } from './filledRounds'
 import { createMatch, createEmptyMatches } from './utils'

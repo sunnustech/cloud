@@ -1,4 +1,4 @@
-import { Rounds } from 'types'
+import { Rounds } from '../../../types/TSS'
 import { createMatch } from './utils'
 
 export const filledRounds: Rounds = {

@@ -1,4 +1,4 @@
-import { Rounds } from 'types'
+import { Rounds } from '../../../types/TSS'
 
 export const emptyRounds: Rounds = {
   round_robin: {},

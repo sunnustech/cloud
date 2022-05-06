@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { Sport } from 'types'
+import { Sport } from '../types/TSS'
 import { hasMissingKeys } from '../utils/exits'
 import { firestore } from 'firebase-admin'
 import { getQuarterfinalists as keyCheck } from '../utils/keyChecks'

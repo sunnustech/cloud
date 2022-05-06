@@ -1,4 +1,4 @@
-import { SOARLocation } from 'types'
+import { SOARLocation } from '../../../types/SOAR'
 
 const Slide: SOARLocation = {
   google_map_pin_url: 'https://goo.gl/maps/T1F9XPH1bCcAW1bJA',

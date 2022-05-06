@@ -5,9 +5,9 @@ import {
   SetOptions,
   WriteResult,
 } from '@google-cloud/firestore'
-import * as sunnus from 'types'
+import { Init } from '../types/classes'
 
-export class User implements sunnus.User {
+export class User {
   realEmail: string
   role: string
   phoneNumber: string
@@ -68,7 +68,7 @@ export class User implements sunnus.User {
     return result
   }
   // constructor values can be read directly from csv
-  public constructor(props: sunnus.Init.User) {
+  public constructor(props: Init.User) {
     this.phoneNumber = sanitizePhoneNumber(props.phoneNumber)
     this.realEmail = props.email
     this.role = props.role || ''

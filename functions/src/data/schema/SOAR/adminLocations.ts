@@ -1,4 +1,4 @@
-import { SOARLocation } from 'types'
+import { SOARLocation } from '../../../types/SOAR'
 
 const waterPoints: Array<SOARLocation> = [
   {

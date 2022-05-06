@@ -5,7 +5,7 @@ import {
   DocumentData,
   DocumentReference,
 } from '@google-cloud/firestore'
-import { Sport } from 'types'
+import { Sport } from '../types/TSS'
 import { sportList } from '../data/constants'
 
 type Group = string
