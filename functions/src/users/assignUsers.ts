@@ -6,6 +6,7 @@ import { hasMissingKeys } from '../utils/exits'
 import { please as keyCheck } from '../utils/keyChecks'
 import { User } from '../classes/user'
 import { Team } from '../classes/team'
+import { resultSummary } from '../utils/response'
 
 export const assignUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
@@ -34,13 +35,8 @@ export const assignUsers = https.onRequest(async (req, res) => {
     )
   })
 
-  const writeResults = await Promise.allSettled(assignQueue)
-
-  const [fulfilled, rejected] = partition(
-    writeResults,
-    (result) => result.status === 'fulfilled'
-  )
+  const writeResults = resultSummary(await Promise.allSettled(assignQueue))
 
   /* send back the statuses */
-  res.json({ message: 'assigning users...', fulfilled, rejected })
+  res.json({ message: 'assigning users...', writeResults})
 })

@@ -3,6 +3,7 @@ import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 import { clearCollection as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
+import { resultSummary } from '../utils/response'
 
 export const clearCollection = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
@@ -28,7 +29,7 @@ export const clearCollection = https.onRequest(async (req, res) => {
     removeDocQueue.push(removeDoc.delete())
   })
 
-  const removeResult = await Promise.allSettled(removeDocQueue)
+  const removeResult = resultSummary(await Promise.allSettled(removeDocQueue))
 
   res.json({
     removeResult,

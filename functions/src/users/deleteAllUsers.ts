@@ -4,6 +4,7 @@ import { getAuth } from 'firebase-admin/auth'
 import { deleteAllUsers as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 import { firestore } from 'firebase-admin'
+import { resultSummary } from '../utils/response'
 
 async function getUidsToRemove(whitelist: string[]): Promise<string[]> {
   const users = await getAuth().listUsers()
@@ -32,7 +33,7 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
     removeDocQueue.push(usersCollection.doc(doc.id).delete())
   })
 
-  const collectionResult = await Promise.allSettled(removeDocQueue)
+  const collectionResult = resultSummary(await Promise.allSettled(removeDocQueue))
 
   res.json({
     message: 'Processed request to delete all users',
