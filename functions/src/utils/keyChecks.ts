@@ -8,7 +8,9 @@ export const getSchedule = [{ key: 'filter', description: 'filter' }]
 
 export const assignTSSTeams = [{ key: 'please', description: 'magic word' }]
 
-export const createTeams = [{ key: 'teamListCsvString', description: 'team data' }]
+export const createTeams = [
+  { key: 'teamListCsvString', description: 'team data' },
+]
 
 export const getQuarterfinalists = [
   { key: 'sportList', description: 'list of sports' },
@@ -27,9 +29,7 @@ export const deleteDocs = [
   { key: 'documents', description: 'list of documents' },
 ]
 
-export const deleteAllUsers = [
-  { key: 'whitelist', description: 'whitelist' },
-]
+export const deleteAllUsers = [{ key: 'whitelist', description: 'whitelist' }]
 
 export const please = [{ key: 'please', description: 'magic word' }]
 

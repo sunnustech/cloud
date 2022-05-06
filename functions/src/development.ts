@@ -13,7 +13,7 @@ import { initializeCollections } from './data/initializeCollections'
 import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
-import { assignTSSTeams } from './teams/assignTSSTeams'
+// import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
 import { autoLinkNewUser, autoLinkChangedUser } from './users/trigger'
 import { getUsers } from './users/getUsers'
@@ -38,7 +38,7 @@ export {
   getQuarterfinalists,
   deleteDocs,
   createTeams,
-  assignTSSTeams,
+  // assignTSSTeams,
   handleMatch,
   writeSchema,
   deleteAllUsers,
@@ -47,5 +47,5 @@ export {
   createSchedule,
   clearCollection,
   getSchedule,
-  initializeCollections
+  initializeCollections,
 }

@@ -1,5 +1,5 @@
 import { sportList } from '../data/constants'
-import { Sport } from '../types'
+import { Sport } from '../types/TSS'
 import { RoundRobinConfig, ScheduleConfig, Event } from '../types/schedule'
 import {
   dateify,

@@ -56,7 +56,7 @@ export async function getAllExistingValues(
   field: string
 ): Promise<UniquenessChecker<string>> {
   const result = new UniquenessChecker<string>()
-  const snapshot =  await firestore().collection(collection).get()
+  const snapshot = await firestore().collection(collection).get()
   snapshot.forEach((doc) => {
     const value = doc.data()[field]
     result.push(value)

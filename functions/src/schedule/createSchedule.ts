@@ -1,11 +1,11 @@
 import { https } from 'firebase-functions'
 import { Event, RoundRobinConfig, ScheduleConfig } from '../types/schedule'
+import { Sport } from '../types/TSS'
 import { hasMissingKeys } from '../utils/exits'
 import { createSchedule as keyCheck } from '../utils/keyChecks'
 import { makeSchedule } from './makeSchedule'
 import { firestore } from 'firebase-admin'
 import { DocumentData, DocumentReference } from '@google-cloud/firestore'
-import { Sport } from '../types'
 
 async function fetchTSSCache(): Promise<Record<Sport, Record<string, string>>> {
   const sharedCollection = firestore().collection('shared')

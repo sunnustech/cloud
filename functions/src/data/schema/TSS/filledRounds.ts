@@ -2,6 +2,7 @@ import { Rounds } from '../../../types/TSS'
 import { createMatch } from './utils'
 
 export const filledRounds: Rounds = {
+  round_robin: {},
   round_of_32: {
     0: createMatch('Independent_Decorators', 'Gentle_Sweaters'),
     1: createMatch('Known_Painters', 'Modest_Liberators'),

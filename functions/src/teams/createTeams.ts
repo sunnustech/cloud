@@ -3,7 +3,6 @@ import { BaseTeam } from '../classes/team'
 import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'
-// import { makeTeam } from '../utils/team'
 import { getTeamsFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { firestore } from 'firebase-admin'
 import { getAllExistingValues } from '../utils/firestore'
@@ -14,9 +13,18 @@ export const createTeams = https.onRequest(async (req, res) => {
 
   // check csv headers
   const csv = req.body.teamListCsvString
-  // prettier-ignore
-  const required = [ 'teamName', 'touchRugby', 'dodgeball', 'frisbee',
-    'tchoukball', 'volleyball', 'captainsBall', 'SOAR', 'direction' ]
+
+  const required = [
+    'teamName',
+    'touchRugby',
+    'dodgeball',
+    'frisbee',
+    'tchoukball',
+    'volleyball',
+    'captainsBall',
+    'SOAR',
+    'direction',
+  ]
   if (hasMissingHeaders(required, csv, res)) return
 
   // get existing list of team names
@@ -37,9 +45,9 @@ export const createTeams = https.onRequest(async (req, res) => {
     q.push(teamsCollection.doc(team.teamName).set(team))
   })
   const result = await Promise.all(q) // only returns writeTime, nothing to capture here
-  
+
   res.json({
-    message: "successfully created teams",
-    result
+    message: 'successfully created teams',
+    result,
   })
 })

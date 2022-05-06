@@ -1,4 +1,4 @@
-import { SOARDatabase } from '../../../types/SOAR'
+import {SOARDatabase} from '../../../types/SOAR'
 import gameLocations from './gameLocations'
 import adminLocations from './adminLocations'
 

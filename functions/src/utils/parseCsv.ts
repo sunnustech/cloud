@@ -3,7 +3,7 @@ import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
 import { User } from '../classes/user'
 import { BaseTeam } from '../classes/team'
-import * as sunnus from '../types/classes'
+import { Init } from '../types/classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -27,12 +27,12 @@ const getFromCsv = <T>(csv: string): T[] => {
 }
 
 export const getUsersFromCsv = (csv: string) => {
-  const parsed = getFromCsv<sunnus.Init.User>(csv)
+  const parsed = getFromCsv<Init.User>(csv)
   return parsed.map((e) => new User(e))
 }
 
 export const getTeamsFromCsv = (csv: string) => {
-  const parsed = getFromCsv<sunnus.Init.Team>(csv)
+  const parsed = getFromCsv<Init.Team>(csv)
   return parsed.map((e) => new BaseTeam(e))
 }
 
@@ -42,7 +42,7 @@ export function hasMissingHeaders(
   res: Response<any>
 ): boolean {
   const headers = getCsvHeadersFromString(csv)
-  const hasMissing: boolean = !isSubset(
+  const hasMissing = !isSubset(
     requiredHeaders,
     headers,
     'Check that all headers are provided.',

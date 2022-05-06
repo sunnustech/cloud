@@ -120,6 +120,16 @@
     google-gax "^2.24.1"
     protobufjs "^6.8.6"
 
+"@google-cloud/firestore@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@google-cloud/firestore/-/firestore-5.0.2.tgz#36923fde45987f928a220d347f341c5602f9e340"
+  integrity sha512-xlGcNYaW0nvUMzNn2+pLfbEBVt6oysVqtM89faMgZWkWfEtvIQGS0h5PRdLlcqufNzRCX3yIGv29Pb+03ys+VA==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    functional-red-black-tree "^1.0.1"
+    google-gax "^2.24.1"
+    protobufjs "^6.8.6"
+
 "@google-cloud/paginator@^3.0.6", "@google-cloud/paginator@^3.0.7":
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@google-cloud/paginator/-/paginator-3.0.7.tgz#fb6f8e24ec841f99defaebf62c75c2e744dd419b"
@@ -411,7 +421,7 @@
   dependencies:
     "@types/express" "*"
 
-"@types/express@*":
+"@types/express@*", "@types/express@^4.17.13":
   version "4.17.13"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.13.tgz#a76e2995728999bab51a33fabce1d705a3709034"
   integrity sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==
