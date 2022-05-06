@@ -1,10 +1,7 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import {
-  IncomingHandleMatchRequest,
-  Round,
-  ServerMatchRecord,
-} from '../types'
+import { IncomingHandleMatchRequest, ServerMatchRecord } from '../types'
+import { Round } from '../types/TSS'
 import { roundList } from '../data/constants'
 
 /**
@@ -16,9 +13,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length ?
-    roundList[next] :
-    roundList[roundList.length - 1]
+  return next < roundList.length
+    ? roundList[next]
+    : roundList[roundList.length - 1]
 }
 
 const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
@@ -102,7 +99,7 @@ export const _handleMatch = https.onRequest(async (req, res) => {
   const request: IncomingHandleMatchRequest = {
     series: 'TSS',
     sport: 'volleyball',
-    round: 'round_of_32',
+    round: 'round_robin',
     matchNumber: 0,
     A: 'A-team',
     B: 'B-team',

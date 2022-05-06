@@ -1,13 +1,3 @@
-export type Sport =
-  | 'touchRugby'
-  | 'dodgeball'
-  | 'frisbee'
-  | 'tchoukball'
-  | 'volleyball'
-  | 'captainsBall'
-
-export type Round = 'round_robin' | 'quarterfinals' | 'semifinals' | 'finals'
-
 export type Event = {
   group: string
   start: string
