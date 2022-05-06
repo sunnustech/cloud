@@ -33,7 +33,7 @@ export const getUsersFromCsv = (csv: string) => {
 
 export const getTeamsFromCsv = (csv: string) => {
   const parsed = getFromCsv<sunnus.Init.Team>(csv)
-  return parsed.map((e) => new BaseTeam(e))
+  return parsed.map((e) => new Team(e))
 }
 
 export function hasMissingHeaders(
