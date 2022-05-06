@@ -16,6 +16,7 @@ import { createTeams } from './teams/createTeams'
 // import { assignTSSTeams } from './teams/assignTSSTeams'
 import { createUsers } from './users/createUsers'
 import { autoLinkNewUser, autoLinkChangedUser } from './users/trigger'
+import { autoLinkNewTeam } from './teams/trigger'
 import { getUsers } from './users/getUsers'
 import { assignUsers } from './users/assignUsers'
 import { deleteAllUsers } from './users/deleteAllUsers'
@@ -31,6 +32,7 @@ import { updatePageAccess } from './access/updatePageAccess'
 export {
   autoLinkNewUser,
   autoLinkChangedUser,
+  autoLinkNewTeam,
   getUsers,
   pageAccess,
   updatePageAccess,
