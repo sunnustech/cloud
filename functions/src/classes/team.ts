@@ -3,6 +3,8 @@ import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { Sport } from '../types/TSS'
 import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
+import { SOARTimestamp } from '../types/SOAR'
+import { stationOrder } from '../data/schema/SOAR'
 
 type SportFlexible = Sport | 'none' | 'more than 1'
 
@@ -11,6 +13,19 @@ export class Team {
   teamName: string
   direction: string
   sport: SportFlexible
+  _started: boolean
+  _stopped: boolean
+  _startTime: number
+  _stopTime: number
+  _timerRunning: boolean
+  _allEvents: SOARTimestamp[]
+  _direction: 'A' | 'B'
+  _points: number
+  _timerEvents: number[]
+  _start: number
+  _pausedAt: number
+  _stationsCompleted: string[]
+  _stationsRemaining: string[]
   private static getSport(props: Init.Team) {
     let result: SportFlexible = 'none'
     const sportsSignedUp = sportList
@@ -58,6 +73,19 @@ export class Team {
     this.members = []
     this.sport = Team.getSport(props)
     this.direction = props.direction
+    this._started = false
+    this._stopped = false
+    this._startTime = 0
+    this._stopTime = 0
+    this._timerRunning = false
+    this._allEvents = []
+    this._direction = 'A'
+    this._points = 0
+    this._timerEvents = []
+    this._start = 0
+    this._pausedAt = 0
+    this._stationsCompleted = []
+    this._stationsRemaining = stationOrder[props.direction]
   }
   setSport(value: SportFlexible) {
     this.sport = value
