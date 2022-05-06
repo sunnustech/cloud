@@ -29,6 +29,7 @@ module.exports = {
     'semi': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
     'import/no-unresolved': 0,
+    '@typescript-eslint/no-namespace': 'off',
     'require-jsdoc': [
       'error',
       {

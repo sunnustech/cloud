@@ -16,9 +16,14 @@ jobs:
           cache: yarn
 
       - name: 📦 Install dependencies
-        run: yarn install
+        working-directory: ./functions
+        run: yarn
+
+      - name: 📦 Install firebase-tools
+        run: yarn global add firebase-tools
 
       - name: Deploy to firebase
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy --token "$FIREBASE_TOKEN"
+        working-directory: ./functions
+        run: firebase deploy --token "$FIREBASE_TOKEN" --only functions

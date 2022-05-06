@@ -13,9 +13,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {

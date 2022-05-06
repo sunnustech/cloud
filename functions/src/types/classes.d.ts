@@ -1,5 +1,4 @@
-import { FirestoreDataConverter } from '@google-cloud/firestore'
-import { SetOptions, WriteResult } from '@google-cloud/firestore'
+import { FirestoreDataConverter, SetOptions, WriteResult } from '@google-cloud/firestore'
 
 // every thing in namespace Init comes from a csv
 // so every type in here should be a subset of string.
