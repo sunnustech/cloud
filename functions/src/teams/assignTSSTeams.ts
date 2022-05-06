@@ -1,12 +1,11 @@
 import { https } from 'firebase-functions'
-import { InitializeTeam } from '../types/sunnus-init'
+import { InitializeTeam, Sport } from 'types'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 import { please as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 import { sportCapacity, sportList } from '../data/constants'
 import { shuffle } from '../utils/team'
-import { Sport } from '../types'
 
 /**
  * @param {InitializeTeam[]} teamList

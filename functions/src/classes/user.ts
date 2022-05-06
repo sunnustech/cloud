@@ -1,10 +1,13 @@
-import { fs } from '../init'
-
+import { firestore } from 'firebase-admin'
 import { sanitizePhoneNumber } from '../utils/string'
-import { FirestoreDataConverter } from '@google-cloud/firestore'
-import { Init } from '../types/classes'
+import {
+  FirestoreDataConverter,
+  SetOptions,
+  WriteResult,
+} from '@google-cloud/firestore'
+import * as sunnus from 'types'
 
-export class User {
+export class User implements sunnus.User {
   realEmail: string
   role: string
   phoneNumber: string
@@ -13,14 +16,12 @@ export class User {
   loginIdNumberPart: string
   loginId: string
   uid: string
-  static collectionRef = fs.collection('users')
   static empty = new User({
     phoneNumber: '',
     role: '',
     email: '',
     teamName: '',
   })
-  /** converts a User to a database-friendly object */
   static converter: FirestoreDataConverter<User> = {
     toFirestore: (user: User) => {
       return {
@@ -46,32 +47,28 @@ export class User {
       return user
     },
   }
-  /**
-   * gets a user object from the database
-   * @param {string} uid
-   * @returns {Promise<User>}
-   */
   static async get(uid: string): Promise<User> {
-    const docRef = this.collectionRef.doc(uid).withConverter(this.converter)
-    const snapshot = await docRef.get()
-    const data = snapshot.data()
-    if (data) {
+    const ref = firestore()
+      .collection('users')
+      .doc(uid)
+      .withConverter(this.converter)
+    const docSnap = await ref.get()
+    const data = docSnap.data()
+    if (data !== undefined) {
       return data
     }
-    return User.empty
+    return this.empty
   }
-  /**
-   * add/updates the database with the user
-   * @param {User} user
-   */
-  static async set(user: User) {
-    const docRef = this.collectionRef
+  static async set(user: User, options: SetOptions): Promise<WriteResult> {
+    const ref = firestore()
+      .collection('users')
       .doc(user.uid)
       .withConverter(this.converter)
-    await docRef.set(user, { merge: true })
+    const result = await ref.set(user, options)
+    return result
   }
   // constructor values can be read directly from csv
-  public constructor(props: Init.User) {
+  public constructor(props: sunnus.Init.User) {
     this.phoneNumber = sanitizePhoneNumber(props.phoneNumber)
     this.realEmail = props.email
     this.role = props.role || ''

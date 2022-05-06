@@ -50,7 +50,7 @@ export function isSubset<T>(
   res: Response<any>
 ): boolean {
   if (b.length === 0) {
-    res.json({ message: "list has no elements" })
+    res.json({ message: 'list has no elements' })
     return false
   }
   const ok = a.every((val) => b.includes(val))

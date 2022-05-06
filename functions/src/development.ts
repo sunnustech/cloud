@@ -47,5 +47,5 @@ export {
   createSchedule,
   clearCollection,
   getSchedule,
-  initializeCollections
+  initializeCollections,
 }

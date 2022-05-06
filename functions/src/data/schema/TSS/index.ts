@@ -1,9 +1,10 @@
-import { TSSSchedule, Rounds, TSSDatabase } from '../../../types/TSS'
+import { TSSSchedule, Rounds, TSSDatabase } from 'types'
 import { emptyRounds } from './emptyRounds'
 import { filledRounds } from './filledRounds'
 import { createMatch, createEmptyMatches } from './utils'
 
 export const sampleRounds: Rounds = {
+  round_robin: {},
   round_of_32: {
     0: createMatch('Independent_Decorators', 'Gentle_Sweaters'),
     1: createMatch('Known_Painters', 'Modest_Liberators'),
@@ -66,6 +67,8 @@ const schedule: TSSSchedule = [
 
 const TSS: TSSDatabase = {
   dodgeball: sampleRounds,
+  captainsBall: sampleRounds,
+  touchRugby: sampleRounds,
   frisbee: sampleRounds,
   volleyball: sampleRounds,
   tchoukball: sampleRounds,

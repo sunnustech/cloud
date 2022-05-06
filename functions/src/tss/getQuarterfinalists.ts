@@ -1,11 +1,7 @@
 import { https } from 'firebase-functions'
-import { Sport } from '../types'
+import { Sport } from 'types'
 import { hasMissingKeys } from '../utils/exits'
 import { firestore } from 'firebase-admin'
-// import { WriteResult } from '@google-cloud/firestore'
-// import { Sport } from '../types'
-// import { DocumentData, DocumentReference } from '@google-cloud/firestore'
-// import { sportList } from '../data/constants'
 import { getQuarterfinalists as keyCheck } from '../utils/keyChecks'
 import { PointsProps } from './updatePoints'
 

@@ -31,7 +31,10 @@ export const autoLinkChangedUser = fs
       // check if after team exists
       const doc = await afterTeam.get()
       if (!doc.exists) {
-        firestore().collection('users').doc(context.params.uid).update(change.before.data())
+        firestore()
+          .collection('users')
+          .doc(context.params.uid)
+          .update(change.before.data())
         return null
       }
       afterTeam.update({

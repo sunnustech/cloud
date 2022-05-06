@@ -37,6 +37,6 @@ export const deleteAllUsers = https.onRequest(async (req, res) => {
   res.json({
     message: 'Processed request to delete all users',
     userResult,
-    collectionResult
+    collectionResult,
   })
 })

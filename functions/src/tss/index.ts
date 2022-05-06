@@ -4,7 +4,7 @@ import {
   IncomingHandleMatchRequest,
   Round,
   ServerMatchRecord,
-} from '../types/index'
+} from 'types'
 import { roundList } from '../data/constants'
 
 /**

@@ -4,7 +4,7 @@ export type ResultSummary = {
 }
 /**
  * @param {PromiseSettledResult<T>[]} p
- * @returns { fulfilled: number, rejected: number }
+ * @return {ResultSummary}
  */
 export function resultSummary<T>(p: PromiseSettledResult<T>[]): ResultSummary {
   const result = { fulfilled: 0, rejected: 0 }
