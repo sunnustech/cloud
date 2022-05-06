@@ -18,11 +18,11 @@ export const createUsers = https.onRequest(async (req, res) => {
   if (hasMissingHeaders(required, csv, res)) return
 
   // get existing list of emails
-  const already = await getAllExistingValues('users', 'email')
+  const already = await getAllExistingValues('users', 'realEmail')
 
   // get list of new users to make
   const userList: User[] = getUsersFromCsv(csv).filter(
-    (user) => !already.exists(user.email)
+    (user) => !already.exists(user.realEmail)
   )
 
   const writeSummary = await createFirebaseUsers(userList)
@@ -33,7 +33,9 @@ export const createUsers = https.onRequest(async (req, res) => {
   // write the user data to collections
   const q: Promise<WriteResult>[] = []
   userList.forEach((user) => {
-    q.push(userCollection.doc(user.uid).set(user))
+    if (user.uid !== '') {
+      q.push(userCollection.doc(user.uid).set(user))
+    }
   })
   await Promise.all(q) // only returns writeTime, nothing to capture here
 

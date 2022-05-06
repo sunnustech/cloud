@@ -21,7 +21,7 @@ export const hasMissingKeys = (
   function getMessage(item: RequiredKey): string {
     const vowel = ['a', 'e', 'i', 'o', 'u']
     const an = vowel.includes(item.key[0]) ? 'an' : 'a'
-    return `Please supply ${an} ${item.key} in the \`${item.description}\` prop of the request body.`
+    return `Please supply ${an} ${item.description} in the \`${item.key}\` prop of the request body.`
   }
   const requestedKeys = Object.keys(req.body)
   for (let i = 0; i < arr.length; i++) {

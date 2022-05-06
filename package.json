@@ -1,9 +1,5 @@
 {
-  "name": "smash",
+  "name": "functions",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "firebase-tools": "^10.6.0"
-  }
+  "license": "MIT"
 }

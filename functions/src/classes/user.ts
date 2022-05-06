@@ -27,7 +27,7 @@ export class User {
       return {
         email: user.email,
         phoneNumber: user.phoneNumber,
-        realEmail: user.email,
+        realEmail: user.realEmail,
         role: user.role,
         teamName: user.teamName,
         loginId: user.loginId,
