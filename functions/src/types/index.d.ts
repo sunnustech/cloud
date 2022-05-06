@@ -1,13 +1,14 @@
-export type Sport = 'dodgeball' | 'frisbee' | 'volleyball' | 'tchoukball' | 'touchRugby' | 'captainsBall'
+export type Sport =
+  | 'dodgeball'
+  | 'frisbee'
+  | 'volleyball'
+  | 'tchoukball'
+  | 'touchRugby'
+  | 'captainsBall'
 
 export type Winner = 'A' | 'B' | 'U'
 
-export type Round =
-  | 'round_of_32'
-  | 'round_of_16'
-  | 'quarterfinals'
-  | 'semifinals'
-  | 'finals'
+export type Round = 'round_robin' | 'quarterfinals' | 'semifinals' | 'finals'
 
 export type Series = 'TSS' | 'WSS'
 

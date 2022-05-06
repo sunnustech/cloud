@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { BaseTeam } from '../classes/team'
+import { Team } from '../classes/team'
 import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'
@@ -31,13 +31,13 @@ export const createTeams = https.onRequest(async (req, res) => {
   const already = await getAllExistingValues('teams', 'teamName')
 
   // get list of new teams to make
-  const teamList: BaseTeam[] = getTeamsFromCsv(csv).filter(
+  const teamList: Team[] = getTeamsFromCsv(csv).filter(
     (team) => !already.exists(team.teamName)
   )
 
   const teamsCollection = firestore()
     .collection('teams')
-    .withConverter(BaseTeam.converter)
+    .withConverter(Team.converter)
 
   // write the team data to collections
   const q: Promise<WriteResult>[] = []
