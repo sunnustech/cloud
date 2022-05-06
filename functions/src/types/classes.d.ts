@@ -44,4 +44,5 @@ export class Team {
   members: string[]
   teamName: string
   constructor(props: Init.Team)
+  static converter: FirestoreDataConverter<User>
 }

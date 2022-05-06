@@ -4,19 +4,24 @@ import { WriteResult } from '@google-cloud/firestore'
 import { partition } from '../utils/array'
 import { hasMissingKeys } from '../utils/exits'
 import { please as keyCheck } from '../utils/keyChecks'
+import { User } from '../classes/user'
+import { Team } from '../classes/team'
 
 export const assignUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
-  const userCollection = firestore().collection('users')
-  const teamCollection = firestore().collection('teams')
+  const userCollection = firestore()
+    .collection('users')
+    .withConverter(User.converter)
+  const teamCollection = firestore()
+    .collection('teams')
+    .withConverter(Team.converter)
 
   const users = await userCollection.get()
   const assignQueue: Promise<WriteResult>[] = []
 
   users.forEach((doc) => {
-    const d = doc.data()
-    const user = { teamName: d.teamName, uid: d.uid }
+    const user = doc.data()
     // skip if no teamName
     if (!user.teamName) {
       return
@@ -37,5 +42,5 @@ export const assignUsers = https.onRequest(async (req, res) => {
   )
 
   /* send back the statuses */
-  res.json({ message: '[WIP] assigning users...', fulfilled, rejected })
+  res.json({ message: 'assigning users...', fulfilled, rejected })
 })

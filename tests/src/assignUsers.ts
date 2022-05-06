@@ -4,7 +4,7 @@ import { cloud } from './utils/firebase'
 
 const fn = 'development-assignUsers'
 timestamp(fn)
-axios.post(cloud(fn), { message: 'please' }).then((res) => {
+axios.post(cloud(fn), { please: 'yes' }).then((res) => {
   const data = res.data
   console.debug(data)
 })
