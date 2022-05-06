@@ -7,7 +7,7 @@ import {
 import { Sport } from '../types'
 import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
-import { firestore } from 'firebase-admin'
+import { fs } from '../init'
 
 type SportFlexible = Sport | 'none' | 'more than 1'
 
@@ -39,7 +39,7 @@ export class Team {
   teamName: string
   direction: string
   sport: SportFlexible
-  static collectionRef = firestore().collection('teams')
+  static collectionRef = fs.collection('teams')
   static empty = new Team({
     teamName: '',
     direction: 'A',

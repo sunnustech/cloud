@@ -1,4 +1,5 @@
-import { firestore } from 'firebase-admin'
+import { fs } from '../init'
+
 import { sanitizePhoneNumber } from '../utils/string'
 import { FirestoreDataConverter } from '@google-cloud/firestore'
 import { Init } from '../types/classes'
@@ -12,7 +13,7 @@ export class User {
   loginIdNumberPart: string
   loginId: string
   uid: string
-  static collectionRef = firestore().collection('users')
+  static collectionRef = fs.collection('users')
   static empty = new User({
     phoneNumber: '',
     role: '',
