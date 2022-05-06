@@ -1,29 +1,6 @@
 import { firestore as fs } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 
-export const autoLinkNewUser = fs
-  .document('users/{uid}')
-  .onCreate(async (snap, context) => {
-    const data = snap.data()
-    if (!data) {
-      return false
-    }
-    const teamName = data.teamName
-    if (!teamName) {
-      return false
-    }
-    const teamsCollection = firestore().collection('teams')
-    const teamDoc = teamsCollection.doc(teamName)
-    const doc = await teamDoc.get()
-    if (!doc.exists) {
-      return false
-    }
-    teamDoc.update({
-      members: firestore.FieldValue.arrayUnion(context.params.uid),
-    })
-    return true
-  })
-
 export const autoLinkChangedUser = fs
   .document('users/{uid}')
   .onUpdate(async (change, context) => {
