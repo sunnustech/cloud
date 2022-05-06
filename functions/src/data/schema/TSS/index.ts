@@ -5,7 +5,7 @@ import { createMatch, createEmptyMatches } from './utils'
 
 export const sampleRounds: Rounds = {
   round_robin: {},
-  round_of_32: {
+  quarterfinals: {
     0: createMatch('Independent_Decorators', 'Gentle_Sweaters'),
     1: createMatch('Known_Painters', 'Modest_Liberators'),
     2: createMatch('Poor_Philosophers', 'Written_Particulars'),
@@ -14,17 +14,7 @@ export const sampleRounds: Rounds = {
     5: createMatch('Elaborate_Solvents', 'Sophisticated_Crystals'),
     6: createMatch('Influential_Realtors', 'Irrelevant_Readers'),
     7: createMatch('Harvard_Graduates', 'Lingustic_Reformers'),
-    8: createMatch('Unfortunate_Landlords', 'Magical_Publishers'),
-    9: createMatch('Violent_Bathers', 'Eventual_Resters'),
-    10: createMatch('Intimate_Creditors', 'Domestic_Populators'),
-    11: createMatch('Blonde_Stoppers', 'Mass_Activators'),
-    12: createMatch('Emotional_Writers', 'Rich_Searchers'),
-    13: createMatch('Crucial_Managers', 'Coastal_Housers'),
-    14: createMatch('Useful_Wanters', 'Foolish_Reasoners'),
-    15: createMatch('Representative_Witnesses', 'Prone_Artists'),
   },
-  round_of_16: createEmptyMatches(8),
-  quarterfinals: createEmptyMatches(4),
   semifinals: createEmptyMatches(2),
   finals: createEmptyMatches(1),
   champions: '',

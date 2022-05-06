@@ -1,10 +1,7 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
-import {
-  IncomingHandleMatchRequest,
-  Round,
-  ServerMatchRecord,
-} from '../types'
+import { IncomingHandleMatchRequest, ServerMatchRecord } from '../types'
+import { Round } from '../types/TSS'
 import { roundList } from '../data/constants'
 
 /**
@@ -16,9 +13,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length ?
-    roundList[next] :
-    roundList[roundList.length - 1]
+  return next < roundList.length
+    ? roundList[next]
+    : roundList[roundList.length - 1]
 }
 
 const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
