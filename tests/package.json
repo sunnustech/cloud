@@ -1,0 +1,41 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^17.0.23",
+    "axios": "^0.26.1",
+    "csv-parse": "^5.0.4",
+    "csv-stringify": "^6.0.5",
+    "typescript": "^4.6.3",
+    "types": "*"
+  },
+  "scripts": {
+    "dev": "tsc && node .",
+    "build": "tsc",
+    "debug": "tsc && node lib/debug",
+    "ic": "tsc && node lib/initializeCollections",
+    "cu": "tsc && node lib/create/users",
+    "ct": "tsc && node lib/create/teams",
+    "cou": "tsc && node lib/createOneUser",
+    "gu": "tsc && node lib/getUsers",
+    "ca": "tsc && node lib/createAdmins",
+    "au": "tsc && node lib/assignUsers",
+    "dau": "tsc && node lib/deleteAllUsers",
+    "dat": "tsc && node lib/deleteAllTeams",
+    "hm": "tsc && node lib/handleMatch",
+    "it": "tsc && node lib/initializeTeam",
+    "cs": "tsc && node lib/createSchedule",
+    "rr": "tsc && node lib/parsers/roundRobinConfig",
+    "ws": "tsc && node lib/writeSchema",
+    "dd": "tsc && node lib/deleteDocs",
+    "cc": "tsc && node lib/clearCollection",
+    "gs": "tsc && node lib/getSchedule",
+    "ds": "tsc && node lib/deleteSchedule",
+    "up": "tsc && node lib/updatePoints",
+    "upa": "tsc && node lib/updatePageAccess",
+    "gq": "tsc && node lib/getQuarterfinalists",
+    "reset": "tsc && node lib/RESET"
+  }
+}
