@@ -10,6 +10,9 @@ export class UniquenessChecker<T extends string | number | symbol> {
     return key in this.database
   }
   push(key: T): boolean {
+    if (key === undefined) {
+      return false
+    }
     if (!(key in this.database)) {
       this.database[key] = true
       return true
