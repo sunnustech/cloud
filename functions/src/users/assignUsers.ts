@@ -1,7 +1,6 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
-import { partition } from '../utils/array'
 import { hasMissingKeys } from '../utils/exits'
 import { please as keyCheck } from '../utils/keyChecks'
 import { User } from '../classes/user'
@@ -38,5 +37,5 @@ export const assignUsers = https.onRequest(async (req, res) => {
   const writeResults = resultSummary(await Promise.allSettled(assignQueue))
 
   /* send back the statuses */
-  res.json({ message: 'assigning users...', writeResults})
+  res.json({ message: 'assigning users...', writeResults })
 })

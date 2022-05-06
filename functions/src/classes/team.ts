@@ -90,4 +90,7 @@ export class Team {
   setSport(value: SportFlexible) {
     this.sport = value
   }
+  start() {
+    this._started = true
+  }
 }
