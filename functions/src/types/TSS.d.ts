@@ -4,7 +4,7 @@ export type Sport =
   | 'volleyball'
   | 'tchoukball'
   | 'touchRugby'
-  | 'tchoukball'
+  | 'captainsBall'
 
 export type Winner = 'A' | 'B' | 'U'
 

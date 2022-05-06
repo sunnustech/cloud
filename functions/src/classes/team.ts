@@ -1,11 +1,12 @@
 import { sportList } from '../data/constants'
 import { FirestoreDataConverter } from '@google-cloud/firestore'
-import { Sport, Init, Team } from 'types'
+import { Sport } from '../types/TSS'
+import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
 
 type SportFlexible = Sport | 'none' | 'more than 1'
 
-export class BaseTeam implements Team {
+export class Team {
   members: string[]
   teamName: string
   direction: string
@@ -27,8 +28,8 @@ export class BaseTeam implements Team {
     }
     return result
   }
-  static converter: FirestoreDataConverter<BaseTeam> = {
-    toFirestore: (team: BaseTeam) => {
+  static converter: FirestoreDataConverter<Team> = {
+    toFirestore: (team: Team) => {
       return {
         members: team.members,
         teamName: team.teamName,
@@ -38,7 +39,7 @@ export class BaseTeam implements Team {
     },
     fromFirestore: (snapshot) => {
       const data = snapshot.data()
-      const team = new BaseTeam({
+      const team = new Team({
         teamName: data.teamName,
         direction: data.direction,
         captainsBall: '',
@@ -55,7 +56,7 @@ export class BaseTeam implements Team {
   constructor(props: Init.Team) {
     this.teamName = props.teamName
     this.members = []
-    this.sport = BaseTeam.getSport(props)
+    this.sport = Team.getSport(props)
     this.direction = props.direction
   }
   setSport(value: SportFlexible) {

@@ -1,5 +1,6 @@
 import { https } from 'firebase-functions'
-import { Event, RoundRobinConfig, ScheduleConfig, Sport } from 'types'
+import { Event, RoundRobinConfig, ScheduleConfig } from '../types/schedule'
+import { Sport } from '../types/TSS'
 import { hasMissingKeys } from '../utils/exits'
 import { createSchedule as keyCheck } from '../utils/keyChecks'
 import { makeSchedule } from './makeSchedule'
