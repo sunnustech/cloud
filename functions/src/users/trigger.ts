@@ -3,7 +3,7 @@ import { firestore } from 'firebase-admin'
 
 export const autoLinkNewUser = fs
   .document('users/{uid}')
-  .onCreate((snap, context) => {
+  .onCreate(async (snap, context) => {
     const data = snap.data()
     if (!data) {
       return false
@@ -14,6 +14,10 @@ export const autoLinkNewUser = fs
     }
     const teamsCollection = firestore().collection('teams')
     const teamDoc = teamsCollection.doc(teamName)
+    const doc = await teamDoc.get()
+    if (!doc.exists) {
+      return false
+    }
     teamDoc.update({
       members: firestore.FieldValue.arrayUnion(context.params.uid),
     })
@@ -45,6 +49,10 @@ export const autoLinkChangedUser = fs
     const before = change.before.data()?.teamName
     if (before) {
       const beforeTeam = teamsCollection.doc(before)
+      const doc = await beforeTeam.get()
+      if (!doc.exists) {
+        return false
+      }
       beforeTeam.update({
         members: firestore.FieldValue.arrayRemove(context.params.uid),
       })
