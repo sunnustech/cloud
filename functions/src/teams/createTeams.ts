@@ -1,5 +1,5 @@
 import { https } from 'firebase-functions'
-import { BaseTeam } from '../classes/team'
+import { Team } from '../classes/team'
 import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { createTeams as keyCheck } from '../utils/keyChecks'

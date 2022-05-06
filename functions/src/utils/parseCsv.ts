@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { parse } from 'csv-parse/sync'
 import { isSubset } from './exits'
 import { User } from '../classes/user'
-import { BaseTeam } from '../classes/team'
+import { Team } from '../classes/team'
 import * as sunnus from '../types/classes'
 
 export const getCsvHeadersFromString = (string: string): string[] => {
