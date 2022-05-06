@@ -31,6 +31,9 @@ export const createFirebaseUsers = async (
           // saves the auto-generatered uid
           user.setUid(rec.uid)
           return user
+        }).catch((user) => {
+          console.log(user, 'failed')
+          return user
         })
     )
   })

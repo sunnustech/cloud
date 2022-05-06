@@ -33,7 +33,9 @@ export const createUsers = https.onRequest(async (req, res) => {
   // write the user data to collections
   const q: Promise<WriteResult>[] = []
   userList.forEach((user) => {
-    q.push(userCollection.doc(user.uid).set(user))
+    if (user.uid !== '') {
+      q.push(userCollection.doc(user.uid).set(user))
+    }
   })
   await Promise.all(q) // only returns writeTime, nothing to capture here
 
