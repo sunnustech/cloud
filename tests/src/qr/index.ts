@@ -12,6 +12,8 @@ export type Command =
   | 'resumeTimer'
   | 'stopTimer'
   | 'resetTimer'
+  | 'forceStopTimer'
+  | 'addPoints'
 
 export async function createOneTeam() {
   const fileData = fs.readFileSync(`src/csv/createOneTeam.csv`)

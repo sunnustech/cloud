@@ -184,6 +184,25 @@ export class Team {
     await this.beginQRFunction()
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
+    if (this._stationsRemaining.length > 0) {
+      return 'have not completed all stations'
+    }
+    this._stopped = true
+    this._timerRunning = false
+    this._timerEvents.push(-this.timestamp)
+    await this.endQRFunction()
+    return 'ok'
+  }
+
+  /**
+   * forcefully stop the team's timer for the last time
+   * even when there are stations that haven't been completed
+   * can only be run once
+   */
+  async forceStopTimer(): Promise<string> {
+    await this.beginQRFunction()
+    if (!this.ensureInGame()) return 'not in game'
+    if (!this.ensureTimerRunning(true)) return 'timer already paused'
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
@@ -278,6 +297,9 @@ export class Team {
         break
       case 'stopTimer':
         m = await this.stopTimer()
+        break
+      case 'forceStopTimer':
+        m = await this.forceStopTimer()
         break
       case 'pauseTimer':
         m = await this.pauseTimer()
