@@ -37,30 +37,10 @@ export const QRApi = https.onRequest(async (req, res) => {
     return
   }
 
-  var m: string
-  switch (command) {
-    case 'startTimer':
-      m = await team.startTimer()
-      break
-    case 'resumeTimer':
-      m = await team.resumeTimer()
-      break
-    case 'stopTimer':
-      m = await team.stopTimer()
-      break
-    case 'pauseTimer':
-      m = await team.pauseTimer()
-      break
-    case 'resetTimer':
-      m = await team.resetTimer()
-      break
-    default:
-      res.json({ message: 'QR: invalid command', status: 'invalid command' })
-      return
-  }
+  const status =  await team.task(command)
 
   res.json({
     message: `successfully processed QR command for team ${teamName}`,
-    status: m,
+    status,
   })
 })

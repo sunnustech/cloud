@@ -1,4 +1,4 @@
-import { sendQRRequest, Command } from '.'
+import { sendQRRequest, createOneTeam, Command } from '.'
 
 const colors = {
   reset: '\x1b[0m',
@@ -58,6 +58,7 @@ async function checkWithContext(context: Command[], cmd: Command, toBe: string) 
 }
 
 async function all() {
+  await createOneTeam()
   var c: Command[] = ['resetTimer']
   nextRun(c)
   await checkWithContext(c, 'startTimer', 'ok')

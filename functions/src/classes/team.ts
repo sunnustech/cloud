@@ -231,6 +231,30 @@ export class Team {
     return 'ok'
   }
 
+  async task(command: string): Promise<string> {
+    var m: string
+    switch (command) {
+      case 'startTimer':
+        m = await this.startTimer()
+        break
+      case 'resumeTimer':
+        m = await this.resumeTimer()
+        break
+      case 'stopTimer':
+        m = await this.stopTimer()
+        break
+      case 'pauseTimer':
+        m = await this.pauseTimer()
+        break
+      case 'resetTimer':
+        m = await this.resetTimer()
+        break
+      default:
+        m = 'invalid command'
+    }
+    return m
+  }
+
   displayTimeOffset() {
     const sum = this._timerEvents.reduce((a, b) => a + b, 0)
     return Math.abs(sum)

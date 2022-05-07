@@ -3,7 +3,7 @@ import { timestamp } from '../utils/timestamp'
 import { cloud } from '../utils/firebase'
 import fs from 'fs'
 
-export function create(entity: string, key: string) {
+export async function create(entity: string, key: string) {
   const fileData = fs.readFileSync(`src/csv/create${entity}.csv`)
   const fn = `development-create${entity}`
   timestamp(fn)
