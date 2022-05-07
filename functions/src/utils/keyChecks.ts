@@ -36,3 +36,10 @@ export const please = [{ key: 'please', description: 'magic word' }]
 export const clearCollection = [
   { key: 'collection', description: 'collection name' },
 ]
+
+export const handleQR = [
+  { key: 'command', description: 'command' },
+  { key: 'station', description: 'station name' },
+  { key: 'facilitator', description: 'facilitator name' },
+  { key: 'points', description: 'number of points' },
+]
