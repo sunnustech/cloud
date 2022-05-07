@@ -1,7 +1,7 @@
 import { sendQRRequest, Command } from '.'
 
 const colors = {
-  reset :"\x1b[0m",
+  reset: '\x1b[0m',
   red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
@@ -41,38 +41,61 @@ async function sendAndCheck(cmd: Command, toBe: string) {
   console.log(`${colors.gray}${cmd}${colors.reset} ${response}`)
 }
 
-function nextRun() {
+async function nextRun(c: Command[]) {
   console.log('───────────────────')
+  console.log('setup', c)
 }
 
-async function main() {
-  // reset timer for a clean test
-  await sendAndCheck('resetTimer', 'ok')
-
-  // pre-start checks
-  nextRun()
-  await sendAndCheck('resumeTimer', 'not in game')
-  await sendAndCheck('pauseTimer', 'not in game')
-  await sendAndCheck('stopTimer', 'not in game')
-
-  nextRun()
-  await sendAndCheck('startTimer', 'ok')
-  await sendAndCheck('startTimer', 'already started')
-  await sendAndCheck('stopTimer', 'ok')
-  await sendAndCheck('resetTimer', 'ok')
-
-  nextRun()
-  await sendAndCheck('startTimer', 'ok')
-  await sendAndCheck('resumeTimer', 'timer already running')
-  await sendAndCheck('stopTimer', 'ok')
-  await sendAndCheck('resetTimer', 'ok')
-
-  nextRun()
-  await sendAndCheck('startTimer', 'ok')
-  await sendAndCheck('pauseTimer', 'ok')
-  await sendAndCheck('stopTimer', 'timer already paused')
-  await sendAndCheck('resumeTimer', 'ok')
-  await sendAndCheck('stopTimer', 'ok')
-  await sendAndCheck('resetTimer', 'ok')
+async function setup(cmd: Command[]) {
+  for (const c of cmd) {
+    await sendQRRequest(c)
+  }
 }
-main()
+
+async function checkWithContext(context: Command[], cmd: Command, toBe: string) {
+  await setup(context)
+  await sendAndCheck(cmd, toBe)
+}
+
+async function all() {
+  var c: Command[] = ['resetTimer']
+  nextRun(c)
+  await checkWithContext(c, 'startTimer', 'ok')
+  await checkWithContext(c, 'resumeTimer', 'not in game')
+  await checkWithContext(c, 'pauseTimer', 'not in game')
+  await checkWithContext(c, 'stopTimer', 'not in game')
+
+  c = ['resetTimer', 'startTimer']
+  nextRun(c)
+  await checkWithContext(c, 'startTimer', 'already started')
+  await checkWithContext(c, 'resumeTimer', 'timer already running')
+  await checkWithContext(c, 'pauseTimer', 'ok')
+  await checkWithContext(c, 'stopTimer', 'ok')
+
+  c.push('pauseTimer')
+  nextRun(c)
+  await checkWithContext(c, 'startTimer', 'already started')
+  await checkWithContext(c, 'resumeTimer', 'ok')
+  await checkWithContext(c, 'pauseTimer', 'timer already paused')
+  await checkWithContext(c, 'stopTimer', 'timer already paused')
+
+  c.push('resumeTimer')
+  nextRun(c)
+  await checkWithContext(c, 'startTimer', 'already started')
+  await checkWithContext(c, 'resumeTimer', 'timer already running')
+  await checkWithContext(c, 'pauseTimer', 'ok')
+  await checkWithContext(c, 'stopTimer', 'ok')
+
+  c.push('stopTimer')
+  nextRun(c)
+  await checkWithContext(c, 'startTimer', 'already started')
+  await checkWithContext(c, 'resumeTimer', 'not in game')
+  await checkWithContext(c, 'pauseTimer', 'not in game')
+  await checkWithContext(c, 'stopTimer', 'not in game')
+}
+
+async function unit() {
+  await checkWithContext(['resetTimer', 'startTimer'], 'resumeTimer', 'timer already running')
+}
+
+all()
