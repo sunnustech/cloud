@@ -1,8 +1,9 @@
 import { logger, https } from 'firebase-functions'
 import { AuthData } from 'firebase-functions/lib/common/providers/https'
 import { handleMatch } from './tss'
+import { QRApi } from './production/qr'
 
-export { handleMatch }
+export { handleMatch, QRApi }
 
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')
