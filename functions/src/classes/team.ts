@@ -32,8 +32,10 @@ export class Team {
   /**
    * grabs the sport and populates this.sport
    * based on csv values
+   * @param {Init.Team} props
+   * @return {SportFlexible} result
    */
-  private static getSport(props: Init.Team) {
+  private static getSport(props: Init.Team): SportFlexible {
     let result: SportFlexible = 'none'
     const sportsSignedUp = sportList
       .map((sport) => {
@@ -53,6 +55,7 @@ export class Team {
 
   /**
    * instantiate this class
+   * @param {Init.Team} props
    */
   constructor(props: Init.Team) {
     this.timestamp = 0
@@ -74,8 +77,11 @@ export class Team {
     this._stationsRemaining = stationOrder[props.direction]
   }
 
-  setSport(value: SportFlexible) {
-    this.sport = value
+  /**
+   * @param {SportFlexible} sport
+   */
+  setSport(sport: SportFlexible) {
+    this.sport = sport
   }
 
   async fetch() {
@@ -109,51 +115,58 @@ export class Team {
 
   /**
    * ensure that the team's started status is at the specified state
+   * @param {boolean} b
+   * @return {boolean}
    */
   ensureStarted(b: boolean): boolean {
     if (this._started === b) {
       return true
     }
     console.warn(
-      b === true
-        ? 'this team has not started yet'
-        : 'this team has already started'
+      b === true ?
+        'this team has not started yet' :
+        'this team has already started'
     )
     return false
   }
 
   /**
    * ensure that the team's stopped status is at the specified state
+   * @param {boolean} b
+   * @return {boolean}
    */
   ensureStopped(b: boolean): boolean {
     if (this._stopped === b) {
       return true
     }
     console.warn(
-      b === true
-        ? 'this team has not stopped yet'
-        : 'this team has already stopped'
+      b === true ?
+        'this team has not stopped yet' :
+        'this team has already stopped'
     )
     return false
   }
 
   /**
    * ensure that the team's timer is at the specified state
+   * @param {boolean} b
+   * @return {boolean}
    */
   ensureTimerRunning(b: boolean): boolean {
     if (this._timerRunning === b) {
       return true
     }
     console.warn(
-      b === true
-        ? "this team's timer is not running yet"
-        : "this team's timer is already running"
+      b === true ?
+        'this team\'s timer is not running yet' :
+        'this team\'s timer is already running'
     )
     return false
   }
 
   /**
    * ensure that the team has started but not stopped yet
+   * @return {boolean}
    */
   ensureInGame(): boolean {
     return this.ensureStopped(false) && this.ensureStarted(true)
@@ -162,6 +175,7 @@ export class Team {
   /**
    * start the team's timer for the first time
    * can only be run once
+   * @return {Promise<string>}
    */
   async startTimer(): Promise<string> {
     await this.beginQRFunction()
@@ -179,6 +193,7 @@ export class Team {
   /**
    * stop the team's timer for the last time
    * can only be run once
+   * @return {Promise<string>}
    */
   async stopTimer(): Promise<string> {
     await this.beginQRFunction()
@@ -198,6 +213,7 @@ export class Team {
    * forcefully stop the team's timer for the last time
    * even when there are stations that haven't been completed
    * can only be run once
+   * @return {Promise<string>}
    */
   async forceStopTimer(): Promise<string> {
     await this.beginQRFunction()
@@ -212,6 +228,7 @@ export class Team {
 
   /**
    * resume the team's timer
+   * @return {Promise<string>}
    */
   async resumeTimer(): Promise<string> {
     await this.beginQRFunction()
@@ -225,6 +242,7 @@ export class Team {
 
   /**
    * pause the team's timer
+   * @return {Promise<string>}
    */
   async pauseTimer(): Promise<string> {
     await this.beginQRFunction()
@@ -238,6 +256,7 @@ export class Team {
 
   /**
    * reset Timer to before starting
+   * @return {Promise<string>}
    */
   async resetTeam(): Promise<string> {
     await this.beginQRFunction()
@@ -254,6 +273,8 @@ export class Team {
 
   /**
    * complete a certain stage
+   * @param {QR} qr
+   * @return {Promise<string>}
    */
   async completeStage(qr: QR): Promise<string> {
     await this.beginQRFunction()
@@ -278,6 +299,8 @@ export class Team {
 
   /**
    * add points to the team
+   * @param {QR} qr
+   * @return {Promise<string>}
    */
   async addPoints(qr: QR): Promise<string> {
     await this.beginQRFunction()
@@ -287,40 +310,49 @@ export class Team {
     return 'ok'
   }
 
+  /**
+   * handles an incoming QR class
+   * @param {QR} qr
+   * @return {Promise<string>}
+   */
   async task(qr: QR): Promise<string> {
-    var m: string
+    let m: string
     switch (qr.command) {
-      case 'startTimer':
-        m = await this.startTimer()
-        break
-      case 'resumeTimer':
-        m = await this.resumeTimer()
-        break
-      case 'stopTimer':
-        m = await this.stopTimer()
-        break
-      case 'forceStopTimer':
-        m = await this.forceStopTimer()
-        break
-      case 'pauseTimer':
-        m = await this.pauseTimer()
-        break
-      case 'resetTeam':
-        m = await this.resetTeam()
-        break
-      case 'completeStage':
-        m = await this.completeStage(qr)
-        break
-      case 'addPoints':
-        m = await this.addPoints(qr)
-        break
-      default:
-        m = 'invalid command'
+    case 'startTimer':
+      m = await this.startTimer()
+      break
+    case 'resumeTimer':
+      m = await this.resumeTimer()
+      break
+    case 'stopTimer':
+      m = await this.stopTimer()
+      break
+    case 'forceStopTimer':
+      m = await this.forceStopTimer()
+      break
+    case 'pauseTimer':
+      m = await this.pauseTimer()
+      break
+    case 'resetTeam':
+      m = await this.resetTeam()
+      break
+    case 'completeStage':
+      m = await this.completeStage(qr)
+      break
+    case 'addPoints':
+      m = await this.addPoints(qr)
+      break
+    default:
+      m = 'invalid command'
     }
     return m
   }
 
-  displayTimeOffset() {
+  /**
+   * find out how much time the team didn't spend since start
+   * @return {number}
+   */
+  displayTimeOffset(): number {
     const sum = this._timerEvents.reduce((a, b) => a + b, 0)
     return Math.abs(sum)
     // on frontend, the total elapsed time would then be

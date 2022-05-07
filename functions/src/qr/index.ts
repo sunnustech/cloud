@@ -27,7 +27,7 @@ export const QRApi = https.onRequest(async (req, res) => {
   // exit if team doesn't exist
   const snapshot = await teamRef.get()
   if (!snapshot.exists) {
-    res.json({ message: "This team doesn't exist" })
+    res.json({ message: 'This team doesn\'t exist' })
     return
   }
 
