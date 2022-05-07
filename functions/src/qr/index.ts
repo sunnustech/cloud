@@ -3,6 +3,7 @@ import { hasMissingKeys, isEmpty } from '../utils/exits'
 import { handleQR as keyCheck } from '../utils/keyChecks'
 import { firestore } from 'firebase-admin'
 import { converter } from '../classes/firebase'
+import { QR } from '../classes/QR'
 
 // entry point for all QR queries
 export const QRApi = https.onRequest(async (req, res) => {
@@ -10,8 +11,7 @@ export const QRApi = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
   // extract required keys
-  // const { facilitator, points, command, station, teamName } = req.body
-  const { teamName, command } = req.body
+  const { teamName, command, points, facilitator, station } = req.body
 
   // require a non-empty team name
   if (isEmpty(teamName, res)) return
@@ -37,10 +37,12 @@ export const QRApi = https.onRequest(async (req, res) => {
     return
   }
 
-  const status =  await team.task(command)
+  const qr = new QR({ teamName, command, points, facilitator, station })
+
+  const status = await team.task(qr)
 
   res.json({
-    message: `successfully processed QR command for team ${teamName}`,
+    message: `finished processing QR command for [${teamName}]`,
     status,
   })
 })

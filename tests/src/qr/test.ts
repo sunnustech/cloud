@@ -99,4 +99,4 @@ async function unit() {
   await checkWithContext(['resetTimer', 'startTimer'], 'resumeTimer', 'timer already running')
 }
 
-all()
+unit()

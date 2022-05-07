@@ -6,6 +6,7 @@ import { notEmpty } from '../utils/string'
 import { stationOrder } from '../data/schema/SOAR'
 import { firestore } from 'firebase-admin'
 import { collection, rebuild } from './firebase'
+import { QR } from './QR'
 
 type SportFlexible = Sport | 'none' | 'more than 1'
 
@@ -96,13 +97,12 @@ export class Team {
   }
 
   // at the start of every timer function
-  async beginTimerFunction() {
+  async beginQRFunction() {
     this.updateTimestamp()
-    await this.fetch()
   }
 
   // at the end of every timer function
-  async endTimerFunction() {
+  async endQRFunction() {
     await collection.teams.doc(this.teamName).set(this)
     console.debug('successfully completed task')
   }
@@ -112,7 +112,6 @@ export class Team {
    */
   ensureStarted(b: boolean): boolean {
     if (this._started === b) {
-      console.log('GOT HERE', this._started)
       return true
     }
     console.warn(
@@ -165,7 +164,7 @@ export class Team {
    * can only be run once
    */
   async startTimer(): Promise<string> {
-    await this.beginTimerFunction()
+    await this.beginQRFunction()
     if (!this.ensureStarted(false)) return 'already started'
     if (!this.ensureStopped(false)) return 'already stopped'
     if (!this.ensureTimerRunning(false)) return 'timer somehow already running'
@@ -173,7 +172,7 @@ export class Team {
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
     this._startTime = this.timestamp
-    await this.endTimerFunction()
+    await this.endQRFunction()
     return 'ok'
   }
 
@@ -182,13 +181,13 @@ export class Team {
    * can only be run once
    */
   async stopTimer(): Promise<string> {
-    await this.beginTimerFunction()
+    await this.beginQRFunction()
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
-    await this.endTimerFunction()
+    await this.endQRFunction()
     return 'ok'
   }
 
@@ -196,12 +195,12 @@ export class Team {
    * resume the team's timer
    */
   async resumeTimer(): Promise<string> {
-    await this.beginTimerFunction()
+    await this.beginQRFunction()
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(false)) return 'timer already running'
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
-    await this.endTimerFunction()
+    await this.endQRFunction()
     return 'ok'
   }
 
@@ -209,12 +208,12 @@ export class Team {
    * pause the team's timer
    */
   async pauseTimer(): Promise<string> {
-    await this.beginTimerFunction()
+    await this.beginQRFunction()
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
     this._timerRunning = false
     this._timerEvents.push(this.timestamp)
-    await this.endTimerFunction()
+    await this.endQRFunction()
     return 'ok'
   }
 
@@ -222,18 +221,43 @@ export class Team {
    * reset Timer to before starting
    */
   async resetTimer(): Promise<string> {
-    await this.beginTimerFunction()
+    await this.beginQRFunction()
     this._timerRunning = false
     this._stopped = false
     this._started = false
     this._timerEvents = []
-    await this.endTimerFunction()
+    await this.endQRFunction()
     return 'ok'
   }
 
-  async task(command: string): Promise<string> {
+  /**
+   * complete a certain stage
+   */
+  async completeStage(stage: string): Promise<string> {
+    await this.beginQRFunction()
+    console.log('=======>', this._stationsRemaining)
+    if (this._stationsRemaining.length === 0) {
+      return 'already completed all stations'
+    }
+    if (!stationOrder['A'].includes(stage)) {
+      return 'invalid station'
+    }
+    if (stage !== this._stationsRemaining[0]) {
+      return 'wrong station'
+    }
+    // after this point, the stage is located at the zeroth index of
+    // _stationsRemaining, so we can do the following safely:
+    this._stationsCompleted.push(stage)
+    this._stationsRemaining.shift()
+    this._timerEvents.push(this.timestamp)
+    await this.endQRFunction()
+    return 'ok'
+  }
+
+
+  async task(qr: QR): Promise<string> {
     var m: string
-    switch (command) {
+    switch (qr.command) {
       case 'startTimer':
         m = await this.startTimer()
         break
@@ -248,6 +272,9 @@ export class Team {
         break
       case 'resetTimer':
         m = await this.resetTimer()
+        break
+      case 'completeStage':
+        m = await this.completeStage(qr.station)
         break
       default:
         m = 'invalid command'

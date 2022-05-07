@@ -41,6 +41,12 @@
     "stop": "tsc && node lib/qr/stop",
     "pause": "tsc && node lib/qr/pause",
     "resetTimer": "tsc && node lib/qr/reset",
+    "c1": "tsc && node lib/qr/c1",
+    "c2": "tsc && node lib/qr/c2",
+    "c3": "tsc && node lib/qr/c3",
+    "c4": "tsc && node lib/qr/c4",
+    "c5": "tsc && node lib/qr/c5",
+    "c6": "tsc && node lib/qr/c6",
     "test": "tsc && node lib/qr/test",
     "reset": "tsc && node lib/RESET"
   },
