@@ -14,7 +14,7 @@ export class Team {
   members: string[]
   timestamp: number
   teamName: string
-  direction: string
+  direction: 'A' | 'B'
   sport: SportFlexible
   _started: boolean
   _stopped: boolean
@@ -156,7 +156,7 @@ export class Team {
    * ensure that the team has started but not stopped yet
    */
   ensureInGame(): boolean {
-    return this.ensureStarted(true) && this.ensureStopped(false)
+    return this.ensureStopped(false) && this.ensureStarted(true)
   }
 
   /**
@@ -165,8 +165,8 @@ export class Team {
    */
   async startTimer(): Promise<string> {
     await this.beginQRFunction()
-    if (!this.ensureStarted(false)) return 'already started'
     if (!this.ensureStopped(false)) return 'already stopped'
+    if (!this.ensureStarted(false)) return 'already started'
     if (!this.ensureTimerRunning(false)) return 'timer somehow already running'
     this._started = true
     this._timerRunning = true
@@ -225,6 +225,8 @@ export class Team {
     this._timerRunning = false
     this._stopped = false
     this._started = false
+    this._stationsCompleted = []
+    this._stationsRemaining = stationOrder[this.direction]
     this._timerEvents = []
     await this.endQRFunction()
     return 'ok'
@@ -235,7 +237,7 @@ export class Team {
    */
   async completeStage(qr: QR): Promise<string> {
     await this.beginQRFunction()
-    console.log('=======>', this._stationsRemaining)
+    if (!this.ensureInGame()) return 'not in game'
     if (this._stationsRemaining.length === 0) {
       return 'already completed all stations'
     }
@@ -250,11 +252,20 @@ export class Team {
     this._points += qr.points
     this._stationsCompleted.push(qr.station)
     this._stationsRemaining.shift()
-    this._timerEvents.push(this.timestamp)
     await this.endQRFunction()
     return 'ok'
   }
 
+  /**
+   * add points to the team
+   */
+  async addPoints(qr: QR): Promise<string> {
+    await this.beginQRFunction()
+    if (!this.ensureInGame()) return 'not in game'
+    this._points += qr.points
+    await this.endQRFunction()
+    return 'ok'
+  }
 
   async task(qr: QR): Promise<string> {
     var m: string
@@ -276,6 +287,9 @@ export class Team {
         break
       case 'completeStage':
         m = await this.completeStage(qr)
+        break
+      case 'addPoints':
+        m = await this.addPoints(qr)
         break
       default:
         m = 'invalid command'

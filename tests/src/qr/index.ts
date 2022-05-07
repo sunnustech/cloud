@@ -35,6 +35,7 @@ export const sendQRRequest = async (command: Command) => {
   }
   const response = await axios.post(cloud(fn), packet)
   const data = response.data
+  console.log(data)
   return data.status
 }
 
