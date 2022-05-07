@@ -40,6 +40,7 @@
     "resume": "tsc && node lib/qr/resume",
     "stop": "tsc && node lib/qr/stop",
     "pause": "tsc && node lib/qr/pause",
+    "resetTimer": "tsc && node lib/qr/reset",
     "test": "tsc && node lib/qr/test",
     "reset": "tsc && node lib/RESET"
   },

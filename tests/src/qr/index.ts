@@ -5,7 +5,7 @@ import { cloud } from '../utils/firebase'
 const fn = 'development-QRApi'
 timestamp(fn)
 
-type Command = 'startTimer' | 'pauseTimer' | 'resumeTimer' | 'stopTimer'
+export type Command = 'startTimer' | 'pauseTimer' | 'resumeTimer' | 'stopTimer' | 'resetTimer'
 
 export const sendQRRequest = async (command: Command) => {
   const packet = {
