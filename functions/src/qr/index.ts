@@ -1,8 +1,8 @@
 import { https } from 'firebase-functions'
-import { Team } from '../classes/team'
 import { hasMissingKeys, isEmpty } from '../utils/exits'
 import { handleQR as keyCheck } from '../utils/keyChecks'
 import { firestore } from 'firebase-admin'
+import { converter } from '../classes/firebase'
 
 // entry point for all QR queries
 export const QRApi = https.onRequest(async (req, res) => {
@@ -16,14 +16,10 @@ export const QRApi = https.onRequest(async (req, res) => {
   // require a non-empty team name
   if (isEmpty(teamName, res)) return
 
-  console.log('reached here', teamName)
-  res.json({ message: 'early exit' })
-  return
-
   // get a reference to the teams collection
   const teamsCollection = firestore()
     .collection('teams')
-    .withConverter(Team.converter)
+    .withConverter(converter.team)
 
   // get a reference to the target team
   const teamRef = teamsCollection.doc(teamName)
@@ -36,6 +32,12 @@ export const QRApi = https.onRequest(async (req, res) => {
   }
 
   const team = snapshot.data()
+  if (!team) {
+    res.json({ message: "Unable to fetch team" })
+    return
+  }
+
+  team.startTimer()
   console.log(team)
 
   res.json({

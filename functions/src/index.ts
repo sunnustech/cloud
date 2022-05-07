@@ -1,6 +1,6 @@
 import * as development from './development'
-import { initializeApp } from 'firebase-admin/app'
 import { authTest, handleMatch } from './production'
+import { app, fs } from './init'
 
 /* [production.ts]
  *   - contains only onCall functions
@@ -13,6 +13,7 @@ import { authTest, handleMatch } from './production'
  *   - use for writing new functions
  */
 
-initializeApp()
+console.log(app.name, fs.settings.name)
+
 
 export { development, authTest, handleMatch }

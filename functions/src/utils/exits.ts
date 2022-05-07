@@ -73,9 +73,8 @@ export function isEmpty(
   res: Response<any>
 ): boolean {
   if (string === '') {
-    console.log('got in here')
     res.json({ message: 'Error: expected non-empty string' })
-    return false
+    return true
   }
-  return true
+  return false
 }
