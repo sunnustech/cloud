@@ -31,6 +31,7 @@ export const QRapi = https.onRequest(async (req, res) => {
   }
 
   const team = snapshot.data()
+  console.log(team)
 
   res.json({
     message: `successfully processed QR command for team ${teamName}`,

@@ -38,8 +38,9 @@ export const clearCollection = [
 ]
 
 export const handleQR = [
-  { key: 'command', description: 'command' },
-  { key: 'station', description: 'station name' },
-  { key: 'facilitator', description: 'facilitator name' },
   { key: 'points', description: 'number of points' },
+  { key: 'command', description: 'QR command' },
+  { key: 'station', description: 'station title' },
+  { key: 'facilitator', description: 'facilitator name' },
+  { key: 'teamName', description: 'team name' },
 ]

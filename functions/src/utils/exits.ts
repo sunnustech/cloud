@@ -60,3 +60,21 @@ export function isSubset<T>(
   }
   return true
 }
+
+/**
+ * required that input is not blank, else exist
+ * where a is the required list
+ * @param {string} string
+ * @param {Response<any>} res
+ * @return {boolean}
+ */
+export function isEmpty(
+  string: string,
+  res: Response<any>
+): boolean {
+  if (string === '') {
+    res.json({ message: 'Error: expected non-empty string' })
+    return false
+  }
+  return true
+}
