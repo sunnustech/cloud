@@ -1,10 +1,10 @@
 import { sportList } from '../data/constants'
-import { FirestoreDataConverter } from '@google-cloud/firestore'
+import { FirestoreDataConverter, Timestamp } from '@google-cloud/firestore'
 import { Sport } from '../types/TSS'
 import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
-import { SOARTimestamp } from '../types/SOAR'
 import { stationOrder } from '../data/schema/SOAR'
+import { firestore } from 'firebase-admin'
 
 type SportFlexible = Sport | 'none' | 'more than 1'
 
@@ -18,7 +18,7 @@ export class Team {
   _startTime: number
   _stopTime: number
   _timerRunning: boolean
-  _allEvents: SOARTimestamp[]
+  _allEvents: Timestamp[]
   _direction: 'A' | 'B'
   _points: number
   _timerEvents: number[]
@@ -26,6 +26,11 @@ export class Team {
   _pausedAt: number
   _stationsCompleted: string[]
   _stationsRemaining: string[]
+
+  /**
+   * grabs the sport and populates this.sport
+   * based on csv values
+   */
   private static getSport(props: Init.Team) {
     let result: SportFlexible = 'none'
     const sportsSignedUp = sportList
@@ -43,6 +48,10 @@ export class Team {
     }
     return result
   }
+
+  /**
+   * converts this class to firestore friendly data
+   */
   static converter: FirestoreDataConverter<Team> = {
     toFirestore: (team: Team) => {
       return {
@@ -68,6 +77,10 @@ export class Team {
       return team
     },
   }
+
+  /**
+   * instantiate this class
+   */
   constructor(props: Init.Team) {
     this.teamName = props.teamName
     this.members = []
@@ -87,10 +100,21 @@ export class Team {
     this._stationsCompleted = []
     this._stationsRemaining = stationOrder[props.direction]
   }
+
   setSport(value: SportFlexible) {
     this.sport = value
   }
-  start() {
+
+  startTimer() {
     this._started = true
+    console.log(firestore.FieldValue.serverTimestamp())
+    this._timerRunning = true
+  }
+
+  displayTimeOffset() {
+    const sum = this._timerEvents.reduce((a, b) => a + b, 0)
+    return Math.abs(sum)
+    // on frontend, the total elapsed time would then be
+    // Math.abs(now.getTime() - <returned value>)
   }
 }

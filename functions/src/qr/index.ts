@@ -5,15 +5,20 @@ import { handleQR as keyCheck } from '../utils/keyChecks'
 import { firestore } from 'firebase-admin'
 
 // entry point for all QR queries
-export const QRapi = https.onRequest(async (req, res) => {
+export const QRApi = https.onRequest(async (req, res) => {
   // check keys
   if (hasMissingKeys(keyCheck, req, res)) return
 
   // extract required keys
-  const { facilitator, points, command, station, teamName } = req.body
+  // const { facilitator, points, command, station, teamName } = req.body
+  const { teamName } = req.body
 
   // require a non-empty team name
   if (isEmpty(teamName, res)) return
+
+  console.log('reached here', teamName)
+  res.json({ message: 'early exit' })
+  return
 
   // get a reference to the teams collection
   const teamsCollection = firestore()

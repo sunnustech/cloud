@@ -36,6 +36,14 @@
     "up": "tsc && node lib/updatePoints",
     "upa": "tsc && node lib/updatePageAccess",
     "gq": "tsc && node lib/getQuarterfinalists",
+    "qr": "tsc && node lib/qr",
     "reset": "tsc && node lib/RESET"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 80
   }
 }

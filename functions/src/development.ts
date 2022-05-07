@@ -10,6 +10,7 @@ export const helloWorld = https.onRequest(async (req, res) => {
 
 /* sunnus functions */
 import { initializeCollections } from './data/initializeCollections'
+import { QRApi } from './qr'
 import { handleMatch } from './roundRobin'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
@@ -47,4 +48,5 @@ export {
   clearCollection,
   getSchedule,
   initializeCollections,
+  QRApi,
 }
