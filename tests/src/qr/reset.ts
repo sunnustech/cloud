@@ -1,3 +1,3 @@
 import { sendQRRequest } from '.'
 
-sendQRRequest('resetTimer')
+sendQRRequest('resetTeam')

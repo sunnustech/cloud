@@ -59,14 +59,14 @@ async function checkWithContext(context: Command[], cmd: Command, toBe: string) 
 
 async function all() {
   await createOneTeam()
-  var c: Command[] = ['resetTimer']
+  var c: Command[] = ['resetTeam']
   nextRun(c)
   await checkWithContext(c, 'startTimer', 'ok')
   await checkWithContext(c, 'resumeTimer', 'not in game')
   await checkWithContext(c, 'pauseTimer', 'not in game')
   await checkWithContext(c, 'stopTimer', 'not in game')
 
-  c = ['resetTimer', 'startTimer']
+  c = ['resetTeam', 'startTimer']
   nextRun(c)
   await checkWithContext(c, 'startTimer', 'already started')
   await checkWithContext(c, 'resumeTimer', 'timer already running')
@@ -96,7 +96,7 @@ async function all() {
 }
 
 async function unit() {
-  await checkWithContext(['resetTimer', 'startTimer'], 'resumeTimer', 'timer already running')
+  await checkWithContext(['resetTeam', 'startTimer'], 'resumeTimer', 'timer already running')
 }
 
 unit()

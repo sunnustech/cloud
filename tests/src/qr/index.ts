@@ -11,7 +11,7 @@ export type Command =
   | 'pauseTimer'
   | 'resumeTimer'
   | 'stopTimer'
-  | 'resetTimer'
+  | 'resetTeam'
   | 'forceStopTimer'
   | 'addPoints'
 

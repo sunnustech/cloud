@@ -239,13 +239,14 @@ export class Team {
   /**
    * reset Timer to before starting
    */
-  async resetTimer(): Promise<string> {
+  async resetTeam(): Promise<string> {
     await this.beginQRFunction()
     this._timerRunning = false
     this._stopped = false
     this._started = false
     this._stationsCompleted = []
     this._stationsRemaining = stationOrder[this.direction]
+    this._points = 0
     this._timerEvents = []
     await this.endQRFunction()
     return 'ok'
@@ -304,8 +305,8 @@ export class Team {
       case 'pauseTimer':
         m = await this.pauseTimer()
         break
-      case 'resetTimer':
-        m = await this.resetTimer()
+      case 'resetTeam':
+        m = await this.resetTeam()
         break
       case 'completeStage':
         m = await this.completeStage(qr)
