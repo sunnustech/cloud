@@ -107,7 +107,6 @@ export class Team {
     console.debug('successfully completed task')
   }
 
-
   /**
    * ensure that the team's started status is at the specified state
    */
@@ -165,56 +164,71 @@ export class Team {
    * start the team's timer for the first time
    * can only be run once
    */
-  async startTimer() {
-    console.log("GOT HERE")
-    console.log(typeof this.beginTimerFunction)
+  async startTimer(): Promise<string> {
     await this.beginTimerFunction()
-    if (!this.ensureStarted(false)) return
-    if (!this.ensureStopped(false)) return
-    if (!this.ensureTimerRunning(false)) return
+    if (!this.ensureStarted(false)) return 'already started'
+    if (!this.ensureStopped(false)) return 'already stopped'
+    if (!this.ensureTimerRunning(false)) return 'timer somehow already running'
     this._started = true
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
     this._startTime = this.timestamp
     await this.endTimerFunction()
+    return 'ok'
   }
 
   /**
    * stop the team's timer for the last time
    * can only be run once
    */
-  async stopTimer() {
+  async stopTimer(): Promise<string> {
     await this.beginTimerFunction()
-    if (this.ensureInGame()) return
-    if (!this.ensureTimerRunning(true)) return
+    if (!this.ensureInGame()) return 'not in game'
+    if (!this.ensureTimerRunning(true)) return 'timer already paused'
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
     await this.endTimerFunction()
+    return 'ok'
   }
 
   /**
    * resume the team's timer
    */
-  async resumeTimer() {
+  async resumeTimer(): Promise<string> {
     await this.beginTimerFunction()
-    if (!this.ensureInGame()) return
-    if (!this.ensureTimerRunning(false)) return
+    if (!this.ensureInGame()) return 'not in game'
+    if (!this.ensureTimerRunning(false)) return 'timer already running'
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
     await this.endTimerFunction()
+    return 'ok'
   }
 
   /**
    * pause the team's timer
    */
-  async pauseTimer() {
+  async pauseTimer(): Promise<string> {
     await this.beginTimerFunction()
-    if (!this.ensureInGame()) return
-    if (!this.ensureTimerRunning(true)) return
+    if (!this.ensureInGame()) return 'not in game'
+    if (!this.ensureTimerRunning(true)) return 'timer already paused'
     this._timerRunning = false
     this._timerEvents.push(this.timestamp)
     await this.endTimerFunction()
+    return 'ok'
+  }
+
+  /**
+   * reset Timer to before starting
+   */
+  async resetTimer(): Promise<string> {
+    await this.beginTimerFunction()
+    this._timerRunning = false
+    this._stopped = false
+    this._started = false
+    this._timerEvents = []
+    await this.endTimerFunction()
+    return 'ok'
   }
 
   displayTimeOffset() {

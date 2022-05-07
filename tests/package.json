@@ -8,8 +8,8 @@
     "axios": "^0.26.1",
     "csv-parse": "^5.0.4",
     "csv-stringify": "^6.0.5",
-    "typescript": "^4.6.3",
-    "types": "*"
+    "types": "*",
+    "typescript": "^4.6.3"
   },
   "scripts": {
     "dev": "tsc && node .",
@@ -40,6 +40,7 @@
     "resume": "tsc && node lib/qr/resume",
     "stop": "tsc && node lib/qr/stop",
     "pause": "tsc && node lib/qr/pause",
+    "test": "tsc && node lib/qr/test",
     "reset": "tsc && node lib/RESET"
   },
   "prettier": {
@@ -48,5 +49,6 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 80
-  }
+  },
+  "devDependencies": {}
 }

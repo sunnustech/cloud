@@ -7,16 +7,15 @@ timestamp(fn)
 
 type Command = 'startTimer' | 'pauseTimer' | 'resumeTimer' | 'stopTimer'
 
-export const sendQRRequest = (command: Command) => {
+export const sendQRRequest = async (command: Command) => {
   const packet = {
     points: 10,
     command,
     station: 'Slide',
     facilitator: 'Khang',
-    teamName: 'awakening',
+    teamName: 'allegation',
   }
-  axios.post(cloud(fn), packet).then((res) => {
-    const data = res.data
-    console.debug(data)
-  })
+  const response = await axios.post(cloud(fn), packet)
+  const data = response.data
+  return data.status
 }
