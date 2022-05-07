@@ -37,19 +37,24 @@ export const QRApi = https.onRequest(async (req, res) => {
     return
   }
 
-  const commandMap: Record<string, () => Promise<void>> = {
-    startTimer: team.startTimer,
-    resumeTimer: team.resumeTimer,
-    stopTimer: team.stopTimer,
-    pauseTimer: team.pauseTimer,
+  var m: string;
+  switch (command) {
+    case 'startTimer':
+      await team.startTimer()
+      break
+    case 'resumeTimer':
+      await team.resumeTimer()
+      break
+    case 'stopTimer':
+      await team.stopTimer()
+      break
+    case 'pauseTimer':
+      await team.pauseTimer()
+      break
+    default:
+      res.json({ message: 'QR: invalid command' })
+      return
   }
-
-  if (!(command in commandMap)) {
-    res.json({ message: 'QR: invalid command' })
-    return
-  }
-
-  await commandMap[command]()
 
   res.json({
     message: `successfully processed QR command for team ${teamName}`,

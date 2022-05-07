@@ -36,7 +36,10 @@
     "up": "tsc && node lib/updatePoints",
     "upa": "tsc && node lib/updatePageAccess",
     "gq": "tsc && node lib/getQuarterfinalists",
-    "qr": "tsc && node lib/qr",
+    "start": "tsc && node lib/qr/start",
+    "resume": "tsc && node lib/qr/resume",
+    "stop": "tsc && node lib/qr/stop",
+    "pause": "tsc && node lib/qr/pause",
     "reset": "tsc && node lib/RESET"
   },
   "prettier": {

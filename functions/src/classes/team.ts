@@ -166,6 +166,8 @@ export class Team {
    * can only be run once
    */
   async startTimer() {
+    console.log("GOT HERE")
+    console.log(typeof this.beginTimerFunction)
     await this.beginTimerFunction()
     if (!this.ensureStarted(false)) return
     if (!this.ensureStopped(false)) return
