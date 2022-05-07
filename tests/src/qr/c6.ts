@@ -1,7 +1,7 @@
 import { sendFullQRRequest } from '.'
 
 const packet = {
-  points: 70,
+  points: 6,
   command: 'completeStage',
   station: 'Relay2Maze',
   facilitator: 'Khang',

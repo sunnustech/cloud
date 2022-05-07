@@ -1,7 +1,7 @@
 import { sendFullQRRequest } from '.'
 
 const packet = {
-  points: 70,
+  points: 3,
   command: 'completeStage',
   station: 'Nerf Battle',
   facilitator: 'Khang',

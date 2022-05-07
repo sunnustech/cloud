@@ -233,21 +233,22 @@ export class Team {
   /**
    * complete a certain stage
    */
-  async completeStage(stage: string): Promise<string> {
+  async completeStage(qr: QR): Promise<string> {
     await this.beginQRFunction()
     console.log('=======>', this._stationsRemaining)
     if (this._stationsRemaining.length === 0) {
       return 'already completed all stations'
     }
-    if (!stationOrder['A'].includes(stage)) {
+    if (!stationOrder['A'].includes(qr.station)) {
       return 'invalid station'
     }
-    if (stage !== this._stationsRemaining[0]) {
+    if (qr.station !== this._stationsRemaining[0]) {
       return 'wrong station'
     }
     // after this point, the stage is located at the zeroth index of
     // _stationsRemaining, so we can do the following safely:
-    this._stationsCompleted.push(stage)
+    this._points += qr.points
+    this._stationsCompleted.push(qr.station)
     this._stationsRemaining.shift()
     this._timerEvents.push(this.timestamp)
     await this.endQRFunction()
@@ -274,7 +275,7 @@ export class Team {
         m = await this.resetTimer()
         break
       case 'completeStage':
-        m = await this.completeStage(qr.station)
+        m = await this.completeStage(qr)
         break
       default:
         m = 'invalid command'
