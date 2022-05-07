@@ -1,5 +1,5 @@
 import { sportList } from '../data/constants'
-import { DocumentData, Timestamp } from '@google-cloud/firestore'
+import { Timestamp } from '@google-cloud/firestore'
 import { Sport } from '../types/TSS'
 import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
@@ -104,6 +104,61 @@ export class Team {
   // at the end of every timer function
   async endTimerFunction() {
     await collection.teams.doc(this.teamName).set(this)
+    console.debug('successfully completed task')
+  }
+
+
+  /**
+   * ensure that the team's started status is at the specified state
+   */
+  ensureStarted(b: boolean): boolean {
+    if (this._started === b) {
+      console.log('GOT HERE', this._started)
+      return true
+    }
+    console.warn(
+      b === true
+        ? 'this team has not started yet'
+        : 'this team has already started'
+    )
+    return false
+  }
+
+  /**
+   * ensure that the team's stopped status is at the specified state
+   */
+  ensureStopped(b: boolean): boolean {
+    if (this._stopped === b) {
+      return true
+    }
+    console.warn(
+      b === true
+        ? 'this team has not stopped yet'
+        : 'this team has already stopped'
+    )
+    return false
+  }
+
+  /**
+   * ensure that the team's timer is at the specified state
+   */
+  ensureTimerRunning(b: boolean): boolean {
+    if (this._timerRunning === b) {
+      return true
+    }
+    console.warn(
+      b === true
+        ? "this team's timer is not running yet"
+        : "this team's timer is already running"
+    )
+    return false
+  }
+
+  /**
+   * ensure that the team has started but not stopped yet
+   */
+  ensureInGame(): boolean {
+    return this.ensureStarted(true) && this.ensureStopped(false)
   }
 
   /**
@@ -112,6 +167,9 @@ export class Team {
    */
   async startTimer() {
     await this.beginTimerFunction()
+    if (!this.ensureStarted(false)) return
+    if (!this.ensureStopped(false)) return
+    if (!this.ensureTimerRunning(false)) return
     this._started = true
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
@@ -125,13 +183,37 @@ export class Team {
    */
   async stopTimer() {
     await this.beginTimerFunction()
+    if (this.ensureInGame()) return
+    if (!this.ensureTimerRunning(true)) return
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
-    this._startTime = this.timestamp
     await this.endTimerFunction()
   }
 
+  /**
+   * resume the team's timer
+   */
+  async resumeTimer() {
+    await this.beginTimerFunction()
+    if (!this.ensureInGame()) return
+    if (!this.ensureTimerRunning(false)) return
+    this._timerRunning = true
+    this._timerEvents.push(this.timestamp)
+    await this.endTimerFunction()
+  }
+
+  /**
+   * pause the team's timer
+   */
+  async pauseTimer() {
+    await this.beginTimerFunction()
+    if (!this.ensureInGame()) return
+    if (!this.ensureTimerRunning(true)) return
+    this._timerRunning = false
+    this._timerEvents.push(this.timestamp)
+    await this.endTimerFunction()
+  }
 
   displayTimeOffset() {
     const sum = this._timerEvents.reduce((a, b) => a + b, 0)

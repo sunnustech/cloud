@@ -11,7 +11,7 @@ export const QRApi = https.onRequest(async (req, res) => {
 
   // extract required keys
   // const { facilitator, points, command, station, teamName } = req.body
-  const { teamName } = req.body
+  const { teamName, command } = req.body
 
   // require a non-empty team name
   if (isEmpty(teamName, res)) return
@@ -33,12 +33,23 @@ export const QRApi = https.onRequest(async (req, res) => {
 
   const team = snapshot.data()
   if (!team) {
-    res.json({ message: "Unable to fetch team" })
+    res.json({ message: 'Unable to fetch team' })
     return
   }
 
-  team.startTimer()
-  console.log(team)
+  const commandMap: Record<string, () => Promise<void>> = {
+    startTimer: team.startTimer,
+    resumeTimer: team.resumeTimer,
+    stopTimer: team.stopTimer,
+    pauseTimer: team.pauseTimer,
+  }
+
+  if (!(command in commandMap)) {
+    res.json({ message: 'QR: invalid command' })
+    return
+  }
+
+  await commandMap[command]()
 
   res.json({
     message: `successfully processed QR command for team ${teamName}`,

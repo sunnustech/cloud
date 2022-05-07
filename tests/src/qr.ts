@@ -5,9 +5,13 @@ import { cloud } from './utils/firebase'
 const fn = 'development-QRApi'
 timestamp(fn)
 
+type Command = 'startTimer' | 'pauseTimer' | 'resumeTimer' | 'stopTimer'
+
+const command: Command = 'startTimer'
+
 const packet = {
   points: 10,
-  command: 'startTimer',
+  command,
   station: 'Slide',
   facilitator: 'Khang',
   teamName: 'awakening',
