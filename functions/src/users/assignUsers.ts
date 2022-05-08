@@ -3,19 +3,18 @@ import { firestore } from 'firebase-admin'
 import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { please as keyCheck } from '../utils/keyChecks'
-import { User } from '../classes/user'
-import { Team } from '../classes/team'
 import { resultSummary } from '../utils/response'
+import { converter } from '../classes/firebase'
 
 export const assignUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
   const userCollection = firestore()
     .collection('users')
-    .withConverter(User.converter)
+    .withConverter(converter.user)
   const teamCollection = firestore()
     .collection('teams')
-    .withConverter(Team.converter)
+    .withConverter(converter.team)
 
   const users = await userCollection.get()
   const assignQueue: Promise<WriteResult>[] = []

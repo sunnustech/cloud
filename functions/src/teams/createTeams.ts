@@ -6,6 +6,7 @@ import { createTeams as keyCheck } from '../utils/keyChecks'
 import { getTeamsFromCsv, hasMissingHeaders } from '../utils/parseCsv'
 import { firestore } from 'firebase-admin'
 import { getAllExistingValues } from '../utils/firestore'
+import { converter } from '../classes/firebase'
 
 export const createTeams = https.onRequest(async (req, res) => {
   // check keys
@@ -37,7 +38,7 @@ export const createTeams = https.onRequest(async (req, res) => {
 
   const teamsCollection = firestore()
     .collection('teams')
-    .withConverter(Team.converter)
+    .withConverter(converter.team)
 
   // write the team data to collections
   const q: Promise<WriteResult>[] = []

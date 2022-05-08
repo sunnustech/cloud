@@ -8,8 +8,8 @@
     "axios": "^0.26.1",
     "csv-parse": "^5.0.4",
     "csv-stringify": "^6.0.5",
-    "typescript": "^4.6.3",
-    "types": "*"
+    "types": "*",
+    "typescript": "^4.6.3"
   },
   "scripts": {
     "dev": "tsc && node .",
@@ -37,6 +37,35 @@
     "upa": "tsc && node lib/updatePageAccess",
     "gq": "tsc && node lib/getQuarterfinalists",
     "qr": "tsc && node lib/createQR",
+    "start": "tsc && node lib/qr/start",
+    "resume": "tsc && node lib/qr/resume",
+    "points": "tsc && node lib/qr/addPoints",
+    "stop": "tsc && node lib/qr/stop",
+    "stop:force": "tsc && node lib/qr/forceStop",
+    "pause": "tsc && node lib/qr/pause",
+    "resetTeam": "tsc && node lib/qr/reset",
+    "r1": "node lib/qr/c1",
+    "r2": "node lib/qr/c2",
+    "r3": "node lib/qr/c3",
+    "r4": "node lib/qr/c4",
+    "r5": "node lib/qr/c5",
+    "r6": "node lib/qr/c6",
+    "c1": "tsc && yarn r1",
+    "c2": "tsc && yarn r2",
+    "c3": "tsc && yarn r3",
+    "c4": "tsc && yarn r4",
+    "c5": "tsc && yarn r5",
+    "c6": "tsc && yarn r6",
+    "c:all": "tsc && yarn r1 && yarn r2 && yarn r3 && yarn r4 && yarn r5 && yarn r6",
+    "test": "tsc && node lib/qr/test",
     "reset": "tsc && node lib/RESET"
-  }
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 80
+  },
+  "devDependencies": {}
 }

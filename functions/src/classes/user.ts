@@ -1,11 +1,8 @@
 import { firestore } from 'firebase-admin'
 import { sanitizePhoneNumber } from '../utils/string'
-import {
-  FirestoreDataConverter,
-  SetOptions,
-  WriteResult,
-} from '@google-cloud/firestore'
+import { SetOptions, WriteResult } from '@google-cloud/firestore'
 import { Init } from '../types/classes'
+import { converter } from './firebase'
 
 export class User {
   realEmail: string
@@ -22,36 +19,11 @@ export class User {
     email: '',
     teamName: '',
   })
-  static converter: FirestoreDataConverter<User> = {
-    toFirestore: (user: User) => {
-      return {
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        realEmail: user.realEmail,
-        role: user.role,
-        teamName: user.teamName,
-        loginId: user.loginId,
-        uid: user.uid,
-      }
-    },
-    fromFirestore: (snapshot) => {
-      const data = snapshot.data()
-      const user = new User({
-        phoneNumber: data.phoneNumber,
-        role: data.role,
-        email: data.email,
-        teamName: data.teamName,
-      })
-      user.setUid(data.uid)
-      user.setLoginId(data.loginId)
-      return user
-    },
-  }
   static async get(uid: string): Promise<User> {
     const ref = firestore()
       .collection('users')
       .doc(uid)
-      .withConverter(this.converter)
+      .withConverter(converter.user)
     const docSnap = await ref.get()
     const data = docSnap.data()
     if (data !== undefined) {
@@ -63,7 +35,7 @@ export class User {
     const ref = firestore()
       .collection('users')
       .doc(user.uid)
-      .withConverter(this.converter)
+      .withConverter(converter.user)
     const result = await ref.set(user, options)
     return result
   }

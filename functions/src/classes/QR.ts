@@ -1,54 +1,45 @@
-export namespace QR {
-  type HaventDecided =
-    | 'fn01'
-    | 'fn02'
-    | 'fn03'
-    | 'fn04'
-    | 'fn05'
-    | 'fn06'
-    | 'fn07'
-    | 'fn08'
-    | 'fn09'
-    | 'fn10'
-    | 'fn11'
-    | 'fn12'
-    | 'fn13'
-    | 'fn14'
-    | 'fn15'
-    | 'fn16'
-    | 'fn17'
-    | 'fn18'
-    | 'fn19'
-    | 'fn20'
+import { Team } from "./team"
 
-  export type Command =
-    | 'start'
-    | 'pause'
-    | 'stopFinal'
-    | 'resume'
-    | 'TimerNotRunning'
-    | 'completeStage'
-    | 'WrongStation'
-    | 'HaveNotStartedSOAR'
-    | 'AlreadyPaused'
-    | 'AlreadyResumed'
-    | 'AlreadyStartedSOAR'
-    | 'AlreadyCompletedSOAR'
-    | 'AlreadyCompletedAllStations'
-    | 'AlreadyCompletedStation'
-    | 'WarnStopFinal'
-    | ''
-    | HaventDecided
+export type QRProps = {
+  command: string
+  points: number
+  facilitator: string
+  station: string
+  teamName: string
+}
 
-  export type DictionaryGeneratorProps = {
-    command: Command
-    station: string
+export class QR {
+  command: string
+  points: number
+  facilitator: string
+  station: string
+  teamName: string
+  static empty = {
+    command: '',
+    points: 0,
+    facilitator: '',
+    station: '',
+    teamName: '',
   }
-
-  export type CommandProps = {
-    title: string
-    summary: string
-    action: string
-    points: number
-  } & DictionaryGeneratorProps
+  constructor(props: QRProps) {
+    if (!props.facilitator || props.facilitator === '') {
+      // nullify if no facilitator
+      this.command = ''
+      this.points = 0
+      this.facilitator = ''
+      this.station = ''
+      this.teamName = ''
+    }
+    this.facilitator = props.facilitator
+    this.station = props.station || ''
+    this.command = props.command || ''
+    this.points = props.points || 0
+    this.teamName = props.teamName || ''
+  }
+  checkStation(team: Team): boolean {
+    if (team._stationsRemaining.length === 0) {
+      return false
+    }
+    return this.station === team._stationsRemaining[0]
+  }
 }

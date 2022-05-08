@@ -7,6 +7,7 @@ import { User } from '../classes/user'
 import { https } from 'firebase-functions'
 import { WriteResult } from '@google-cloud/firestore'
 import { firestore } from 'firebase-admin'
+import { converter } from '../classes/firebase'
 
 export const createUsers = https.onRequest(async (req, res) => {
   // check keys
@@ -28,7 +29,7 @@ export const createUsers = https.onRequest(async (req, res) => {
   const writeSummary = await createFirebaseUsers(userList)
   const userCollection = firestore()
     .collection('users')
-    .withConverter(User.converter)
+    .withConverter(converter.user)
 
   // write the user data to collections
   const q: Promise<WriteResult>[] = []
