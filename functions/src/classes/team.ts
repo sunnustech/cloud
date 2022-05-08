@@ -3,7 +3,7 @@ import { Timestamp } from '@google-cloud/firestore'
 import { Sport } from '../types/TSS'
 import { Init } from '../types/classes'
 import { notEmpty } from '../utils/string'
-import { stationOrder } from '../data/schema/SOAR'
+import { stationOrder, stations } from '../data/schema/SOAR'
 import { firestore } from 'firebase-admin'
 import { collection, rebuild } from './firebase'
 import { QR } from './QR'
@@ -123,9 +123,9 @@ export class Team {
       return true
     }
     console.warn(
-      b === true ?
-        'this team has not started yet' :
-        'this team has already started'
+      b === true
+        ? 'this team has not started yet'
+        : 'this team has already started'
     )
     return false
   }
@@ -140,11 +140,33 @@ export class Team {
       return true
     }
     console.warn(
-      b === true ?
-        'this team has not stopped yet' :
-        'this team has already stopped'
+      b === true
+        ? 'this team has not stopped yet'
+        : 'this team has already stopped'
     )
     return false
+  }
+
+  /**
+   * ensure that the station is a valid one
+   * @param {string} station
+   * @return {boolean}
+   */
+  ensureValidStation(station: string): boolean {
+    return stations.includes(station)
+  }
+
+  /**
+   * ensure that the team is at the right station
+   * @param {string} station
+   * @return {boolean}
+   */
+  ensureCorrectStation(station: string): boolean {
+    const rem = this._stationsRemaining
+    if (rem.length === 0) {
+      return false
+    }
+    return station === this._stationsRemaining[0]
   }
 
   /**
@@ -157,9 +179,9 @@ export class Team {
       return true
     }
     console.warn(
-      b === true ?
-        'this team\'s timer is not running yet' :
-        'this team\'s timer is already running'
+      b === true
+        ? "this team's timer is not running yet"
+        : "this team's timer is already running"
     )
     return false
   }
@@ -177,11 +199,13 @@ export class Team {
    * can only be run once
    * @return {Promise<string>}
    */
-  async startTimer(): Promise<string> {
+  async startTimer(qr: QR): Promise<string> {
     await this.beginQRFunction()
     if (!this.ensureStopped(false)) return 'already stopped'
     if (!this.ensureStarted(false)) return 'already started'
     if (!this.ensureTimerRunning(false)) return 'timer somehow already running'
+    if (!this.ensureValidStation(qr.station)) return 'invalid station'
+    if (!this.ensureCorrectStation(qr.station)) return 'wrong station'
     this._started = true
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
@@ -282,12 +306,8 @@ export class Team {
     if (this._stationsRemaining.length === 0) {
       return 'already completed all stations'
     }
-    if (!stationOrder['A'].includes(qr.station)) {
-      return 'invalid station'
-    }
-    if (qr.station !== this._stationsRemaining[0]) {
-      return 'wrong station'
-    }
+    if (!this.ensureValidStation(qr.station)) return 'invalid station'
+    if (!this.ensureCorrectStation(qr.station)) return 'wrong station'
     // after this point, the stage is located at the zeroth index of
     // _stationsRemaining, so we can do the following safely:
     this._points += qr.points
@@ -318,32 +338,32 @@ export class Team {
   async task(qr: QR): Promise<string> {
     let m: string
     switch (qr.command) {
-    case 'startTimer':
-      m = await this.startTimer()
-      break
-    case 'resumeTimer':
-      m = await this.resumeTimer()
-      break
-    case 'stopTimer':
-      m = await this.stopTimer()
-      break
-    case 'forceStopTimer':
-      m = await this.forceStopTimer()
-      break
-    case 'pauseTimer':
-      m = await this.pauseTimer()
-      break
-    case 'resetTeam':
-      m = await this.resetTeam()
-      break
-    case 'completeStage':
-      m = await this.completeStage(qr)
-      break
-    case 'addPoints':
-      m = await this.addPoints(qr)
-      break
-    default:
-      m = 'invalid command'
+      case 'startTimer':
+        m = await this.startTimer(qr)
+        break
+      case 'resumeTimer':
+        m = await this.resumeTimer()
+        break
+      case 'stopTimer':
+        m = await this.stopTimer()
+        break
+      case 'forceStopTimer':
+        m = await this.forceStopTimer()
+        break
+      case 'pauseTimer':
+        m = await this.pauseTimer()
+        break
+      case 'resetTeam':
+        m = await this.resetTeam()
+        break
+      case 'completeStage':
+        m = await this.completeStage(qr)
+        break
+      case 'addPoints':
+        m = await this.addPoints(qr)
+        break
+      default:
+        m = 'invalid command'
     }
     return m
   }
