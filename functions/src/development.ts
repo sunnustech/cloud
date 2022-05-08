@@ -27,6 +27,7 @@ import { updatePoints } from './tss/updatePoints'
 import { getQuarterfinalists } from './tss/getQuarterfinalists'
 import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
+import { createQR } from './qr/createQR'
 
 export {
   autoLinkChangedUser,
@@ -37,6 +38,7 @@ export {
   getQuarterfinalists,
   deleteDocs,
   createTeams,
+  createQR,
   // assignTSSTeams,
   handleMatch,
   writeSchema,

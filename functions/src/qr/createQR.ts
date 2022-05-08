@@ -16,6 +16,10 @@ export const createQR = https.onRequest(async (req, res) => {
 
   if (!event || !action || !facilitator || !score) {
     console.log('Bad request body.')
+    res.json({
+      message:
+        'Please attach a JSON payload. Four fields are needed: event, action, facilitator and score.',
+    })
     return
   }
 
@@ -31,12 +35,10 @@ export const createQR = https.onRequest(async (req, res) => {
     facilitator
   const cipherText = CryptoJS.AES.encrypt(str, SALT).toString()
 
-  const tempResult = await Promise.resolve(str)
   const writeResult = await Promise.resolve(cipherText)
 
   /* send back the statuses */
   res.json({
-    tempResult,
     writeResult,
   })
 })
