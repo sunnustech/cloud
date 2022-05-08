@@ -195,17 +195,27 @@ export class Team {
   }
 
   /**
+   * ensure that the team has completed all stations
+   * @return {boolean}
+   */
+  ensureAllDone(): boolean {
+    return this._stationsRemaining.length === 0
+  }
+
+  /**
    * start the team's timer for the first time
    * can only be run once
    * @return {Promise<string>}
    */
   async startTimer(qr: QR): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureStopped(false)) return 'already stopped'
     if (!this.ensureStarted(false)) return 'already started'
     if (!this.ensureTimerRunning(false)) return 'timer somehow already running'
     if (!this.ensureValidStation(qr.station)) return 'invalid station'
     if (!this.ensureCorrectStation(qr.station)) return 'wrong station'
+    // writes
     this._started = true
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
@@ -221,11 +231,11 @@ export class Team {
    */
   async stopTimer(): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
-    if (this._stationsRemaining.length > 0) {
-      return 'have not completed all stations'
-    }
+    if (!this.ensureAllDone()) return 'have not completed all stations'
+    // writes
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
@@ -241,8 +251,10 @@ export class Team {
    */
   async forceStopTimer(): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
+    // writes
     this._stopped = true
     this._timerRunning = false
     this._timerEvents.push(-this.timestamp)
@@ -256,8 +268,10 @@ export class Team {
    */
   async resumeTimer(): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(false)) return 'timer already running'
+    // writes
     this._timerRunning = true
     this._timerEvents.push(this.timestamp)
     await this.endQRFunction()
@@ -270,27 +284,12 @@ export class Team {
    */
   async pauseTimer(): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureInGame()) return 'not in game'
     if (!this.ensureTimerRunning(true)) return 'timer already paused'
+    // writes
     this._timerRunning = false
     this._timerEvents.push(this.timestamp)
-    await this.endQRFunction()
-    return 'ok'
-  }
-
-  /**
-   * reset Timer to before starting
-   * @return {Promise<string>}
-   */
-  async resetTeam(): Promise<string> {
-    await this.beginQRFunction()
-    this._timerRunning = false
-    this._stopped = false
-    this._started = false
-    this._stationsCompleted = []
-    this._stationsRemaining = stationOrder[this.direction]
-    this._points = 0
-    this._timerEvents = []
     await this.endQRFunction()
     return 'ok'
   }
@@ -302,10 +301,9 @@ export class Team {
    */
   async completeStage(qr: QR): Promise<string> {
     await this.beginQRFunction()
+    // checks
     if (!this.ensureInGame()) return 'not in game'
-    if (this._stationsRemaining.length === 0) {
-      return 'already completed all stations'
-    }
+    if (this.ensureAllDone()) return 'already completed all stations'
     if (!this.ensureValidStation(qr.station)) return 'invalid station'
     if (!this.ensureCorrectStation(qr.station)) return 'wrong station'
     // after this point, the stage is located at the zeroth index of
@@ -326,6 +324,23 @@ export class Team {
     await this.beginQRFunction()
     if (!this.ensureInGame()) return 'not in game'
     this._points += qr.points
+    await this.endQRFunction()
+    return 'ok'
+  }
+
+  /**
+   * reset Timer to before starting
+   * @return {Promise<string>}
+   */
+  async resetTeam(): Promise<string> {
+    await this.beginQRFunction()
+    this._timerRunning = false
+    this._stopped = false
+    this._started = false
+    this._stationsCompleted = []
+    this._stationsRemaining = stationOrder[this.direction]
+    this._points = 0
+    this._timerEvents = []
     await this.endQRFunction()
     return 'ok'
   }
