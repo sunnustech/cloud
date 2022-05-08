@@ -1,5 +1,5 @@
 import * as development from './development'
-import { authTest, handleMatch } from './production'
+import { authTest, handleMatch, QRApi } from './production'
 import { app, fs } from './init'
 
 /* [production.ts]
@@ -16,4 +16,4 @@ import { app, fs } from './init'
 console.log(app.name, fs.settings.name)
 
 
-export { development, authTest, handleMatch }
+export { development, authTest, handleMatch, QRApi }
