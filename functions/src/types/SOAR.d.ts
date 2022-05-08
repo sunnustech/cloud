@@ -78,6 +78,40 @@ export type SOARCommand =
   | ''
   | HaventDecided
 
+export type SOARStations =
+  | 'Slide'
+  | 'Sotong Houze'
+  | 'Nerf Battle'
+  | 'Snake and Ladders'
+  | 'GOLF'
+  | 'Relay2Maze'
+
+export type SOARScores =
+  | '0'
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9'
+  | '10'
+  | '11'
+  | '12'
+  | '13'
+  | '14'
+  | '15'
+  | '16'
+  | '17'
+  | '18'
+  | '19'
+  | '20'
+
+// Placeholder
+export type SOARFacilitators = 'khang' | 'benjy'
+
 export type QRDictionaryGeneratorProps = {
   command: SOARCommand
   station: string

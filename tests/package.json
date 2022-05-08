@@ -36,6 +36,7 @@
     "up": "tsc && node lib/updatePoints",
     "upa": "tsc && node lib/updatePageAccess",
     "gq": "tsc && node lib/getQuarterfinalists",
+    "qr": "tsc && node lib/createQR",
     "reset": "tsc && node lib/RESET"
   }
 }
