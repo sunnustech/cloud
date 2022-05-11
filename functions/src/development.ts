@@ -11,7 +11,7 @@ export const helloWorld = https.onRequest(async (req, res) => {
 /* sunnus functions */
 import { initializeCollections } from './data/initializeCollections'
 import { QRApi } from './qr'
-import { handleMatch } from './roundRobin'
+import { handleMatch } from './tss'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 // import { assignTSSTeams } from './teams/assignTSSTeams'

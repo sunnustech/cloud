@@ -6,13 +6,9 @@ export type Sport =
   | 'touchRugby'
   | 'captainsBall'
 
-export type Winner = 'A' | 'B' | 'U'
+export type Winner = 'A' | 'B' | 'U' | 'D'
 
-export type Round =
-  | 'round_robin'
-  | 'quarterfinals'
-  | 'semifinals'
-  | 'finals'
+export type Round = 'round_robin' | 'quarterfinals' | 'semifinals' | 'finals'
 
 export type MatchRequest = {
   sport: Sport

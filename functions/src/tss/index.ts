@@ -1,37 +1,7 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { IncomingHandleMatchRequest, ServerMatchRecord } from '../types'
-import { Round } from '../types/TSS'
-import { roundList } from '../data/constants'
-
-/**
- * Transitions teams to the next round. If team is in final, it has no more
- * rounds and thus ends.
- * @param {IncomingHandleMatchRequest} data: the entire match request
- * @return {Round} Next round that the team will be in
- */
-const getNextRound = (data: IncomingHandleMatchRequest): Round => {
-  const curr = roundList.indexOf(data.round)
-  const next = curr + 1
-  return next < roundList.length ?
-    roundList[next] :
-    roundList[roundList.length - 1]
-}
-
-const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
-  return Math.floor(data.matchNumber / 2)
-}
-
-const getWinnerTeamName = (data: IncomingHandleMatchRequest) => {
-  if (data.winner === 'U') {
-    return '---'
-  }
-  return data[data.winner]
-}
-
-const getNextSlot = (data: IncomingHandleMatchRequest) => {
-  return data.matchNumber % 2 === 0 ? 'A' : 'B'
-}
+import { Round, Sport, Winner } from '../types/TSS'
 
 const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   // get timestamp from server
@@ -47,8 +17,45 @@ const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   return writeResult
 }
 
-const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
-  const nextRound: Round = getNextRound(data)
+/**
+ * Determines the winner of a match based on the scores
+ *
+ * @param scoreA score that team A receives
+ * @param scoreB score that team B receives
+ * @returns winner of the match
+ */
+const getWinner = (scoreA: number, scoreB: number) => {
+  if (scoreA > scoreB) {
+    return 'A'
+  } else if (scoreA < scoreB) {
+    return 'B'
+  } else {
+    return 'D'
+  }
+}
+
+/**
+ * Updates the 'tss' collection on the outcome of the match
+ *
+ * @param data json request sent to cloud function
+ * @returns
+ */
+const updateMatchResult = async (data: IncomingHandleMatchRequest) => {
+  const teamA: string = data.A
+  const teamB: string = data.B
+  const scoreA: number = data.scoreA
+  const scoreB: number = data.scoreB
+  const winner: Winner = getWinner(scoreA, scoreB)
+  const sport: Sport = data.sport
+  const round: Round = data.round
+
+  const tssDoc = firestore().collection('TSS').doc(sport)
+  // Insert this into frontend, and test
+  console.log()
+}
+
+/**
+const nextRound: Round = getNextRound(data)
   const nextMatchNumber = getNextMatchNumber(data)
   const nextSlot: 'A' | 'B' = getNextSlot(data)
   const winnerTeamName = getWinnerTeamName(data)
@@ -92,41 +99,30 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
     { merge: true }
   )
   return 'updated: non-finals'
+ */
+
+/* 
+Sample call:
+const request: IncomingHandleMatchRequest = {
+  series: 'TSS',
+  sport: 'volleyball',
+  round: 'round_robin',
+  matchNumber: 0,
+  A: 'A-team',
+  B: 'B-team',
+  winner: 'A',
+  scoreA: 10,
+  scoreB: 4,
+  facilitatorEmail: 'hongsheng@gmail.com',
 }
-
-export const _handleMatch = https.onRequest(async (req, res) => {
-  // sample match request
-  const request: IncomingHandleMatchRequest = {
-    series: 'TSS',
-    sport: 'volleyball',
-    round: 'round_robin',
-    matchNumber: 0,
-    A: 'A-team',
-    B: 'B-team',
-    winner: 'A',
-    scoreA: 10,
-    scoreB: 4,
-    facilitatorEmail: 'hongsheng@gmail.com',
-  }
-
-  const [saveResult, writeResult] = await Promise.all([
-    saveMatchRecordAsync(request),
-    updateKnockoutTable(request),
-  ])
-
-  // Send back a message that we've successfully written the match
-  res.json({
-    result: `Match with ID: ${saveResult.id} written.`,
-  })
-  res.json({ result: `${writeResult} successfully` })
-})
+*/
 
 export const handleMatch = https.onCall(
   async (req: IncomingHandleMatchRequest, context) => {
     // TODO: use context to only allow uids that are inside of facils/admins
     const results = await Promise.all([
       saveMatchRecordAsync(req),
-      updateKnockoutTable(req),
+      updateMatchResult(req),
     ])
 
     // Send back a message that we've successfully written the match
