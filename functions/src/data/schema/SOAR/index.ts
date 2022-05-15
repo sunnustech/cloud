@@ -2,15 +2,17 @@ import { SOARDatabase } from '../../../types/SOAR'
 import gameLocations from './gameLocations'
 import adminLocations from './adminLocations'
 
+export const stations = [
+  'Slide',
+  'Sotong Houze',
+  'Nerf Battle',
+  'Snake and Ladders',
+  'GOLF',
+  'Relay2Maze',
+]
+
 export const stationOrder = {
-  A: [
-    'Slide',
-    'Sotong Houze',
-    'Nerf Battle',
-    'Snake and Ladders',
-    'GOLF',
-    'Relay2Maze',
-  ],
+  A: stations,
   B: [
     'GOLF',
     'Snake and Ladders',

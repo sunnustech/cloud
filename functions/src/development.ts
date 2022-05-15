@@ -10,7 +10,8 @@ export const helloWorld = https.onRequest(async (req, res) => {
 
 /* sunnus functions */
 import { initializeCollections } from './data/initializeCollections'
-import { handleMatch } from './roundRobin'
+import { QRApi } from './qr'
+import { handleMatch } from './tss'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 // import { assignTSSTeams } from './teams/assignTSSTeams'
@@ -27,6 +28,7 @@ import { updatePoints } from './tss/updatePoints'
 import { getQuarterfinalists } from './tss/getQuarterfinalists'
 import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
+import { createQR } from './qr/createQR'
 
 export {
   autoLinkChangedUser,
@@ -37,6 +39,7 @@ export {
   getQuarterfinalists,
   deleteDocs,
   createTeams,
+  createQR,
   // assignTSSTeams,
   handleMatch,
   writeSchema,
@@ -47,4 +50,5 @@ export {
   clearCollection,
   getSchedule,
   initializeCollections,
+  QRApi,
 }

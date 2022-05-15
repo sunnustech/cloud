@@ -35,6 +35,31 @@ export const hasMissingKeys = (
 }
 
 /**
+ * requires that all keys are in, else exit firebase with message
+ * @param {RequiredKey[]} arr: array of key-message pairs
+ * @param {any} data
+ * @return {string}
+ */
+export const _hasMissingKeys = (
+  arr: RequiredKey[],
+  data: any
+): string => {
+  function getMessage(item: RequiredKey): string {
+    const vowel = ['a', 'e', 'i', 'o', 'u']
+    const an = vowel.includes(item.key[0]) ? 'an' : 'a'
+    return `Please supply ${an} ${item.description} in the \`${item.key}\` prop of the request body.`
+  }
+  const requestedKeys = Object.keys(data)
+  for (let i = 0; i < arr.length; i++) {
+    const pair = arr[i]
+    if (!requestedKeys.includes(pair.key)) {
+      return getMessage(pair)
+    }
+  }
+  return 'all ok'
+}
+
+/**
  * required that a <= b, else exit firebase with message
  * where a is the required list
  * @param {T[]} a
@@ -59,4 +84,19 @@ export function isSubset<T>(
     return false
   }
   return true
+}
+
+/**
+ * required that input is not blank, else exist
+ * where a is the required list
+ * @param {string} string
+ * @param {Response<any>} res
+ * @return {boolean}
+ */
+export function isEmpty(string: string, res: Response<any>): boolean {
+  if (string === '') {
+    res.json({ message: 'Error: expected non-empty string' })
+    return true
+  }
+  return false
 }

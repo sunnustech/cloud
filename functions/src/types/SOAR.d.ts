@@ -37,28 +37,6 @@ export type SOARDatabase = {
   }
 }
 
-type HaventDecided =
-  | 'fn01'
-  | 'fn02'
-  | 'fn03'
-  | 'fn04'
-  | 'fn05'
-  | 'fn06'
-  | 'fn07'
-  | 'fn08'
-  | 'fn09'
-  | 'fn10'
-  | 'fn11'
-  | 'fn12'
-  | 'fn13'
-  | 'fn14'
-  | 'fn15'
-  | 'fn16'
-  | 'fn17'
-  | 'fn18'
-  | 'fn19'
-  | 'fn20'
-
 export type SOARCommand =
   | 'start'
   | 'pause'
@@ -76,21 +54,47 @@ export type SOARCommand =
   | 'AlreadyCompletedStation'
   | 'WarnStopFinal'
   | ''
-  | HaventDecided
 
-export type QRDictionaryGeneratorProps = {
-  command: SOARCommand
-  station: string
+export type SOARStations =
+  | 'Slide'
+  | 'Sotong Houze'
+  | 'Nerf Battle'
+  | 'Snake and Ladders'
+  | 'GOLF'
+  | 'Relay2Maze'
+
+export type SOARScores =
+  | '0'
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9'
+  | '10'
+  | '11'
+  | '12'
+  | '13'
+  | '14'
+  | '15'
+  | '16'
+  | '17'
+  | '18'
+  | '19'
+  | '20'
+
+// Placeholder
+export type SOARFacilitators = 'khang' | 'benjy'
+
+export type QRRequest = {
+  event: SOARStations
+  action: SOARCommand
+  facilitator: string
+  score: SOARScores
 }
-
-export type QRCommandProps = {
-  title: string
-  summary: string
-  action: string
-  points: number
-} & QRDictionaryGeneratorProps
-
-export type QRDynamicCommandProps = (points: number) => QRCommandProps
 
 export type StationOrderProps = {
   A: Array<string>
