@@ -1,6 +1,12 @@
 import { https } from 'firebase-functions'
 import CryptoJS from 'crypto-js'
+import { QRRequest } from '../types/SOAR'
 
+/**
+ * Endpoint to create a QR URL containing the inputs provided.
+ * Request body parameters:
+ * Refer to the type QRRequest
+ */
 export const createQR = https.onRequest(async (req, res) => {
   const body = req.body
   const event = body.event
@@ -9,10 +15,7 @@ export const createQR = https.onRequest(async (req, res) => {
   const score = body.score
 
   console.log(body)
-  console.log(event)
-  console.log(action)
-  console.log(facilitator)
-  console.log(score)
+  console.log(event, action, facilitator, score)
 
   if (!event || !action || !facilitator || !score) {
     console.log('Bad request body.')

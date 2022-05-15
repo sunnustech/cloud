@@ -1,7 +1,6 @@
-export type Series = 'TSS' | 'WSS'
+import { Match, Round, Sport } from "./TSS"
 
 export type IncomingHandleMatchRequest = Match & {
-  series: Series
   sport: Sport
   matchNumber: number
   round: Round
