@@ -62,6 +62,10 @@ export namespace collection {
  * using source, rebuild target
  */
 export namespace rebuild {
+  /**
+   * @param {Team | DocumentData} source
+   * @param {Team | DocumentData} target
+   */
   export const team = (source: Team | DocumentData, target: Team | DocumentData) => {
     target.teamName = source.teamName || ''
     target.members = source.members || []
