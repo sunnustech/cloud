@@ -1,6 +1,5 @@
 import { https } from 'firebase-functions'
 import CryptoJS from 'crypto-js'
-import { QRRequest } from '../types/SOAR'
 
 /**
  * Endpoint to create a QR URL containing the inputs provided.
