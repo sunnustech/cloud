@@ -2,6 +2,9 @@ on:
   push:
     branches:
       - master
+      - dev
+      - ryan*
+      - khang*
 jobs:
   build:
     runs-on: ubuntu-latest
