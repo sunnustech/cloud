@@ -1,8 +1,56 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { IncomingHandleMatchRequest, ServerMatchRecord } from '../types'
-import { Round, Sport, Winner } from '../types/TSS'
-import { DocumentData, DocumentReference, WriteResult } from '@google-cloud/firestore'
+import { Round } from '../types/TSS'
+import { roundList } from '../data/constants'
+
+/**
+ * Transitions teams to the next round. If team is in final, it has no more
+ * rounds and thus ends.
+ *
+ * @param {IncomingHandleMatchRequest} data json request sent to cloud function
+ * @return {Round} next round that the team will be in
+ */
+const getNextRound = (data: IncomingHandleMatchRequest): Round => {
+  const curr = roundList.indexOf(data.round)
+  const next = curr + 1
+  return next < roundList.length
+    ? roundList[next]
+    : roundList[roundList.length - 1]
+}
+
+/**
+ * Computes the match number for the next bracket
+ *
+ * @param {IncomingHandleMatchRequest} data json request sent to cloud function
+ * @return {number} match number team is in for next bracket
+ */
+const getNextMatchNumber = (data: IncomingHandleMatchRequest) => {
+  return Math.floor(data.matchNumber / 2)
+}
+
+/**
+ * Returns the winner's team name
+ *
+ * @param {IncomingHandleMatchRequest} data json request sent to cloud function
+ * @return {string} name of team that is advancing into the next bracket
+ */
+const getWinnerTeamName = (data: IncomingHandleMatchRequest) => {
+  if (data.winner === 'U') {
+    return '---'
+  }
+  return data.winner === 'A' ? data.A : data.B
+}
+
+/**
+ * Determines if the winner should be team A or team B for the next bracket
+ *
+ * @param {IncomingHandleMatchRequest} data json request sent to cloud function
+ * @return letter mapping of winning team for next bracket
+ */
+const getNextSlot = (data: IncomingHandleMatchRequest) => {
+  return data.matchNumber % 2 === 0 ? 'A' : 'B'
+}
 
 /**
  * Adds a document to the 'match-records' collection on an instance of the match outcome
@@ -10,9 +58,7 @@ import { DocumentData, DocumentReference, WriteResult } from '@google-cloud/fire
  * @param {IncomingHandleMatchRequest} data json request sent to cloud function
  * @return {Promise<DocumentReference<DocumentData>>} the outcome of writing to the collection 'match-records'
  */
-const saveMatchRecordAsync = async (
-  data: IncomingHandleMatchRequest
-): Promise<DocumentReference<DocumentData>> => {
+const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
   // get timestamp from server
   const timestamp: Date = firestore.Timestamp.now().toDate()
   const serverMatchRecord: ServerMatchRecord = {
@@ -27,31 +73,56 @@ const saveMatchRecordAsync = async (
 }
 
 /**
- * Updates the 'tss' collection on the outcome of the match
+ * Updates the 'tss' collection in the database
  *
  * @param {IncomingHandleMatchRequest} data json request sent to cloud function
- * @return {Promise<WriteResult>} the outcome of updating the collection 'tss'
+ * @return {string} outcome as a status update
  */
-const updateMatchResult = async (data: IncomingHandleMatchRequest): Promise<WriteResult> => {
-  const scoreA: number = data.scoreA
-  const scoreB: number = data.scoreB
-  const winner: Winner = data.winner
-  const sport: Sport = data.sport
-  const round: Round = data.round
-  const matchNumber: number = data.matchNumber
+const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
+  const nextRound: Round = getNextRound(data)
+  const nextMatchNumber = getNextMatchNumber(data)
+  const nextSlot: 'A' | 'B' = getNextSlot(data)
+  const winnerTeamName = getWinnerTeamName(data)
 
-  const tssDoc = firestore().collection('TSS').doc(sport)
+  const docRef = firestore().collection('tss').doc(data.sport)
 
-  const path = round + '.' + matchNumber.toString()
-  const scoreAPath = path + '.' + 'scoreA'
-  const scoreBPath = path + '.' + 'scoreB'
-  const winnerPath = path + '.' + 'winner'
+  const thisRoundData = {
+    [data.matchNumber]: {
+      winner: data.winner,
+      scoreA: data.scoreA,
+      scoreB: data.scoreB,
+    },
+  }
 
-  const updatedObj: any = {}
-  updatedObj[scoreAPath] = scoreA
-  updatedObj[scoreBPath] = scoreB
-  updatedObj[winnerPath] = winner
-  return await tssDoc.update(updatedObj)
+  // If the round is finals, we only need to update this round
+  if (data.round === 'finals') {
+    docRef.set(
+      {
+        [data.round]: thisRoundData,
+        champions: winnerTeamName,
+      },
+      { merge: true }
+    )
+    return 'updated: finals'
+  }
+
+  // For any other round,
+  // we need to update the winner of current and next round
+  const nextRoundData = {
+    [nextMatchNumber]: {
+      winner: 'U',
+      [nextSlot]: winnerTeamName,
+    },
+  }
+
+  docRef.set(
+    {
+      [data.round]: thisRoundData,
+      [nextRound]: nextRoundData,
+    },
+    { merge: true }
+  )
+  return 'updated: non-finals'
 }
 
 /**
@@ -64,7 +135,7 @@ export const handleMatch = https.onCall(
     // TODO: use context to only allow uids that are inside of facils/admins
     const results = await Promise.all([
       saveMatchRecordAsync(req),
-      updateMatchResult(req),
+      updateKnockoutTable(req),
     ])
 
     // Send back a message that we've successfully written the match
