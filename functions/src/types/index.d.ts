@@ -1,4 +1,4 @@
-import { Match, Round, Sport } from "./TSS"
+import { Match, Round, Sport } from './TSS'
 
 export type IncomingHandleMatchRequest = Match & {
   sport: Sport
