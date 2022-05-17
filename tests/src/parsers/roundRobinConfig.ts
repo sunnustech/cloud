@@ -1,8 +1,7 @@
 import { parse } from 'csv-parse/sync'
-import { RoundRobinConfig } from '../../../types/schedule'
 
-export const readRoundRobinConfig = (fileData: Buffer): RoundRobinConfig => {
-  const config: RoundRobinConfig = {
+export const readRoundRobinConfig = (fileData: Buffer) => {
+  const config: any = {
     4: [], 5: [], 6: []
   }
   parse(fileData, {

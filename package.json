@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "setup": "yarn && yarn --cwd ./functions && yarn --cwd ./tests"
+    "setup": "yarn && yarn --cwd ./functions && yarn --cwd ./tests",
+    "serve": "yarn --cwd ./functions serve"
   }
 }

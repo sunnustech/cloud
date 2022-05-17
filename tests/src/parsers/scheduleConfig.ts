@@ -1,5 +1,4 @@
 import { parse } from 'csv-parse/sync'
-import { ScheduleConfig } from '../../../types/schedule'
 
 const True: Record<string, boolean> = {
   yes: true,
@@ -11,7 +10,7 @@ const False: Record<string, boolean> = {
   false: true,
 }
 
-export const readScheduleConfig = (fileData: Buffer): ScheduleConfig =>
+export const readScheduleConfig = (fileData: Buffer) =>
   parse(fileData, {
     delimiter: ',',
     fromLine: 2,
