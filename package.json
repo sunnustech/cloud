@@ -1,5 +1,8 @@
 {
   "name": "functions",
   "version": "1.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "setup": "yarn && yarn --cwd ./functions && yarn --cwd ./tests"
+  }
 }
