@@ -25,6 +25,7 @@
     "dau": "tsc && node lib/deleteAllUsers",
     "dat": "tsc && node lib/deleteAllTeams",
     "hm": "tsc && node lib/handleMatch",
+    "us": "tsc ** node lib/updateSchedule",
     "it": "tsc && node lib/initializeTeam",
     "cs": "tsc && node lib/createSchedule",
     "rr": "tsc && node lib/parsers/roundRobinConfig",

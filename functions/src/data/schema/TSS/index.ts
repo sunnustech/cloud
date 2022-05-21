@@ -4,7 +4,17 @@ import { filledRounds } from './filledRounds'
 import { createMatch, createEmptyMatches } from './utils'
 
 export const sampleRounds: Rounds = {
-  round_robin: {},
+  // temp, so frontend has data to work with
+  round_robin: {
+    0: createMatch('Independent_Decorators', 'Gentle_Sweaters'),
+    1: createMatch('Known_Painters', 'Modest_Liberators'),
+    2: createMatch('Poor_Philosophers', 'Written_Particulars'),
+    3: createMatch('Handicapped_Silvers', 'Remaining_Masters'),
+    4: createMatch('Vulnerable_Council', 'Real_Lasers'),
+    5: createMatch('Elaborate_Solvents', 'Sophisticated_Crystals'),
+    6: createMatch('Influential_Realtors', 'Irrelevant_Readers'),
+    7: createMatch('Harvard_Graduates', 'Lingustic_Reformers'),
+  },
   quarterfinals: {
     0: createMatch('Independent_Decorators', 'Gentle_Sweaters'),
     1: createMatch('Known_Painters', 'Modest_Liberators'),

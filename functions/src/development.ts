@@ -12,6 +12,7 @@ export const helloWorld = https.onRequest(async (req, res) => {
 import { initializeCollections } from './data/initializeCollections'
 import { QRApi } from './qr'
 import { handleMatch } from './tss'
+import { updateSchedule } from './tss/updateSchedule'
 import { writeSchema } from './data/writeSchema'
 import { createTeams } from './teams/createTeams'
 // import { assignTSSTeams } from './teams/assignTSSTeams'
@@ -42,6 +43,7 @@ export {
   createQR,
   // assignTSSTeams,
   handleMatch,
+  updateSchedule,
   writeSchema,
   deleteAllUsers,
   createUsers,
