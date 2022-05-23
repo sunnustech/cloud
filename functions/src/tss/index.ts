@@ -14,9 +14,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length ?
-    roundList[next] :
-    roundList[roundList.length - 1]
+  return next < roundList.length
+    ? roundList[next]
+    : roundList[roundList.length - 1]
 }
 
 /**
@@ -59,7 +59,6 @@ const getNextSlot = (data: IncomingHandleMatchRequest): 'A' | 'B' => {
  * @return {Promise<DocumentReference<DocumentData>>} the outcome of writing to the collection 'match-records'
  */
 const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
-  // get timestamp from server
   const timestamp: Date = firestore.Timestamp.now().toDate()
   const serverMatchRecord: ServerMatchRecord = {
     ...data,
@@ -73,12 +72,15 @@ const saveMatchRecordAsync = async (data: IncomingHandleMatchRequest) => {
 }
 
 /**
- * Updates the 'tss' collection in the database
+ * Updates the 'tss' collection in the database for the outcome of finals, semis, quarters
+ * To update round robin matches, check out 'updateScedule'
  *
  * @param {IncomingHandleMatchRequest} data json request sent to cloud function
  * @return {string} outcome as a status update
  */
-const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
+const updateKnockoutTable = async (
+  data: IncomingHandleMatchRequest
+): Promise<string> => {
   const nextRound: Round = getNextRound(data)
   const nextMatchNumber = getNextMatchNumber(data)
   const nextSlot: 'A' | 'B' = getNextSlot(data)
@@ -94,7 +96,7 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
     },
   }
 
-  // If the round is finals, we only need to update this round
+  // If the round is finals, we only need to update this round as there is no next round
   if (data.round === 'finals') {
     docRef.set(
       {
@@ -131,14 +133,13 @@ const updateKnockoutTable = async (data: IncomingHandleMatchRequest) => {
  * Refer to the type IncomingHandleMatchRequest
  */
 export const handleMatch = https.onCall(
-  async (req: IncomingHandleMatchRequest, context) => {
-    // TODO: use context to only allow uids that are inside of facils/admins
+  async (req: IncomingHandleMatchRequest, _context) => {
     const results = await Promise.all([
       saveMatchRecordAsync(req),
       updateKnockoutTable(req),
     ])
 
-    // Send back a message that we've successfully written the match
+    // Sends back a message that we've successfully written the match
     return {
       result: `Match with ID: ${results[0].id} written.`,
     }
