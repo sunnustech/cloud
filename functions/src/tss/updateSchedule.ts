@@ -1,11 +1,10 @@
 import { https } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 import { IncomingHandleMatchRequest, ServerMatchRecord } from '../types'
-import { Round, Sport, Winner } from '../types/TSS'
+// import { Round, Sport, Winner } from '../types/TSS'
 import {
   DocumentData,
   DocumentReference,
-  WriteResult,
 } from '@google-cloud/firestore'
 
 /**
@@ -37,27 +36,30 @@ const saveMatchRecordAsync = async (
  * @return {Promise<WriteResult>} the outcome of updating the collection 'tss'
  */
 const updateMatchResult = async (
-  data: IncomingHandleMatchRequest
-): Promise<WriteResult> => {
-  const scoreA: number = data.scoreA
-  const scoreB: number = data.scoreB
-  const winner: Winner = data.winner
-  const sport: Sport = data.sport
-  const round: Round = data.round
-  const matchNumber: number = data.matchNumber
+  data: IncomingHandleMatchRequest & { id: string }
+): Promise<void> => {
+  // const scoreA: number = data.scoreA
+  // const scoreB: number = data.scoreB
+  // const winner: Winner = data.winner
+  // const sport: Sport = data.sport
+  // const round: Round = data.round
+  // const matchNumber: number = data.matchNumber
 
-  const tssDoc = firestore().collection('TSS').doc(sport)
+  await firestore().collection('schedule').doc(data.id).update({
+    scoreA: data.scoreA, scoreB: data.scoreB,
+  })
+  // const tssDoc = firestore().collection('TSS').doc(sport)
 
-  const path = round + '.' + matchNumber.toString()
-  const scoreAPath = path + '.' + 'scoreA'
-  const scoreBPath = path + '.' + 'scoreB'
-  const winnerPath = path + '.' + 'winner'
-
-  const updatedObj: any = {}
-  updatedObj[scoreAPath] = scoreA
-  updatedObj[scoreBPath] = scoreB
-  updatedObj[winnerPath] = winner
-  return await tssDoc.update(updatedObj)
+  // const path = round + '.' + matchNumber.toString()
+  // const scoreAPath = path + '.' + 'scoreA'
+  // const scoreBPath = path + '.' + 'scoreB'
+  // const winnerPath = path + '.' + 'winner'
+  //
+  // const updatedObj: any = {}
+  // updatedObj[scoreAPath] = scoreA
+  // updatedObj[scoreBPath] = scoreB
+  // updatedObj[winnerPath] = winner
+  // return await tssDoc.update(updatedObj)
 }
 
 /**
@@ -66,7 +68,7 @@ const updateMatchResult = async (
  * Refer to the type IncomingHandleMatchRequest
  */
 export const updateSchedule = https.onCall(
-  async (req: IncomingHandleMatchRequest, context) => {
+  async (req: IncomingHandleMatchRequest & { id: string }, context) => {
     // TODO: use context to only allow uids that are inside of facils/admins
     const results = await Promise.all([
       saveMatchRecordAsync(req),

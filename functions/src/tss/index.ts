@@ -14,9 +14,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 /**
@@ -46,9 +46,9 @@ const getWinnerTeamName = (data: IncomingHandleMatchRequest) => {
  * Determines if the winner should be team A or team B for the next bracket
  *
  * @param {IncomingHandleMatchRequest} data json request sent to cloud function
- * @return letter mapping of winning team for next bracket
+ * @return {"A" | "B"} letter mapping of winning team for next bracket
  */
-const getNextSlot = (data: IncomingHandleMatchRequest) => {
+const getNextSlot = (data: IncomingHandleMatchRequest): 'A' | 'B' => {
   return data.matchNumber % 2 === 0 ? 'A' : 'B'
 }
 
