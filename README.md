@@ -14,59 +14,48 @@
 
 ## What is this repo for?
 
-## Downloading sign up information
+This repo is used to contain all the Firebase [cloud functions](https://firebase.google.com/docs/functions) for the SunNUS 22 mobile app. It facilitates backend functions to our application, thus allowing us develoepers to call them without invoking them from the application itself.
 
-[](https://docs.google.com/spreadsheets/d/1e0zkoT6qQA8gBkd8QvvVuGR332QLotJ94dPJmIo-4BI) 0. do basic checks that data is correct
+If you would like to learn more about the project in general or need a starting point, you may refer to the docs repo.
 
-1. download registration csvs from Google Sheets
-   - createTeams
-   - createUsers
-2. copy them into the csv folder and commit that change
+If you would like to learn more about how the frontend is built, you may refer to the app repo.
 
-## Command Sequence
+## Repo structure
 
-| command  | description                  |
-| -------- | ---------------------------- |
-| yarn cu  | create users                 |
-| yarn ct  | create teams                 |
-| yarn au  | attach users to teams        |
-| yarn att | assign TSS teams their slots |
-| yarn cs  | create schedule              |
+This repo has two main directories: `functions` and `tests`.
 
-## Teardown sequence
+`functions` contain the logic for the `onRequest` and `onCall` backend functions.
 
-| command  | description      |
-| -------- | ---------------- |
-| yarn dau | delete all users |
-| yarn dat | delete all teams |
-| yarn ds  | delete schedule  |
+`tests` contain ...
 
 ## Setup
 
-Clone the repo into a folder called `cloud`. After cloning the repo, install
-node packages by running `yarn` in three directories:
+Pre-requisites:
+- Ensure that you have [node](https://nodejs.org/en/download/) installed.
+- Ensure that you are part of the project on Firebase.
 
-- `cloud/`
+Clone the repo. A folder called `cloud` should appear. After cloning the repo, install
+node packages by running `yarn` in these three directories:
+
+- `cloud`
 - `cloud/functions`
-- `cloud/functions/src/tests`
 
-Then make sure you're logged in to firebase:
-1. `cd cloud/functions`
+Then log in into firebase using the CLI: (assuming you're in `cloud`)
+1. `cd functions`
 2. `yarn firebase login`
 
 ## Writing your first function
 
 Here's an example workflow of how I write a `helloWorld` cloud function.
-1. [Setting up server-side](#setting-up-server-side)
-2. [Setting up client tester](#setting-up-client-tester)
+1. Setting up server-side
+2. Setting up client tester
 
 ### Setting up server-side
 
 1. Export a new `onRequest` function `helloWorld` in
-   `cloud/function/src/index.ts`
+   `cloud/functions/src/helloWorld.ts`
 
 ```js
-// cloud/function/src/index.ts
 export const helloWorld = https.onRequest(async (req, res) => {
   console.debug('hello, server!')
   res.json({
@@ -76,31 +65,40 @@ export const helloWorld = https.onRequest(async (req, res) => {
 })
 ```
 
-2. Spin up a local emulator server
+2. Add it to the list of cloud functions to be used by exporting it in `cloud/functions/src/development.ts`.
 
+3. Spin up a local emulator server
+
+Linux/ MacOS:
 ```bash
-cd cloud/functions && yarn serve
+cd functions && yarn serve
 ```
 
-Alternatively, if you run into an error, run this instead:
+Windows:
 
 ```bash
-cd cloud/functions && yarn start:functions
+cd functions && yarn start:functions
 ```
 
-3. Your terminal should should a list of local urls, one of which ending in
+4. Your terminal should should a list of local urls, one of which ends in
    `helloWorld`.
 
-4. Go to that link in your browser. After loading, both your terminal and your
-   browser should have some nice ouptut.
+![](/docs/images/helloWorldLink.png)
+
+5. Go to that link in your browser. After loading, both your terminal and your
+   browser should have the output as specified in the function above.
+
+![](/docs/images/helloWorldRes.png)
+
+6. Congrats! :tada: You've just written your very first cloud function!
 
 ### Setting up client tester
 
 To avoid needing to navigate to the link each time, you can use a simple
 node.js request sender.
 
-1. Create a new `.ts` file in `cloud/functions/src/tests/src` (reference `index.ts`)
-2. Create a script in `package.json` to build and run it.
+1. Create a new `.ts` file in `cloud/tests/src` (reference `index.ts`)
+2. Create a script in `cloud/tests/package.json` to build and run it. You may do so by creating an alias (i.e shortcut for the command)
 3. Test out the function as per stated above.
 4. If the function you are testing requires inputs, you may embed them in the URL. Alternatively, you may download API Clients such as [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) and form a payload from there.
 
@@ -125,7 +123,8 @@ cd cloud/tests && yarn tsc && node lib/index.js
 
 Supplying inputs from Postman example:
 
-Using `createQR.ts` sa an example, the cloud function requires four parameters to be supplied. You may supply them in a JSON object in the GET request as follows:
+Using `createQR.ts` as an example, the cloud function requires four parameters to be supplied. You may supply them in a JSON object in the GET request as follows:
+
 ```json
 {
    "event": "Slide",
@@ -134,3 +133,33 @@ Using `createQR.ts` sa an example, the cloud function requires four parameters t
    "score": "20"
 }
 ```
+
+![](docs/images/sample_onRequest_request.png)
+
+## Command Sequence
+
+| command  | description                  |
+| -------- | ---------------------------- |
+| yarn cu  | create users                 |
+| yarn ct  | create teams                 |
+| yarn au  | attach users to teams        |
+| yarn att | assign TSS teams their slots |
+| yarn cs  | create schedule              |
+
+## Teardown sequence
+
+| command  | description      |
+| -------- | ---------------- |
+| yarn dau | delete all users |
+| yarn dat | delete all teams |
+| yarn ds  | delete schedule  |
+
+## Downloading sign up information (for future devs)
+
+[](https://docs.google.com/spreadsheets/d/1e0zkoT6qQA8gBkd8QvvVuGR332QLotJ94dPJmIo-4BI) 
+
+1. Download registration csvs from Google Sheets
+   - createTeams
+   - createUsers
+2. Place them into the `tests/src/csv` and commit the changes
+   - Do ensure that the data is correct!

@@ -1,13 +1,3 @@
-import { https } from 'firebase-functions'
-
-export const helloWorld = https.onRequest(async (req, res) => {
-  console.debug('hello, server!')
-  res.json({
-    message: 'hello, requester!',
-    serverReceived: req.body,
-  })
-})
-
 /* sunnus functions */
 import { initializeCollections } from './data/initializeCollections'
 import { QRApi } from './qr'
