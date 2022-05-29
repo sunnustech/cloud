@@ -1,4 +1,18 @@
-# INITIALIZING SEQUENCE
+# SunNUS 22 Cloud Repo :cloud:
+
+![](/docs/images/sunnusofficial.jpg)
+
+## Developed with:
+
+<p align="center">
+   <span>
+      <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original-wordmark.svg" width="45px" alt="react" />
+      <img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-plain.svg" width="45px" alt="typescript" />
+      <img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain-wordmark.svg" width="45px" alt="firebase" />
+   </span>
+</p>
+
+## What is this repo for?
 
 ## Downloading sign up information
 
