@@ -1,5 +1,6 @@
 /**
- * generic unbiased function to shuffle an array.
+ * Shuffles an array randomly
+ * 
  * @param {string[]} array to shuffle
  * @return {string[]} the shuffled array
  */

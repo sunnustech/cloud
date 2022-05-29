@@ -1,5 +1,7 @@
 /**
- * @param {string} HHMM: time in HH:MM format
+ * Converts a given string in the specified format to a date object
+ * 
+ * @param {string} HHMM time in HH:MM format
  * @return {Date} a javascript date object
  */
 export function dateify(HHMM: string): Date {
@@ -8,9 +10,11 @@ export function dateify(HHMM: string): Date {
 }
 
 /**
- * @param {Date} c: the date to check
- * @param {Date} a: the early bound
- * @param {Date} b: the late bound
+ * Checks if a date is in between the specified time period
+ * 
+ * @param {Date} c the date to check
+ * @param {Date} a the early bound
+ * @param {Date} b the late bound
  * @return {boolean} whether or not a < c < b
  */
 export function inBetween(c: Date, a: Date, b: Date): boolean {
@@ -19,7 +23,9 @@ export function inBetween(c: Date, a: Date, b: Date): boolean {
 }
 
 /**
+ * Converts a number into its position in the alphabet
  * A -> 1, B -> 2, ... , Z -> 26
+ * 
  * @param {number} n: the number
  * @return {string} the letter, '_' if number is invalid
  */
@@ -31,7 +37,8 @@ export function letter(n: number): string {
 }
 
 /**
- * Date -> HH:MM
+ * Gets the time in a string format from a given Date object
+ * 
  * @param {Date} t: the Date object
  * @return {string} time in HH:MM format
  */
@@ -44,7 +51,8 @@ export function time(t: Date): string {
 }
 
 /**
- * initialize start and end time
+ * Initializes start and end time
+ * 
  * @param {Date} first: the start time of the first match
  * @param {number} matchLength
  * @return {Date[]} [start, end]
@@ -57,6 +65,8 @@ export function startEndInit(first: Date, matchLength: number): Date[] {
 }
 
 /**
+ * Increments time by a given interval
+ * 
  * @param {Date} s: start of match
  * @param {Date} e: end of match
  * @param {number} interval: end of match

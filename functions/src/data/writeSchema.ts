@@ -3,7 +3,6 @@ import typedTSS from './schema/TSS'
 import typedSOAR from './schema/SOAR'
 import { https } from 'firebase-functions'
 import { WriteResult } from '@google-cloud/firestore'
-// import writeUserList from './schema/users'
 
 /**
  * @param {Object} props: the input
