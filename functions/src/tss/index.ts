@@ -134,6 +134,12 @@ const updateKnockoutTable = async (
  */
 export const handleMatch = https.onCall(
   async (req: IncomingHandleMatchRequest, _context) => {
+    if (req.scoreA === req.scoreB) {
+      return {
+        result: 'Draws are not accepted.',
+        status: 'rejected',
+      }
+    }
     const results = await Promise.all([
       saveMatchRecordAsync(req),
       updateKnockoutTable(req),
@@ -142,6 +148,7 @@ export const handleMatch = https.onCall(
     // Sends back a message that we've successfully written the match
     return {
       result: `Match with ID: ${results[0].id} written.`,
+      status: 'fulfilled',
     }
   }
 )
