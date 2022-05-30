@@ -86,7 +86,7 @@ const updateKnockoutTable = async (
   const nextSlot: 'A' | 'B' = getNextSlot(data)
   const winnerTeamName = getWinnerTeamName(data)
 
-  const docRef = firestore().collection('tss').doc(data.sport)
+  const docRef = firestore().collection('TSS').doc(data.sport)
 
   const thisRoundData = {
     [data.matchNumber]: {
