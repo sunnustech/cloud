@@ -2,7 +2,7 @@ import { getAllExistingValues } from './firestore'
 
 /**
  * Generates a random number x within a specified range
- * 
+ *
  * @param {number} min floor of generated number
  * @param {number} max ceiling of generated number
  * @return {number} a random number
@@ -14,7 +14,7 @@ function randInt(min: number, max: number): number {
 
 /**
  * Generates a random login id (n-digit numeric string)
- * 
+ *
  * @param {number} n length of login id
  * @return {string} the login id
  */
@@ -26,7 +26,7 @@ function makeLoginId(n: number): string {
 
 /**
  * Generates a list of login ids that do not exist yet
- * 
+ *
  * @param {number} n number of unique ids to generate
  * @return {string[]} list of new unique ids
  */

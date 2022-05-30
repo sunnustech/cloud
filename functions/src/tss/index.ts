@@ -14,9 +14,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 /**
@@ -137,6 +137,12 @@ export const handleMatch = https.onCall(
     if (req.scoreA === req.scoreB) {
       return {
         result: 'Draws are not accepted.',
+        status: 'rejected',
+      }
+    }
+    if (req.A === '' || req.B === '') {
+      return {
+        result: 'One or none of the teams are in the round yet.',
         status: 'rejected',
       }
     }
