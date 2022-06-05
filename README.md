@@ -2,7 +2,7 @@
 
 ![](/docs/images/sunnusofficial.jpg)
 
-## Developed with:
+## Developed with :heart: in:
 
 <p align="center">
    <span>
@@ -30,7 +30,7 @@ This repo has two main directories: `functions` and `tests`.
 
 ## Setup
 
-Pre-requisites:
+*Pre-requisites:*
 - [node](https://nodejs.org/en/download/current/) **v16 and above**
 - [yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable) **strictly v1**
 - [git](https://git-scm.com/downloads)
@@ -39,10 +39,11 @@ Pre-requisites:
 More detailed explanations on installation process can be found in docs repo.
 
 Clone the repo. A folder called `cloud` should appear. After cloning the repo, install
-node packages by running `yarn` in these three directories:
+node packages by running `yarn` in these directories:
 
 - `cloud`
 - `cloud/functions`
+- `cloud/tests`
 
 Then log in into firebase using the CLI: (assuming you're in `cloud`)
 1. `cd functions`
@@ -50,11 +51,17 @@ Then log in into firebase using the CLI: (assuming you're in `cloud`)
 
 ## Writing your first function
 
+*Pre-requisites:*
+- Basic understanding of HTTP requests and response
+- Firebase cloud functions
+
 Here's an example workflow of how I write a `helloWorld` cloud function.
+It is recommended to complete the tutorial in order as they build on the same example.
+
 1. Setting up server-side
 2. Setting up client tester
 
-### Setting up server-side
+### 1. Setting up server-side
 
 1. Export a new `onRequest` function `helloWorld` in
    `cloud/functions/src/helloWorld.ts`
@@ -68,6 +75,9 @@ export const helloWorld = https.onRequest(async (req, res) => {
   })
 })
 ```
+
+Here, we are creating a type of cloud function, taking the form of an onRequest. 
+Users who wish to call this function can attach a message in the request object `req`, and it will be reflected in the response `res`. More will be elaborated on in the later parts.
 
 2. Add it to the list of cloud functions to be used by exporting it in `cloud/functions/src/development.ts`.
 
@@ -99,31 +109,63 @@ cd functions && yarn start:functions
 ### Setting up client tester
 
 To avoid needing to navigate to the link each time, you can use a simple
-node.js request sender.
+node.js request sender and run it locally.
 
-1. Create a new `.ts` file in `cloud/tests/src` (reference `index.ts`)
-2. Create a script in `cloud/tests/package.json` to build and run it. You may do so by creating an alias (i.e shortcut for the command)
-3. Test out the function as per stated above.
-4. If the function you are testing requires inputs, you may embed them in the URL. Alternatively, you may download API Clients such as [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) and form a payload from there.
+Let us continue by building on the `helloWorld` function built previously.
 
-Note: Edit in the `src` folder. The `lib` folder contains build output files
-only.
+7. Navigate to `cloud/tests/src` and create a new file called `helloWorld.ts`.
 
-### Testing
+```js
+const fn = 'development-helloWorld'
+timestamp(fn)
 
-The current `index.ts` contains a request sender for `helloWorld`. To see it in
-action, start the emulator in one terminal with
+const request = { message: 'requester to server, over!' }
 
-```
-cd cloud/functions && yarn serve
+axios.post(cloud(fn), request).then((res) => {
+  console.debug(res.data)
+})
 ```
 
-and in another terminal build and run the testing script with
+Here, we are referencing the cloud function we have just added to development. 
+We can then use [axios](https://flaviocopes.com/node-axios/) to run our HTTP request.
+Previously, we did not attach a request and as such, our serverReceived did not return anything. Let us now attach a message to our request payload.
+
+8. Create a script in `cloud/tests/package.json` to build and run it. You may do so by creating an alias (i.e shortcut for the command)
+For example, let us call our alias `hw` for `helloWorld`. This way, we can simply call `yarn hw` instead of running `yarn tsc && node lib/helloWorld`.
+
+![](/docs/images/pkgjson_hw.png)
+
+9. Let us test the function by running the following:
 
 ```bash
-cd cloud/tests && yarn tsc && node lib/index.js
-# or simply: yarn dev (customize in package.json)
+cd tests && yarn tsc && node lib/helloWorld.ts
+
+# or simply (if alias is set up correctly)
+cd tests && yarn hw
 ```
+
+A message should pop up in your terminal with a timestamp, showcasing the function called as well as the response object.
+
+10. Congrats! :tada: You've just written your very first test function using node and axios!
+
+11. Let us take it a step further and pass in parameters into our cloud function. The function should now echo a hello back to the user.
+
+![](/docs/images/cloud_hw.png)
+
+12. Modify your `helloWorld` to return a message reflecting the name attached to the request payload. Attach the name you want to return as a property of the request object in `index`.
+```js
+// helloWorld.ts
+message: `hello, ${req.body.name}!`,
+
+// index.ts
+const request = { name: 'Khang' }
+```
+
+13. Run the function as before, now you have successfully learnt how to attach parameters onto your request body!
+
+### Testing with external applications
+
+Alternatively, you may download API Clients such as [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) and form a payload from there.
 
 Supplying inputs from Postman example:
 
@@ -140,7 +182,11 @@ Using `createQR.ts` as an example, the cloud function requires four parameters t
 
 ![](docs/images/sample_onRequest_request.png)
 
-## Command Sequence
+## Useful aliases
+
+Here are some useful aliases to run, for a more comprehensive list, refer to the respective `package.json` files.
+
+### Setup Sequence
 
 | command  | description                  |
 | -------- | ---------------------------- |
@@ -150,7 +196,7 @@ Using `createQR.ts` as an example, the cloud function requires four parameters t
 | yarn att | assign TSS teams their slots |
 | yarn cs  | create schedule              |
 
-## Teardown sequence
+### Teardown sequence
 
 | command  | description      |
 | -------- | ---------------- |
@@ -158,7 +204,9 @@ Using `createQR.ts` as an example, the cloud function requires four parameters t
 | yarn dat | delete all teams |
 | yarn ds  | delete schedule  |
 
-## Downloading sign up information (for future devs)
+## Downloading sign up information
+
+Contact the tech lead to get the link to the google sheets.
 
 [](https://docs.google.com/spreadsheets/d/1e0zkoT6qQA8gBkd8QvvVuGR332QLotJ94dPJmIo-4BI) 
 
