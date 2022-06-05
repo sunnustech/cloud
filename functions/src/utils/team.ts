@@ -1,6 +1,6 @@
 /**
  * Shuffles an array randomly
- * 
+ *
  * @param {string[]} array to shuffle
  * @return {string[]} the shuffled array
  */

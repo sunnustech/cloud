@@ -1,6 +1,6 @@
 /**
  * Capitalizes the first letter of each word and combines them afterwards
- * 
+ *
  * @param {string} string the string you want to process
  * @return {string} the joined string with each first letter capitalized
  */
@@ -15,7 +15,7 @@ export function capitalizeFirstLettersAndJoin(string: string): string {
 
 /**
  * Removes spaces from a string
- * 
+ *
  * @param {string} string the string you want to process
  * @return {string} returns a string with spaces trimmed
  */
@@ -25,7 +25,7 @@ export function removeSpaces(string: string): string {
 
 /**
  * Cleans up a phone number by removing spaces and country code
- * 
+ *
  * @param {string} phone
  * @return {string} 8-digit, no spaces
  */
@@ -41,9 +41,9 @@ export function sanitizePhoneNumber(phone: string): string {
 
 /**
  * Checks if a given string is empty
- * 
+ *
  * @param {string} string the string you want to process
- * @returns {boolean} whether or not string is empty
+ * @return {boolean} whether or not string is empty
  */
 export function isEmpty(string: string): boolean {
   return string === ''
@@ -51,9 +51,9 @@ export function isEmpty(string: string): boolean {
 
 /**
  * Checks if a given string is not empty
- * 
+ *
  * @param {string} string the string you want to process
- * @returns {boolean} whether or not string is not empty
+ * @return {boolean} whether or not string is not empty
  */
 export function notEmpty(string: string): boolean {
   return string !== ''

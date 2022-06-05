@@ -5,7 +5,7 @@ import { User } from '../classes/user'
 
 /**
  * Creates firebase users (uid will be auto-generatered)
- * 
+ *
  * @param {InitializeUser[]} users
  * @return {Promise<ResultSummary>}
  */

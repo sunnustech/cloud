@@ -37,7 +37,7 @@ export const hasMissingKeys = (
 
 /**
  * Requires that all keys are in, else exit firebase with message
- * 
+ *
  * @param {RequiredKey[]} arr: array of key-message pairs
  * @param {any} data
  * @return {string}
@@ -63,7 +63,7 @@ export const _hasMissingKeys = (
 
 /**
  * Compares two arraysm and checks if the first array is part of the second one
- * 
+ *
  * @param {T[]} a first array which is required to be in the second array
  * @param {T[]} b second array
  * @param {string} message
@@ -90,7 +90,7 @@ export function isSubset<T>(
 
 /**
  * Checks if input is empty
- * 
+ *
  * @param {string} string input to be checked
  * @param {Response<any>} res
  * @return {boolean} whether or not input is empty
