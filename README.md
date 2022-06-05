@@ -31,8 +31,12 @@ This repo has two main directories: `functions` and `tests`.
 ## Setup
 
 Pre-requisites:
-- Ensure that you have [node](https://nodejs.org/en/download/) installed.
+- [node](https://nodejs.org/en/download/current/) **v16 and above**
+- [yarn](https://classic.yarnpkg.com/en/docs/install#windows-stable) **strictly v1**
+- [git](https://git-scm.com/downloads)
 - Ensure that you are part of the project on Firebase.
+
+More detailed explanations on installation process can be found in docs repo.
 
 Clone the repo. A folder called `cloud` should appear. After cloning the repo, install
 node packages by running `yarn` in these three directories:
