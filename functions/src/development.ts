@@ -21,6 +21,10 @@ import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
 import { createQR } from './qr/createQR'
 
+/**
+ * List of cloud functions, add them in below
+ * refer to 'functions/src/index.ts' for explanation
+ */
 export {
   autoLinkChangedUser,
   getUsers,
@@ -33,6 +37,7 @@ export {
   createQR,
   // assignTSSTeams,
   handleMatch,
+  // updateSChedule is now an onCall function, but yet to be shifted to production (stage)
   updateSchedule,
   writeSchema,
   deleteAllUsers,

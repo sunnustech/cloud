@@ -28,6 +28,11 @@ export type PointsProps = {
 }
 type Points = Record<TeamName, PointsProps>
 
+/**
+ * Returns all the completed round robin matches, does not handle quarters and above
+ * 
+ * @returns a list of completed round robin matches
+ */
 async function fetchCompletedMatches(): Promise<CompletedMatch[]> {
   const scheduleCollection = firestore().collection('schedule')
   const query = scheduleCollection.where('completed', '==', true)
@@ -47,14 +52,14 @@ async function fetchCompletedMatches(): Promise<CompletedMatch[]> {
   return completedMatches
 }
 
+/**
+ * Reads the entire schedule for completed matches
+ * Extracts winners / drawers from each match
+ * Stores them on a local dictionary Record<string, number> sorted by sport
+ * Gives winners 3 points, drawers 1 point
+ * Makes a reference to their document in collection.teams and writes them
+ */
 export const updatePoints = https.onRequest(async (req, res) => {
-  // read the entire schedule for completed matches
-  // extract winners / drawers from each match
-  // store them on a local dictionary Record<string, number> sorted by sport
-  // give winners 3 points, drawers 1 point
-  // make a reference to their document in collection.teams
-  // write them
-
   const completedMatches: CompletedMatch[] = await fetchCompletedMatches()
   const points: Points = {}
 

@@ -7,11 +7,11 @@ type RequiredKey = {
 }
 
 /**
- * Requires that all keys are in, else exit firebase with message
+ * Requires that all keys are in, else returns a description on which keys are missing
  * 
- * @param {RequiredKey[]} arr array of key-message pairs
- * @param {Request} req the entire request body
- * @param {Response<any>} res
+ * @param {RequiredKey[]} arr array of key-message pairs where the key must be present
+ * @param {Request} req a request object containg keys, to be checked if any are missing from arr
+ * @param {Response<any>} res a response object indiciating which keys are missing, if any
  * @return {boolean} whether or not all keys are in
  */
 export const hasMissingKeys = (
