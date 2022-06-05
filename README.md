@@ -26,7 +26,7 @@ This repo has two main directories: `functions` and `tests`.
 
 `functions` contain the logic for the `onRequest` and `onCall` backend functions.
 
-`tests` contain ...
+`tests` contain testing files that can be executed in `node` for the respective cloud functions.
 
 ## Setup
 
