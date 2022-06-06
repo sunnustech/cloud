@@ -14,9 +14,9 @@ import { roundList } from '../data/constants'
 const getNextRound = (data: IncomingHandleMatchRequest): Round => {
   const curr = roundList.indexOf(data.round)
   const next = curr + 1
-  return next < roundList.length
-    ? roundList[next]
-    : roundList[roundList.length - 1]
+  return next < roundList.length ?
+    roundList[next] :
+    roundList[roundList.length - 1]
 }
 
 /**
@@ -86,7 +86,7 @@ const updateKnockoutTable = async (
   const nextSlot: 'A' | 'B' = getNextSlot(data)
   const winnerTeamName = getWinnerTeamName(data)
 
-  const docRef = firestore().collection('tss').doc(data.sport)
+  const docRef = firestore().collection('TSS').doc(data.sport)
 
   const thisRoundData = {
     [data.matchNumber]: {
@@ -134,6 +134,18 @@ const updateKnockoutTable = async (
  */
 export const handleMatch = https.onCall(
   async (req: IncomingHandleMatchRequest, _context) => {
+    if (req.scoreA === req.scoreB) {
+      return {
+        result: 'Draws are not accepted.',
+        status: 'rejected',
+      }
+    }
+    if (req.A === '' || req.B === '') {
+      return {
+        result: 'One or none of the teams are in the round yet.',
+        status: 'rejected',
+      }
+    }
     const results = await Promise.all([
       saveMatchRecordAsync(req),
       updateKnockoutTable(req),
@@ -142,6 +154,7 @@ export const handleMatch = https.onCall(
     // Sends back a message that we've successfully written the match
     return {
       result: `Match with ID: ${results[0].id} written.`,
+      status: 'fulfilled',
     }
   }
 )

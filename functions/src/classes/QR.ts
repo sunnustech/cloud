@@ -29,12 +29,13 @@ export class QR {
       this.facilitator = ''
       this.station = ''
       this.teamName = ''
+      return
     }
     this.facilitator = props.facilitator
     this.station = props.station || ''
     this.command = props.command || ''
     this.points = props.points || 0
-    this.teamName = props.teamName || ''
+    this.teamName = ''
   }
   checkStation(team: Team): boolean {
     if (team._stationsRemaining.length === 0) {

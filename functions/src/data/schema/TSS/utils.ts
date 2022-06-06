@@ -1,8 +1,10 @@
 import { Match, Matches } from '../../../types/TSS'
 
 /**
- * @param {string} A: the first team name
- * @param {string} B: the second team name
+ * Creates a new match with the specified teams
+ *
+ * @param {string} A the first team name
+ * @param {string} B the second team name
  * @return {Match} a match event with empty content
  */
 export function createMatch(A: string, B: string): Match {
@@ -12,7 +14,9 @@ export function createMatch(A: string, B: string): Match {
 export const emptyMatch = createMatch('', '')
 
 /**
- * @param {number} n: the number of empty matches to make
+ * Creates an object of empty matches with no teams specified
+ *
+ * @param {number} n the number of empty matches to make
  * @return {Matches} an object with keys as match numbers
  * and values of match events
  */

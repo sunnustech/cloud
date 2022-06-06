@@ -5,6 +5,10 @@ import { clearCollection as keyCheck } from '../utils/keyChecks'
 import { hasMissingKeys } from '../utils/exits'
 import { resultSummary } from '../utils/response'
 
+/**
+ * Deletes docs from a collection except for ones specified in a whitelist
+ * Whitelist and collection specified in request body
+ */
 export const clearCollection = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 

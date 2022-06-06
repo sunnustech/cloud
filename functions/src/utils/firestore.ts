@@ -6,9 +6,10 @@ import { UniquenessChecker } from '../classes/data'
 type Collection = CollectionReference<DocumentData>
 
 /**
- * retrives a list of document ids of a collection
+ * Retrives a list of document ids of a collection
+ *
  * @param {Collection} collection: the collection reference
- * @return {Promise<string[]>} the list
+ * @return {Promise<string[]>} list of document ids
  */
 export async function listDocIdsAsync(
   collection: Collection
@@ -18,8 +19,9 @@ export async function listDocIdsAsync(
 }
 
 /**
- * retrieves a database array as a dictionary
+ * Retrieves a database array as a dictionary
  * mainly used to check for uniqueness
+ *
  * @param {string} collection
  * @param {string} document
  * @param {string} field
@@ -45,8 +47,8 @@ export async function getExistingDict(
 }
 
 /**
- * searches all documents in {collection} and
- * retrives all values of {field}
+ * Searches all documents in {collection} and retrives all values of {field}
+ *
  * @param {string} collection
  * @param {string} field
  * @return {UniquenessChecker<string>}

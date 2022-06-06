@@ -1,11 +1,11 @@
 import { getAllExistingValues } from './firestore'
 
 /**
- * generates a random number x
- * min <= x < max
- * @param {number} min
- * @param {number} max
- * @return {number}
+ * Generates a random number x within a specified range
+ *
+ * @param {number} min floor of generated number
+ * @param {number} max ceiling of generated number
+ * @return {number} a random number
  */
 function randInt(min: number, max: number): number {
   const random = Math.random() * (max - min)
@@ -13,8 +13,9 @@ function randInt(min: number, max: number): number {
 }
 
 /**
- * tries for a random login id (n-digit numeric string)
- * @param {number} n
+ * Generates a random login id (n-digit numeric string)
+ *
+ * @param {number} n length of login id
  * @return {string} the login id
  */
 function makeLoginId(n: number): string {
@@ -24,8 +25,9 @@ function makeLoginId(n: number): string {
 }
 
 /**
- * generates a list of login ids that do not exist yet
- * @param {number} n: number of unique ids to generate
+ * Generates a list of login ids that do not exist yet
+ *
+ * @param {number} n number of unique ids to generate
  * @return {string[]} list of new unique ids
  */
 export async function getFreshLoginIds(n: number): Promise<string[]> {

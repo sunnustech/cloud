@@ -4,6 +4,10 @@ import { WriteResult } from '@google-cloud/firestore'
 import { hasMissingKeys } from '../utils/exits'
 import { deleteDocs as keyCheck } from '../utils/keyChecks'
 
+/**
+ * Deletes all documents in a specific collection
+ * Collection name is specified in the request body
+ */
 export const deleteDocs = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 
