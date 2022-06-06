@@ -7,9 +7,9 @@ import { Init } from '../types/classes'
 
 /**
  * Obtains the headers from the csv file, assuming that it exists
- * 
+ *
  * @param {string} string csv content passed in as a string
- * @returns {string[]} an array that represents the parts of the header
+ * @return {string[]} an array that represents the parts of the header
  */
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
@@ -26,9 +26,9 @@ export const getCsvHeadersFromString = (string: string): string[] => {
 /**
  * Returns csv content in a hashmap form
  * For more information, read https://csv.js.org/parse/api/sync/
- * 
+ *
  * @param {string} csv csv content passed in as a string
- * @returns {any} hashmap containing csv records
+ * @return {any} hashmap containing csv records
  */
 const getFromCsv = <T>(csv: string): T[] => {
   const parsedCsv = parse(csv, {
@@ -41,9 +41,9 @@ const getFromCsv = <T>(csv: string): T[] => {
 
 /**
  * Creates user objects from the fields in the csv
- * 
+ *
  * @param {string} csv csv content passed in as a string
- * @returns {Init.User[]} an array of users obtained from the csv
+ * @return {Init.User[]} an array of users obtained from the csv
  */
 export const getUsersFromCsv = (csv: string) => {
   const parsed = getFromCsv<Init.User>(csv)
@@ -52,9 +52,9 @@ export const getUsersFromCsv = (csv: string) => {
 
 /**
  * Creates team objects from the fields in the csv
- * 
+ *
  * @param {string} csv csv content passed in as a string
- * @returns {Init.Team[]} an array of teams obtained from the csv
+ * @return {Init.Team[]} an array of teams obtained from the csv
  */
 export const getTeamsFromCsv = (csv: string) => {
   const parsed = getFromCsv<Init.Team>(csv)
@@ -63,11 +63,11 @@ export const getTeamsFromCsv = (csv: string) => {
 
 /**
  * Checks if the csv file has missing headers
- * 
+ *
  * @param {string[]} requiredHeaders list of headers to check against
  * @param {string} csv csv content passed in as a string
  * @param {Respone<any>} res response object containing json for feedback messages
- * @returns {boolean} whether or not there are missing headers
+ * @return {boolean} whether or not there are missing headers
  */
 export function hasMissingHeaders(
   requiredHeaders: string[],
