@@ -94,7 +94,7 @@ Windows:
 cd functions && yarn start:functions
 ```
 
-4. Your terminal should should a list of local urls, one of which ends in
+4. Your terminal should show a list of local urls, one of which ends in
    `helloWorld`.
 
 ![](/docs/images/helloWorldLink.png)
@@ -176,7 +176,7 @@ Using `createQR.ts` as an example, the cloud function requires four parameters t
    "event": "Slide",
    "action": "resume",
    "facilitator": "Ryan",
-   "score": "20"
+   "score": "18"
 }
 ```
 
