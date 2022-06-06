@@ -4,6 +4,9 @@ import { SetOptions, WriteResult } from '@google-cloud/firestore'
 import { Init } from '../types/classes'
 import { converter } from './firebase'
 
+/**
+ * SunNUS participant
+ */
 export class User {
   realEmail: string
   role: string
@@ -19,6 +22,11 @@ export class User {
     email: '',
     teamName: '',
   })
+  /**
+   * fetches one user from database
+   * @param {string} uid
+   * @return {Promise<User>}
+   */
   static async get(uid: string): Promise<User> {
     const ref = firestore()
       .collection('users')
@@ -31,6 +39,12 @@ export class User {
     }
     return this.empty
   }
+  /**
+   * updates one user in database
+   * @param {User} user
+   * @param {SetOptions} options
+   * @return {Promise<WriteResult>}
+   */
   static async set(user: User, options: SetOptions): Promise<WriteResult> {
     const ref = firestore()
       .collection('users')
@@ -50,13 +64,27 @@ export class User {
     this.loginIdNumberPart = ''
     this.uid = ''
   }
+  /**
+   * checks if user is empty
+   * @return {boolean}
+   */
   isEmpty(): boolean {
     const values = Object.values(this)
     return values.every((v) => v === '')
   }
+  /**
+   * updates the user's UID
+   * @param {string} value
+   */
   setUid(value: string) {
     this.uid = value
   }
+  /**
+   * updates the user's login id
+   * <team name><six digits>
+   *
+   * @param {string} value
+   */
   setLoginId(value: string) {
     this.loginIdNumberPart = value
     this.loginId = `${this.teamName}${value}`

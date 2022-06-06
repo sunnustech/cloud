@@ -30,8 +30,8 @@ type Points = Record<TeamName, PointsProps>
 
 /**
  * Returns all the completed round robin matches, does not handle quarters and above
- * 
- * @returns a list of completed round robin matches
+ *
+ * @return a list of completed round robin matches
  */
 async function fetchCompletedMatches(): Promise<CompletedMatch[]> {
   const scheduleCollection = firestore().collection('schedule')

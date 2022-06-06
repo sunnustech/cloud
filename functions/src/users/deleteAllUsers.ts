@@ -8,9 +8,9 @@ import { resultSummary } from '../utils/response'
 
 /**
  * Returns an array of user ids to be removed
- * 
- * @param {string[]} whitelist list of user ids to preserve 
- * @returns {Promise<string[]>} to be removed, preserving whitelisted ids
+ *
+ * @param {string[]} whitelist list of user ids to preserve
+ * @return {Promise<string[]>} to be removed, preserving whitelisted ids
  */
 async function getUidsToRemove(whitelist: string[]): Promise<string[]> {
   const users = await getAuth().listUsers()
