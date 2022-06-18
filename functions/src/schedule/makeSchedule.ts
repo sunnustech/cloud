@@ -10,16 +10,36 @@ import {
   incrementTime,
 } from '../utils/schedule'
 
-// exclude upper bound
+/**
+ * Returns a random number, just a helper function for debugging
+ *
+ * @param {number} max upper bound
+ * @return {number} random number generated
+ */
 function getRandomInt(max: number): number {
   return Math.floor(Math.random() * max)
 }
 
+/**
+ * Acts as a normal get function as per a hashmap, but returns a default value if we get undefined
+ *
+ * @param {Record<string, T>} object hashmap of kvps
+ * @param {string} key find value in hashmap based on this filter
+ * @param {T} defaultValue initialize the value to be this if undefined
+ * @return {T} value from hashmap or default value if undefined
+ */
 function get<T>(object: Record<string, T>, key: string, defaultValue: T): T {
   const result = object[key]
   return typeof result !== 'undefined' ? result : defaultValue
 }
 
+/**
+ * @param {ScheduleConfig} scheduleConfig
+ * @param {RoundRobinConfig} rr
+ * @param {Record<Sport, Record<string, string>>} cache
+ * @param {boolean} debugScores
+ * @returns
+ */
 export const makeSchedule = (
   scheduleConfig: ScheduleConfig,
   rr: RoundRobinConfig,

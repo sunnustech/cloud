@@ -5,6 +5,12 @@ import { User } from '../classes/user'
 import { Team } from '../classes/team'
 import { Init } from '../types/classes'
 
+/**
+ * Obtains the headers from the csv file, assuming that it exists
+ *
+ * @param {string} string csv content passed in as a string
+ * @return {string[]} an array that represents the parts of the header
+ */
 export const getCsvHeadersFromString = (string: string): string[] => {
   const result: string[][] = parse(string, {
     delimiter: ',',
@@ -17,6 +23,13 @@ export const getCsvHeadersFromString = (string: string): string[] => {
   return result[0]
 }
 
+/**
+ * Returns csv content in a hashmap form
+ * For more information, read https://csv.js.org/parse/api/sync/
+ *
+ * @param {string} csv csv content passed in as a string
+ * @return {any} hashmap containing csv records
+ */
 const getFromCsv = <T>(csv: string): T[] => {
   const parsedCsv = parse(csv, {
     delimiter: ',',
@@ -26,16 +39,36 @@ const getFromCsv = <T>(csv: string): T[] => {
   return parsedCsv
 }
 
+/**
+ * Creates user objects from the fields in the csv
+ *
+ * @param {string} csv csv content passed in as a string
+ * @return {Init.User[]} an array of users obtained from the csv
+ */
 export const getUsersFromCsv = (csv: string) => {
   const parsed = getFromCsv<Init.User>(csv)
   return parsed.map((e) => new User(e))
 }
 
+/**
+ * Creates team objects from the fields in the csv
+ *
+ * @param {string} csv csv content passed in as a string
+ * @return {Init.Team[]} an array of teams obtained from the csv
+ */
 export const getTeamsFromCsv = (csv: string) => {
   const parsed = getFromCsv<Init.Team>(csv)
   return parsed.map((e) => new Team(e))
 }
 
+/**
+ * Checks if the csv file has missing headers
+ *
+ * @param {string[]} requiredHeaders list of headers to check against
+ * @param {string} csv csv content passed in as a string
+ * @param {Respone<any>} res response object containing json for feedback messages
+ * @return {boolean} whether or not there are missing headers
+ */
 export function hasMissingHeaders(
   requiredHeaders: string[],
   csv: string,

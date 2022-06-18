@@ -4,7 +4,8 @@ import { ResultSummary, resultSummary } from '../utils/response'
 import { User } from '../classes/user'
 
 /**
- * creates firebase users (uid will be auto-generatered)
+ * Creates firebase users (uid will be auto-generatered)
+ *
  * @param {InitializeUser[]} users
  * @return {Promise<ResultSummary>}
  */

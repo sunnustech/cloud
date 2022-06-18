@@ -6,6 +6,9 @@ import { please as keyCheck } from '../utils/keyChecks'
 import { resultSummary } from '../utils/response'
 import { converter } from '../classes/firebase'
 
+/**
+ * Adds each user to their respective team in firebase within the 'teams' docs
+ */
 export const assignUsers = https.onRequest(async (req, res) => {
   if (hasMissingKeys(keyCheck, req, res)) return
 

@@ -1,6 +1,10 @@
 import { firestore as fs } from 'firebase-functions'
 import { firestore } from 'firebase-admin'
 
+/**
+ * Triggers when a user changes team, adds to the new team and removes from the previous one
+ * Edits 'teams' collection
+ */
 export const autoLinkChangedUser = fs
   .document('users/{uid}')
   .onUpdate(async (change, context) => {

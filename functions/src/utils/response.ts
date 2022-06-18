@@ -2,6 +2,7 @@ export type ResultSummary = {
   fulfilled: number
   rejected: number
 }
+
 /**
  * @param {PromiseSettledResult<T>[]} p
  * @return {ResultSummary}

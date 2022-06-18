@@ -1,13 +1,3 @@
-import { https } from 'firebase-functions'
-
-export const helloWorld = https.onRequest(async (req, res) => {
-  console.debug('hello, server!')
-  res.json({
-    message: 'hello, requester!',
-    serverReceived: req.body,
-  })
-})
-
 /* sunnus functions */
 import { initializeCollections } from './data/initializeCollections'
 import { QRApi } from './qr'
@@ -31,6 +21,10 @@ import { pageAccess } from './access/pageAccess'
 import { updatePageAccess } from './access/updatePageAccess'
 import { createQR } from './qr/createQR'
 
+/**
+ * List of cloud functions, add them in below
+ * refer to 'functions/src/index.ts' for explanation
+ */
 export {
   autoLinkChangedUser,
   getUsers,
@@ -43,6 +37,7 @@ export {
   createQR,
   // assignTSSTeams,
   handleMatch,
+  // updateSChedule is now an onCall function, but yet to be shifted to production (stage)
   updateSchedule,
   writeSchema,
   deleteAllUsers,

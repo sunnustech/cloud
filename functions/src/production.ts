@@ -5,6 +5,11 @@ import { QRApi } from './production/qr'
 
 export { handleMatch, QRApi }
 
+/**
+ * Exports onCall functions to be used in the frontend
+ * refer to 'functions/src/index.ts' for explanation
+ */
+
 export const authTest = https.onCall((data, context) => {
   logger.info('authentication testing 3')
 

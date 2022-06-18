@@ -3,8 +3,22 @@ import { Team } from './team'
 import { User } from './user'
 import { fs } from '../init'
 
-export namespace converter {
-  export const user: FirestoreDataConverter<User> = {
+type Converter = {
+  user: FirestoreDataConverter<User>
+  team: FirestoreDataConverter<Team>
+}
+
+/**
+ * to use with Firebase getDoc and setDoc
+ * allows you to push to and pull from Firebase
+ * a custom class that you wrote.
+ */
+export const converter: Converter = {
+  /**
+   * converts a custom User class to raw data that
+   * can be stored on firebase
+   */
+  user: {
     toFirestore: (user: User) => {
       return {
         email: user.email,
@@ -28,8 +42,12 @@ export namespace converter {
       user.setLoginId(data.loginId)
       return user
     },
-  }
-  export const team: FirestoreDataConverter<Team> = {
+  },
+  /**
+   * converts a custom Team class to raw data that
+   * can be stored on firebase
+   */
+  team: {
     toFirestore: (team: Team) => {
       const data: DocumentData = {}
       rebuild.team(team, data)
@@ -50,23 +68,23 @@ export namespace converter {
       rebuild.team(data, team)
       return team
     },
-  }
+  },
 }
 
-export namespace collection {
-  export const users = fs.collection('users').withConverter(converter.user)
-  export const teams = fs.collection('teams').withConverter(converter.team)
+export const collection = {
+  users: fs.collection('users').withConverter(converter.user),
+  teams: fs.collection('teams').withConverter(converter.team),
 }
 
 /**
  * using source, rebuild target
  */
-export namespace rebuild {
+export const rebuild = {
   /**
    * @param {Team | DocumentData} source
    * @param {Team | DocumentData} target
    */
-  export const team = (source: Team | DocumentData, target: Team | DocumentData) => {
+  team: (source: Team | DocumentData, target: Team | DocumentData) => {
     target.teamName = source.teamName || ''
     target.members = source.members || []
     target.sport = source.sport || ''
@@ -83,5 +101,5 @@ export namespace rebuild {
     target._pausedAt = source._pausedAt || 0
     target._stationsCompleted = source._stationsCompleted || []
     target._stationsRemaining = source._stationsRemaining || []
-  }
+  },
 }
