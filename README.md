@@ -14,7 +14,8 @@
 
 ## What is this repo for?
 
-This repo is used to contain all the Firebase [cloud functions](https://firebase.google.com/docs/functions) for the SunNUS 22 mobile app. It facilitates backend functions to our application, thus allowing us develoepers to call them without invoking them from the application itself.
+This repo is used to contain all the Firebase [cloud functions](https://firebase.google.com/docs/functions) for the SunNUS 22 mobile app. 
+It facilitates backend functions to our application, thus allowing us develoepers to call them without invoking them from the application itself.
 
 If you would like to learn more about the project in general or need a starting point, you may refer to the docs repo.
 
@@ -77,7 +78,8 @@ export const helloWorld = https.onRequest(async (req, res) => {
 ```
 
 Here, we are creating a type of cloud function, taking the form of an onRequest. 
-Users who wish to call this function can attach a message in the request object `req`, and it will be reflected in the response `res`. More will be elaborated on in the later parts.
+Users who wish to call this function can attach a message in the request object `req`, and it will be reflected in the response `res`. 
+More will be elaborated on in the later parts.
 
 2. Add it to the list of cloud functions to be used by exporting it in `cloud/functions/src/development.ts`.
 
@@ -128,10 +130,13 @@ axios.post(cloud(fn), request).then((res) => {
 
 Here, we are referencing the cloud function we have just added to development. 
 We can then use [axios](https://flaviocopes.com/node-axios/) to run our HTTP request.
-Previously, we did not attach a request and as such, our serverReceived did not return anything. Let us now attach a message to our request payload.
+Previously, we did not attach a request and as such, our serverReceived did not return anything. 
+Let us now attach a message to our request payload.
 
-8. Create a script in `cloud/tests/package.json` to build and run it. You may do so by creating an alias (i.e shortcut for the command)
-For example, let us call our alias `hw` for `helloWorld`. This way, we can simply call `yarn hw` instead of running `yarn tsc && node lib/helloWorld`.
+8. Create a script in `cloud/tests/package.json` to build and run it. 
+You may do so by creating an alias (i.e shortcut for the command)
+For example, let us call our alias `hw` for `helloWorld`. 
+This way, we can simply call `yarn hw` instead of running `yarn tsc && node lib/helloWorld`.
 
 ![](/docs/images/pkgjson_hw.png)
 
@@ -152,7 +157,8 @@ A message should pop up in your terminal with a timestamp, showcasing the functi
 
 ![](/docs/images/cloud_hw.png)
 
-12. Modify your `helloWorld` to return a message reflecting the name attached to the request payload. Attach the name you want to return as a property of the request object in `index`.
+12. Modify your `helloWorld` to return a message reflecting the name attached to the request payload. 
+Attach the name you want to return as a property of the request object in `index`.
 ```js
 // helloWorld.ts
 message: `hello, ${req.body.name}!`,
@@ -169,7 +175,8 @@ Alternatively, you may download API Clients such as [Postman](https://www.postma
 
 Supplying inputs from Postman example:
 
-Using `createQR.ts` as an example, the cloud function requires four parameters to be supplied. You may supply them in a JSON object in the GET request as follows:
+Using `createQR.ts` as an example, the cloud function requires four parameters to be supplied.
+You may supply them in a JSON object in the GET request as follows:
 
 ```json
 {
